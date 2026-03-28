@@ -4,13 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MinecraftHUD – Your Mac in Survival Mode</title>
-  <meta name="description" content="A Minecraft-style HUD overlay for your Mac. Health bar = battery. XP bar = your work. Kill feed = closed apps. Play your life." />
+  <meta name="description" content="A Minecraft-style HUD overlay for your Mac. Health bar = battery. XP bar = your work. Kill feed = closed apps." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛏</text></svg>" />
 </head>
 <body>
+
+<canvas id="particles"></canvas>
 
 <!-- NAV -->
 <nav class="nav">
@@ -18,207 +20,260 @@
     <div class="nav-logo">⛏ MinecraftHUD</div>
     <div class="nav-links">
       <a href="#features">Features</a>
-      <a href="#download" class="mc-btn nav-cta">Download</a>
+      <a href="#sounds">Sounds</a>
+      <a href="#install">Install</a>
+      <a href="#download" class="nav-cta">Download</a>
     </div>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg-overlay"></div>
   <div class="hero-content">
-    <div class="mc-tag">v1.0 — macOS 13+</div>
-    <h1 class="hero-title">Your Mac.<br/>Now in <span class="green">Survival Mode.</span></h1>
-    <p class="hero-sub">A Minecraft HUD overlay that lives on top of every app.<br/>Your battery = health. Your hunger = real hunger. Your closed apps = kill feed.</p>
-    <div class="hero-hud-preview">
-      <div class="hud-preview-bar">
-        <div class="hearts-row">
-          <span class="heart full">♥</span>
-          <span class="heart full">♥</span>
-          <span class="heart full">♥</span>
-          <span class="heart full">♥</span>
-          <span class="heart full">♥</span>
-          <span class="heart full">♥</span>
-          <span class="heart full">♥</span>
-          <span class="heart half">♥</span>
-          <span class="heart empty">♥</span>
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span></span> v1.0 — Available Now for macOS
+      </div>
+      <h1 class="hero-title">Your Mac.<br/>Now in<br/><span class="green">Survival Mode.</span></h1>
+      <p class="hero-sub">A Minecraft HUD that lives on top of every app — always. Your battery is your health. Your hunger is real. Your closed apps show up in the kill feed.</p>
+      <div class="hero-ctas">
+        <a href="#download" class="btn-primary">⬇ &nbsp;Download for Mac</a>
+        <a href="#features" class="btn-secondary">See Features →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">9</span>
+          <span class="stat-label">Pixel Hearts</span>
         </div>
-        <div class="food-row">
-          <span class="food full">🍗</span>
-          <span class="food full">🍗</span>
-          <span class="food full">🍗</span>
-          <span class="food full">🍗</span>
-          <span class="food full">🍗</span>
-          <span class="food full">🍗</span>
-          <span class="food half">🍗</span>
-          <span class="food empty">🍗</span>
-          <span class="food empty">🍗</span>
+        <div class="stat">
+          <span class="stat-num">9</span>
+          <span class="stat-label">Drumsticks</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">∞</span>
+          <span class="stat-label">XP to grind</span>
         </div>
       </div>
-      <div class="xp-bar-wrap">
-        <div class="xp-bar" id="xpBar"></div>
-        <span class="xp-label">Level 7 &nbsp;[3500 XP]</span>
-      </div>
-      <div class="killfeed">
-        <div class="kill-item">Chrome was slain</div>
-        <div class="kill-item" style="opacity:0.6">Spotify eliminated</div>
-        <div class="kill-item" style="opacity:0.3">Zoom has fallen</div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hud-mockup">
+        <div class="mockup-screen">
+          <div class="fake-windows">
+            <div class="fake-win">
+              <div class="fake-win-bar">
+                <div class="fake-win-dot"></div><div class="fake-win-dot"></div><div class="fake-win-dot"></div>
+              </div>
+            </div>
+            <div class="fake-win">
+              <div class="fake-win-bar">
+                <div class="fake-win-dot"></div><div class="fake-win-dot"></div><div class="fake-win-dot"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kill feed -->
+          <div class="mockup-killfeed" id="killfeed">
+            <div class="kf-item" style="opacity:0.9">Chrome was slain</div>
+            <div class="kf-item" style="opacity:0.55">Spotify eliminated</div>
+            <div class="kf-item" style="opacity:0.25">Zoom has fallen</div>
+          </div>
+
+          <!-- XP popup -->
+          <div class="xp-popup" id="xpPopup" style="opacity:0">+1 XP</div>
+
+          <!-- HUD bar -->
+          <div class="hud-bar">
+            <div class="hud-row">
+              <div class="hearts">
+                <span class="h on">♥</span><span class="h on">♥</span><span class="h on">♥</span>
+                <span class="h on">♥</span><span class="h on">♥</span><span class="h on">♥</span>
+                <span class="h on">♥</span><span class="h half">♥</span><span class="h off">♥</span>
+              </div>
+              <div class="foods">
+                <span class="f off">🍗</span><span class="f off">🍗</span>
+                <span class="f on">🍗</span><span class="f on">🍗</span><span class="f on">🍗</span>
+                <span class="f on">🍗</span><span class="f on">🍗</span><span class="f on">🍗</span>
+                <span class="f on">🍗</span>
+              </div>
+            </div>
+            <div class="xp-wrap">
+              <div class="xp-track">
+                <div class="xp-fill" id="xpFill"></div>
+                <div class="xp-shine"></div>
+              </div>
+              <div class="xp-text" id="xpText">Level 7 &nbsp;·&nbsp; 3,500 XP</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#3a5a3a;text-align:center;padding-top:8px;">
+          Always-on-top · Click-through · macOS 13+
+        </div>
       </div>
     </div>
-    <div class="hero-ctas">
-      <a href="#download" class="mc-btn big">⬇ Download for Mac</a>
-      <a href="#features" class="mc-btn big secondary">See Features</a>
-    </div>
-    <p class="hero-compat">macOS 13+ &nbsp;·&nbsp; Apple Silicon &amp; Intel &nbsp;·&nbsp; No dock icon</p>
   </div>
 </section>
 
 <!-- FEATURES -->
-<section class="features" id="features">
+<section class="features-section" id="features">
   <div class="section-inner">
-    <h2 class="section-title">What it does</h2>
+    <span class="section-tag">// What it does</span>
+    <h2 class="section-title">Six features.<br/>All Minecraft.</h2>
+    <p class="section-sub">Every element of the HUD mirrors something real about your working day.</p>
+
     <div class="features-grid">
-
-      <div class="mc-panel feature-card">
-        <div class="feature-icon">❤️</div>
+      <div class="feature-card">
+        <span class="feature-icon">❤️</span>
         <h3>Health Bar = Battery</h3>
-        <p>9 pixel-art hearts mirror your battery percentage. When it drops — you hear the classic Minecraft hurt sound.</p>
+        <p>9 pixel-perfect Minecraft hearts mirror your battery percentage in real time. Drop below 20% and you'll hear the classic hurt sound. You've been warned.</p>
       </div>
-
-      <div class="mc-panel feature-card">
-        <div class="feature-icon">🍗</div>
+      <div class="feature-card">
+        <span class="feature-icon">🍗</span>
         <h3>Hunger Bar = Real Hunger</h3>
-        <p>Empties over 6 hours like actual hunger. 3 quick clicks to eat and refill it — complete with the eating sound.</p>
+        <p>Takes 6 hours to empty — just like actual hunger during a workday. Three quick clicks on the drumsticks to eat and refill. Complete with the eating sound effect.</p>
       </div>
-
-      <div class="mc-panel feature-card">
-        <div class="feature-icon">✨</div>
+      <div class="feature-card">
+        <span class="feature-icon">✨</span>
         <h3>XP Bar = Your Work</h3>
-        <p>Every keystroke and mouse click earns XP. Level up sounds play automatically. Resets at midnight.</p>
+        <p>Every keystroke and mouse click earns XP. Watch the green bar fill. Level up sounds fire automatically. Resets at midnight. What's your daily high score?</p>
       </div>
-
-      <div class="mc-panel feature-card">
-        <div class="feature-icon">💀</div>
+      <div class="feature-card">
+        <span class="feature-icon">💀</span>
         <h3>Kill Feed</h3>
-        <p>When you close any app, it shows up in the top-right corner. "Spotify eliminated." "Zoom has fallen." Classic.</p>
+        <p>Close any app and it appears top-right: "Chrome was slain." "Zoom has fallen." "Spotify got rekt." The kill feed fades out after a few seconds.</p>
       </div>
-
-      <div class="mc-panel feature-card">
-        <div class="feature-icon">🎵</div>
+      <div class="feature-card">
+        <span class="feature-icon">🎵</span>
         <h3>Real Minecraft Sounds</h3>
-        <p>Dirt when you type. Gravel on Delete. TNT on Force Quit. XP pickup on Cmd+S. Villager on Cmd+T. All original game sounds.</p>
+        <p>Original game sounds — directly from Mojang's CDN. Dirt on typing. Gravel on Delete. TNT on Force Quit. XP pickup on Save. Villager hmm on new tab.</p>
       </div>
-
-      <div class="mc-panel feature-card">
-        <div class="feature-icon">🖥️</div>
-        <h3>Always On Top, Never In The Way</h3>
-        <p>Fully transparent overlay. Floats above all apps. Completely click-through — you'll forget it's there. Until it's not.</p>
+      <div class="feature-card">
+        <span class="feature-icon">🖥️</span>
+        <h3>Fully Click-Through</h3>
+        <p>The overlay sits above every app but gets out of your way completely. You won't even notice it — until someone walks by and asks what that thing on your screen is.</p>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="howitworks">
+<!-- SOUNDS -->
+<section class="sounds-section" id="sounds">
   <div class="section-inner">
-    <h2 class="section-title">How to install</h2>
-    <div class="steps">
+    <span class="section-tag">// Sound Pack</span>
+    <h2 class="section-title">Every action has a sound.</h2>
+    <p class="section-sub">Original Minecraft audio — pulled directly from Mojang's servers. Your keyboard has never been this satisfying.</p>
+    <div class="sounds-grid">
+      <div class="sound-card"><div class="sound-key">Any Key</div><div class="sound-desc">Dirt block place</div></div>
+      <div class="sound-card"><div class="sound-key">Delete</div><div class="sound-desc">Gravel break</div></div>
+      <div class="sound-card"><div class="sound-key">Cmd + S</div><div class="sound-desc">XP orb pickup</div></div>
+      <div class="sound-card"><div class="sound-key">Cmd + T</div><div class="sound-desc">Villager hmm</div></div>
+      <div class="sound-card"><div class="sound-key">Force Quit</div><div class="sound-desc">TNT explosion</div></div>
+      <div class="sound-card"><div class="sound-key">Battery drop</div><div class="sound-desc">Classic hurt</div></div>
+      <div class="sound-card"><div class="sound-key">Eat (3 clicks)</div><div class="sound-desc">Eating sound</div></div>
+      <div class="sound-card"><div class="sound-key">Level Up</div><div class="sound-desc">Level up fanfare</div></div>
+      <div class="sound-card"><div class="sound-key">Close App</div><div class="sound-desc">Item pickup pop</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="steps-section" id="install">
+  <div class="section-inner">
+    <span class="section-tag">// Installation</span>
+    <h2 class="section-title">Up in 60 seconds.</h2>
+    <p class="section-sub">No installer. No setup wizard. No subscription. Just download and open.</p>
+    <div class="steps-grid">
       <div class="step">
         <div class="step-num">01</div>
-        <div class="step-text">
-          <h3>Download &amp; open the .app</h3>
-          <p>No installer needed. Drag MinecraftHUD.app to your Applications folder or just double-click it.</p>
-        </div>
+        <h3>Download &amp; Open</h3>
+        <p>Download the .zip, unzip it, drag MinecraftHUD.app to your Applications folder. Double-click to open.</p>
       </div>
-      <div class="step-arrow">▶</div>
       <div class="step">
         <div class="step-num">02</div>
-        <div class="step-text">
-          <h3>Grant Accessibility Access</h3>
-          <p>System Settings → Privacy &amp; Security → Accessibility → add MinecraftHUD. This is needed for keyboard sounds.</p>
-        </div>
+        <h3>Grant Accessibility</h3>
+        <p>System Settings → Privacy &amp; Security → Accessibility → add MinecraftHUD. This lets it listen for keyboard events.</p>
       </div>
-      <div class="step-arrow">▶</div>
       <div class="step">
         <div class="step-num">03</div>
-        <div class="step-text">
-          <h3>Play your life</h3>
-          <p>The HUD appears at the bottom of your screen. Start typing. Close some apps. Hear the sounds. You're in survival mode now.</p>
-        </div>
+        <h3>You're In Survival Mode</h3>
+        <p>The HUD appears at the bottom of your screen. Start typing. Close some apps. Hear the sounds. Try not to die.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- DOWNLOAD / PRICING -->
-<section class="download" id="download">
+<!-- PRICING / DOWNLOAD -->
+<section class="pricing-section" id="download">
   <div class="section-inner">
-    <h2 class="section-title">Get MinecraftHUD</h2>
-    <div class="pricing-grid">
+    <span class="section-tag">// Download</span>
+    <h2 class="section-title">Get MinecraftHUD.</h2>
+    <p class="section-sub">One-time purchase. No subscription. No bullshit.</p>
 
-      <div class="mc-panel pricing-card featured">
-        <div class="pricing-badge">Most Popular</div>
-        <div class="pricing-icon">🍎</div>
+    <div class="pricing-grid">
+      <!-- Mac -->
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Available Now</div>
+        <span class="pricing-icon">🍎</span>
         <h3>macOS</h3>
-        <div class="price">$4.99</div>
+        <div class="price-amount">$4.99</div>
+        <div class="price-sub">One-time · No subscription</div>
         <ul class="pricing-features">
-          <li>✓ All 6 HUD features</li>
-          <li>✓ Real Minecraft sounds</li>
-          <li>✓ Works on Apple Silicon &amp; Intel</li>
-          <li>✓ macOS 13 Ventura or later</li>
-          <li>✓ No subscription — pay once</li>
+          <li><span>✓</span> All 6 HUD features</li>
+          <li><span>✓</span> 9 original Minecraft sounds</li>
+          <li><span>✓</span> Apple Silicon &amp; Intel</li>
+          <li><span>✓</span> macOS 13 Ventura or later</li>
+          <li><span>✓</span> No dock icon — runs silently</li>
         </ul>
         <form action="https://www.paypal.com/donate" method="post" target="_blank">
           <input type="hidden" name="business" value="YOUR_PAYPAL_EMAIL_HERE" />
           <input type="hidden" name="item_name" value="MinecraftHUD for macOS" />
           <input type="hidden" name="amount" value="4.99" />
           <input type="hidden" name="currency_code" value="USD" />
-          <button type="submit" class="mc-btn big paypal-btn">💳 Buy via PayPal — $4.99</button>
+          <button type="submit" class="btn-paypal">💳 Buy via PayPal — $4.99</button>
         </form>
-        <a href="https://github.com/eliaspfeffer/MinecraftHUD/releases/latest/download/MinecraftHUD.zip" class="mc-btn big secondary download-btn">
-          ⬇ Download .app
-        </a>
-        <p class="pricing-note">Pay first, then download the link will appear via email. Or download free and pay to support.</p>
+        <a href="https://github.com/eliaspfeffer/MinecraftHUD/releases/latest/download/MinecraftHUD.zip" class="btn-download">⬇ Download .app (free / pay what you want)</a>
       </div>
 
-      <div class="mc-panel pricing-card coming-soon">
-        <div class="pricing-icon">🪟</div>
+      <!-- Windows -->
+      <div class="pricing-card" style="opacity:0.45">
+        <span class="pricing-icon">🪟</span>
         <h3>Windows</h3>
-        <div class="price coming">Coming Soon</div>
+        <div class="price-amount dim">Coming Soon</div>
+        <div class="price-sub">Windows 10 / 11</div>
         <ul class="pricing-features">
-          <li>⏳ In development</li>
-          <li>⏳ Windows 10 / 11</li>
-          <li>⏳ Same features</li>
-          <li>⏳ Notify me below</li>
+          <li class="dim"><span>⏳</span> In development</li>
+          <li class="dim"><span>⏳</span> Same features</li>
+          <li class="dim"><span>⏳</span> .exe installer</li>
+          <li class="dim"><span>⏳</span> Sign up to be notified</li>
         </ul>
-        <button class="mc-btn big disabled" disabled>Not Available Yet</button>
+        <button class="btn-disabled" disabled>Not Available Yet</button>
       </div>
 
-      <div class="mc-panel pricing-card coming-soon">
-        <div class="pricing-icon">🐧</div>
+      <!-- Linux -->
+      <div class="pricing-card" style="opacity:0.45">
+        <span class="pricing-icon">🐧</span>
         <h3>Linux</h3>
-        <div class="price coming">Coming Soon</div>
+        <div class="price-amount dim">Coming Soon</div>
+        <div class="price-sub">Ubuntu · Arch · Debian</div>
         <ul class="pricing-features">
-          <li>⏳ In development</li>
-          <li>⏳ Ubuntu, Arch, Debian</li>
-          <li>⏳ Same features</li>
-          <li>⏳ Notify me below</li>
+          <li class="dim"><span>⏳</span> In development</li>
+          <li class="dim"><span>⏳</span> Same features</li>
+          <li class="dim"><span>⏳</span> AppImage</li>
+          <li class="dim"><span>⏳</span> Sign up to be notified</li>
         </ul>
-        <button class="mc-btn big disabled" disabled>Not Available Yet</button>
+        <button class="btn-disabled" disabled>Not Available Yet</button>
       </div>
-
     </div>
 
-    <!-- Notify me -->
-    <div class="notify-box mc-panel">
+    <!-- Notify -->
+    <div class="notify-section">
       <h3>🔔 Get notified for Windows &amp; Linux</h3>
       <p>Drop your email and we'll ping you the moment it's ready.</p>
       <form class="notify-form" onsubmit="handleNotify(event)">
         <input type="email" placeholder="your@email.com" class="mc-input" required />
-        <button type="submit" class="mc-btn">Notify Me</button>
+        <button type="submit" class="btn-primary" style="white-space:nowrap">Notify Me</button>
       </form>
-      <p class="notify-confirm" id="notifyConfirm" style="display:none">✓ You're on the list!</p>
+      <p class="notify-confirm" id="notifyConfirm" style="display:none">✓ You're on the list. We'll ping you.</p>
     </div>
   </div>
 </section>
@@ -226,13 +281,15 @@
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
-    <div class="footer-logo">⛏ MinecraftHUD</div>
-    <p class="footer-sub">Not affiliated with Mojang or Microsoft. Made by a Minecraft fan, for Minecraft fans.</p>
+    <div>
+      <div class="footer-logo">⛏ MinecraftHUD</div>
+    </div>
+    <div class="footer-sub">Not affiliated with Mojang or Microsoft.<br/>Made by a Minecraft fan, for Minecraft fans.</div>
     <div class="footer-links">
       <a href="https://github.com/eliaspfeffer/MinecraftHUD" target="_blank">GitHub</a>
       <a href="mailto:YOUR_EMAIL_HERE">Contact</a>
     </div>
-    <p class="footer-legal">© 2025 MinecraftHUD. Minecraft is a trademark of Mojang Studios.</p>
+    <p class="footer-legal">© 2025 MinecraftHUD · Minecraft is a registered trademark of Mojang Studios · Not affiliated with Mojang or Microsoft</p>
   </div>
 </footer>
 
