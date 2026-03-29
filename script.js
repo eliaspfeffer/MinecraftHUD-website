@@ -120,6 +120,175 @@ setInterval(() => {
   });
 }, 700);
 
+// ── INTERACTIVE SOUND DEMO ───────────────────────────────────
+let _audioCtx = null;
+let _audioUnlocked = false;
+
+function ensureAudio() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (_audioCtx.state === 'suspended') _audioCtx.resume();
+  _audioUnlocked = true;
+}
+document.addEventListener('click', ensureAudio, { once: true });
+
+function noise(dur, freq, q, vol) {
+  if (!_audioUnlocked) return;
+  const ctx = _audioCtx;
+  const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * Math.exp(-i/(d.length*0.5));
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  const filt = ctx.createBiquadFilter(); filt.type = 'bandpass';
+  filt.frequency.value = freq; filt.Q.value = q;
+  const g = ctx.createGain(); g.gain.value = vol;
+  src.connect(filt); filt.connect(g); g.connect(ctx.destination);
+  src.start();
+}
+
+function tone(freqs, dur, type, vol) {
+  if (!_audioUnlocked) return;
+  const ctx = _audioCtx;
+  freqs.forEach((f, i) => {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    const t = ctx.currentTime + i * (dur * 0.55);
+    osc.type = type; osc.frequency.value = f;
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    osc.connect(g); g.connect(ctx.destination);
+    osc.start(t); osc.stop(t + dur + 0.02);
+  });
+}
+
+const demoSounds = {
+  dirt:    () => noise(0.055, 520, 0.9, 0.38),
+  gravel:  () => noise(0.13, 200, 1.8, 0.5),
+  xp:      () => tone([660, 990], 0.13, 'sine', 0.2),
+  levelup: () => tone([330, 415, 494, 659, 880], 0.17, 'square', 0.13),
+  cow:     () => tone([130, 105], 0.28, 'sawtooth', 0.22),
+  pig:     () => tone([380, 300, 380], 0.075, 'sine', 0.22),
+  dog:     () => tone([290, 260, 230], 0.065, 'square', 0.18),
+};
+
+const demoKeyboard = document.getElementById('demoKeyboard');
+const demoSoundLabel = document.getElementById('demoSoundLabel');
+const demoXpPop = document.getElementById('demoXpPop');
+const demoMobLane = document.getElementById('demoMobLane');
+
+function pressKeyEl(el) {
+  if (!el) return;
+  el.classList.add('pressed');
+  setTimeout(() => el.classList.remove('pressed'), 210);
+}
+
+function flashLabel(text) {
+  if (!demoSoundLabel) return;
+  demoSoundLabel.textContent = text;
+  demoSoundLabel.classList.remove('flash');
+  void demoSoundLabel.offsetWidth;
+  demoSoundLabel.classList.add('flash');
+}
+
+function spawnMob(emoji) {
+  if (!demoMobLane) return;
+  const mob = document.createElement('div');
+  mob.className = 'demo-mob';
+  mob.innerHTML = `<span class="demo-mob-inner">${emoji}</span>`;
+  demoMobLane.appendChild(mob);
+  mob.addEventListener('animationend', () => mob.remove());
+}
+
+function showDemoXPPop() {
+  if (!demoXpPop) return;
+  demoXpPop.className = 'demo-xp-pop';
+  void demoXpPop.offsetWidth;
+  demoXpPop.className = 'demo-xp-pop show';
+}
+
+// Manual click on single keys
+if (demoKeyboard) {
+  demoKeyboard.querySelectorAll('.demo-key[data-sound]').forEach(key => {
+    key.addEventListener('click', () => {
+      ensureAudio();
+      pressKeyEl(key);
+      demoSounds[key.dataset.sound]?.();
+      flashLabel(key.dataset.label || key.dataset.sound);
+    });
+  });
+  demoKeyboard.querySelectorAll('.demo-key-combo').forEach(combo => {
+    combo.addEventListener('click', () => {
+      ensureAudio();
+      const snd = combo.dataset.sound;
+      combo.classList.add('pressed');
+      setTimeout(() => combo.classList.remove('pressed'), 250);
+      demoSounds[snd]?.();
+      flashLabel(combo.dataset.label || snd);
+      if (snd === 'cow') spawnMob('🐄');
+      if (snd === 'pig') spawnMob('🐷');
+      if (snd === 'xp') showDemoXPPop();
+    });
+  });
+}
+
+// Auto-demo sequence
+const _dirtKeys = demoKeyboard ? demoKeyboard.querySelectorAll('.demo-key[data-sound="dirt"]') : [];
+const _delKey   = demoKeyboard ? demoKeyboard.querySelector('.demo-key[data-sound="gravel"]') : null;
+const _comboXP  = demoKeyboard ? demoKeyboard.querySelector('.demo-key-combo[data-sound="xp"]') : null;
+const _comboCow = demoKeyboard ? demoKeyboard.querySelector('.demo-key-combo[data-sound="cow"]') : null;
+const _comboPig = demoKeyboard ? demoKeyboard.querySelector('.demo-key-combo[data-sound="pig"]') : null;
+const _comboDog = demoKeyboard ? demoKeyboard.querySelector('.demo-key-combo[data-sound="dog"]') : null;
+const _comboLvl = demoKeyboard ? demoKeyboard.querySelector('.demo-key-combo[data-sound="levelup"]') : null;
+
+function pressCombo(el, snd, label, mob) {
+  if (!el) return;
+  el.classList.add('pressed');
+  setTimeout(() => el.classList.remove('pressed'), 260);
+  demoSounds[snd]?.();
+  flashLabel(label);
+  if (mob) spawnMob(mob);
+  if (snd === 'xp') showDemoXPPop();
+}
+
+const autoSteps = [
+  [() => { const k = _dirtKeys[0]; pressKeyEl(k); demoSounds.dirt?.(); flashLabel('Any Key → 🪨 Dirt block place'); }, 1300],
+  [() => { const k = _dirtKeys[1]; pressKeyEl(k); demoSounds.dirt?.(); flashLabel('Any Key → 🪨 Dirt block place'); }, 1200],
+  [() => { const k = _dirtKeys[2]; pressKeyEl(k); demoSounds.dirt?.(); flashLabel('Any Key → 🪨 Dirt block place'); }, 1200],
+  [() => { pressKeyEl(_delKey); demoSounds.gravel?.(); flashLabel('Delete → Gravel break'); }, 1800],
+  [() => { const k = _dirtKeys[3]; pressKeyEl(k); demoSounds.dirt?.(); flashLabel('Any Key → 🪨 Dirt block place'); }, 1200],
+  [() => pressCombo(_comboXP, 'xp', 'Cmd + S → ✨ XP orb pickup'), 2000],
+  [() => pressCombo(_comboCow, 'cow', 'Cmd + C → 🐄 Cow moo!', '🐄'), 3500],
+  [() => { const k = _dirtKeys[0]; pressKeyEl(k); demoSounds.dirt?.(); flashLabel('Any Key → 🪨 Dirt block place'); }, 1200],
+  [() => pressCombo(_comboPig, 'pig', 'Cmd + V → 🐷 Pig oink!', '🐷'), 3500],
+  [() => pressCombo(_comboDog, 'dog', 'Cmd + Z → 🐕 Dog bark!'), 2000],
+  [() => { const k = _dirtKeys[1]; pressKeyEl(k); demoSounds.dirt?.(); flashLabel('Any Key → 🪨 Dirt block place'); }, 1200],
+  [() => pressCombo(_comboLvl, 'levelup', 'Level Up → 🎵 Fanfare!'), 2200],
+];
+
+let _autoIdx = 0, _autoTimer = null, _autoRunning = false;
+
+function runAutoStep() {
+  if (!_autoRunning) return;
+  const [fn, delay] = autoSteps[_autoIdx % autoSteps.length];
+  fn();
+  _autoIdx++;
+  _autoTimer = setTimeout(runAutoStep, delay);
+}
+
+const demoSection = document.getElementById('sounds');
+if (demoSection) {
+  new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !_autoRunning) {
+        _autoRunning = true;
+        _autoTimer = setTimeout(runAutoStep, 600);
+      } else if (!e.isIntersecting) {
+        _autoRunning = false;
+        clearTimeout(_autoTimer);
+      }
+    });
+  }, { threshold: 0.25 }).observe(demoSection);
+}
+
 // ── SUPABASE ─────────────────────────────────────────────────
 const _sb = supabase.createClient(
   'https://eczgwwpesnjlvwqrelzz.supabase.co',

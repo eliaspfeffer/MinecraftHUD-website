@@ -114,6 +114,23 @@
   </div>
 </section>
 
+<!-- SCREENSHOTS -->
+<section class="screenshots-section" id="screenshots">
+  <div class="section-inner">
+    <span class="section-tag">// In Action</span>
+    <h2 class="section-title">The real thing.<br/>On a real Mac.</h2>
+    <p class="section-sub">Running live, above every app. Always-on-top, always click-through.</p>
+    <div class="screenshots-grid">
+      <div class="screenshot-wrap">
+        <img src="screenshot1.png" alt="MinecraftHUD showing hearts, hunger and XP bar over macOS" loading="lazy" />
+      </div>
+      <div class="screenshot-wrap">
+        <img src="screenshot2.png" alt="MinecraftHUD kill feed and HUD overlay on macOS desktop" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FEATURES -->
 <section class="features-section" id="features">
   <div class="section-inner">
@@ -166,23 +183,74 @@
   </div>
 </section>
 
-<!-- SOUNDS -->
+<!-- SOUNDS INTERACTIVE -->
 <section class="sounds-section" id="sounds">
   <div class="section-inner">
     <span class="section-tag">// Sound Pack</span>
     <h2 class="section-title">Every action has a sound.</h2>
-    <p class="section-sub">Original Minecraft audio — pulled directly from Mojang's servers. Your keyboard has never been this satisfying.</p>
-    <div class="sounds-grid">
-      <div class="sound-card"><div class="sound-key">Any Key</div><div class="sound-desc">Dirt block place</div></div>
-      <div class="sound-card"><div class="sound-key">Delete</div><div class="sound-desc">Gravel break</div></div>
-      <div class="sound-card"><div class="sound-key">Cmd + S</div><div class="sound-desc">XP orb pickup</div></div>
-      <div class="sound-card"><div class="sound-key">Cmd + T</div><div class="sound-desc">Villager hmm</div></div>
-      <div class="sound-card"><div class="sound-key">Force Quit</div><div class="sound-desc">TNT explosion</div></div>
-      <div class="sound-card"><div class="sound-key">Battery drop</div><div class="sound-desc">Classic hurt</div></div>
-      <div class="sound-card"><div class="sound-key">Eat (3 clicks)</div><div class="sound-desc">Eating sound</div></div>
-      <div class="sound-card"><div class="sound-key">Level Up</div><div class="sound-desc">Level up fanfare</div></div>
-      <div class="sound-card"><div class="sound-key">Close App</div><div class="sound-desc">Item pickup pop</div></div>
+    <p class="section-sub">Click any key below to hear it. The demo auto-plays — but sounds need one click first to unlock audio.</p>
+
+    <!-- Mini demo screen -->
+    <div class="demo-screen">
+      <div class="demo-screen-bar">
+        <div class="demo-dot"></div>
+        <div class="demo-dot"></div>
+        <div class="demo-dot"></div>
+        <span class="demo-app-name">VS Code — AppDelegate.swift</span>
+      </div>
+      <div class="demo-screen-content">
+        <div class="demo-code-lines">
+          <div class="demo-line"><span class="demo-ln">1</span><span class="demo-code kw">import</span><span class="demo-code"> AppKit</span></div>
+          <div class="demo-line"><span class="demo-ln">2</span><span class="demo-code kw">import</span><span class="demo-code"> Foundation</span></div>
+          <div class="demo-line"><span class="demo-ln">3</span><span class="demo-code">&nbsp;</span></div>
+          <div class="demo-line demo-active"><span class="demo-ln">4</span><span class="demo-code kw">class </span><span class="demo-code"><span class="demo-type">AppDelegate</span>: NSObject {</span><span class="demo-cursor">|</span></div>
+        </div>
+        <div class="demo-mob-lane" id="demoMobLane"></div>
+        <div class="demo-xp-pop" id="demoXpPop">+2 XP</div>
+      </div>
     </div>
+
+    <!-- Interactive keyboard -->
+    <div class="demo-keyboard" id="demoKeyboard">
+      <div class="demo-kb-row">
+        <div class="demo-key" data-sound="dirt" data-label="Any Key → 🪨 Dirt block place">A</div>
+        <div class="demo-key" data-sound="dirt" data-label="Any Key → 🪨 Dirt block place">S</div>
+        <div class="demo-key" data-sound="dirt" data-label="Any Key → 🪨 Dirt block place">D</div>
+        <div class="demo-key" data-sound="dirt" data-label="Any Key → 🪨 Dirt block place">F</div>
+        <div class="demo-key wide" data-sound="gravel" data-label="Delete → Gravel break">⌫ Del</div>
+      </div>
+      <div class="demo-kb-row">
+        <div class="demo-key-combo" data-sound="xp" data-label="Cmd + S → ✨ XP orb pickup">
+          <div class="demo-key mod">⌘</div>
+          <div class="demo-plus">+</div>
+          <div class="demo-key">S</div>
+          <div class="demo-key-desc">XP orb</div>
+        </div>
+        <div class="demo-key-combo" data-sound="cow" data-label="Cmd + C → 🐄 Cow moo!">
+          <div class="demo-key mod">⌘</div>
+          <div class="demo-plus">+</div>
+          <div class="demo-key">C</div>
+          <div class="demo-key-desc">Cow moo</div>
+        </div>
+        <div class="demo-key-combo" data-sound="pig" data-label="Cmd + V → 🐷 Pig oink!">
+          <div class="demo-key mod">⌘</div>
+          <div class="demo-plus">+</div>
+          <div class="demo-key">V</div>
+          <div class="demo-key-desc">Pig oink</div>
+        </div>
+        <div class="demo-key-combo" data-sound="dog" data-label="Cmd + Z → 🐕 Dog bark!">
+          <div class="demo-key mod">⌘</div>
+          <div class="demo-plus">+</div>
+          <div class="demo-key">Z</div>
+          <div class="demo-key-desc">Dog bark</div>
+        </div>
+        <div class="demo-key-combo" data-sound="levelup" data-label="Level Up → 🎵 Fanfare!">
+          <div class="demo-key mod" style="font-size:13px">⬆</div>
+          <div class="demo-key-desc">Level up</div>
+        </div>
+      </div>
+    </div>
+    <div class="demo-sound-label" id="demoSoundLabel">🎵 Click a key to hear it — or wait for the auto-demo</div>
   </div>
 </section>
 
