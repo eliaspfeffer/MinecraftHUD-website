@@ -51,9 +51,13 @@
 
   <ol class="ty-steps">
     <li>Open the <strong>.dmg</strong> — drag MinecraftHUD to Applications</li>
-    <li>Open from <strong>/Applications</strong></li>
-    <li>macOS warning? → System Settings → Privacy → <strong>Open Anyway</strong></li>
-    <li>Grant <strong>Accessibility</strong> + <strong>Input Monitoring</strong></li>
+    <li><strong>Right-click</strong> MinecraftHUD.app → click <strong>"Open"</strong> → click <strong>"Open"</strong> again in the popup</li>
+    <li style="background:rgba(255,200,0,0.08);border-left:2px solid #ffd700;padding:8px 12px;margin:4px 0;list-style:none;border-radius:2px">
+      ⚠️ If you see <em>"Apple could not verify…"</em> — this is normal for indie apps.<br/>
+      Fix: open Terminal and paste:<br/>
+      <code style="display:block;margin-top:8px;background:#000;padding:8px;color:#7fff00;font-size:11px;border-radius:3px;user-select:all">xattr -cr /Applications/MinecraftHUD.app && open /Applications/MinecraftHUD.app</code>
+    </li>
+    <li>Grant <strong>Accessibility</strong> + <strong>Input Monitoring</strong> when asked</li>
     <li>HUD appears at the bottom — start typing ⛏</li>
   </ol>
 
