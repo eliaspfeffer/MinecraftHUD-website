@@ -120,11 +120,35 @@ setInterval(() => {
   });
 }, 700);
 
+// ── SUPABASE ─────────────────────────────────────────────────
+const _sb = supabase.createClient(
+  'https://eczgwwpesnjlvwqrelzz.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVjemd3d3Blc25qbHZ3cXJlbHp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2NzcxNzUsImV4cCI6MjA4OTI1MzE3NX0.YJZD6nwYBD-1u4DiKATIel2F5zvGa-E1h9nJbeJzB9o'
+);
+
 // ── NOTIFY FORM ──────────────────────────────────────────────
-function handleNotify(e) {
+async function handleNotify(e) {
   e.preventDefault();
+  const email = document.getElementById('notifyEmail').value.trim();
+  if (!email) return;
+
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.textContent = '...';
+  btn.disabled = true;
+
+  const { error } = await _sb.from('email_signups').insert({ email, platform: 'all' });
+
+  if (error && error.code !== '23505') { // 23505 = unique violation (already signed up)
+    btn.textContent = 'Notify Me';
+    btn.disabled = false;
+    alert('Something went wrong. Please try again.');
+    return;
+  }
+
   document.getElementById('notifyConfirm').style.display = 'block';
   e.target.reset();
+  btn.textContent = 'Notify Me';
+  btn.disabled = false;
 }
 
 // ── NAV SCROLL SHADOW ────────────────────────────────────────

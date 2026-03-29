@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thanks! — MinecraftHUD</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body { display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; }
+    .ty-box {
+      max-width: 520px;
+      background: #111;
+      border: 2px solid #3a5a3a;
+      border-radius: 12px;
+      padding: 48px 40px;
+      text-align: center;
+    }
+    .ty-icon { font-size: 64px; margin-bottom: 24px; display:block; }
+    .ty-title { font-family:'Press Start 2P',monospace; font-size:16px; color:#7fff00; margin-bottom:20px; line-height:1.6; }
+    .ty-sub { color:#aaa; font-size:15px; line-height:1.7; margin-bottom:32px; }
+    .btn-download-big {
+      display:inline-block;
+      background:#7fff00;
+      color:#000;
+      font-family:'Press Start 2P',monospace;
+      font-size:11px;
+      padding:18px 32px;
+      border-radius:6px;
+      text-decoration:none;
+      border:none;
+      cursor:pointer;
+      transition:opacity .15s;
+    }
+    .btn-download-big:hover { opacity:.85; }
+    .ty-steps { margin-top:32px; text-align:left; color:#888; font-size:13px; line-height:2; }
+    .ty-steps li { margin-bottom:4px; }
+    .ty-footer { margin-top:32px; font-size:12px; color:#555; }
+  </style>
+</head>
+<body>
+<div class="ty-box">
+  <span class="ty-icon">⛏</span>
+  <div class="ty-title">You're in Survival Mode.</div>
+  <p class="ty-sub">Payment confirmed. Your download is ready.<br/>Check your email for a receipt too.</p>
+
+  <a href="https://github.com/eliaspfeffer/MinecraftHUD/releases/latest/download/MinecraftHUD.dmg"
+     class="btn-download-big">
+    ⬇ &nbsp;Download MinecraftHUD.dmg
+  </a>
+
+  <ol class="ty-steps">
+    <li>Open the <strong>.dmg</strong> — drag MinecraftHUD to Applications</li>
+    <li>Open from <strong>/Applications</strong></li>
+    <li>macOS warning? → System Settings → Privacy → <strong>Open Anyway</strong></li>
+    <li>Grant <strong>Accessibility</strong> + <strong>Input Monitoring</strong></li>
+    <li>HUD appears at the bottom — start typing ⛏</li>
+  </ol>
+
+  <div class="ty-footer">
+    Questions? <a href="mailto:eliaspfeffer@gmail.com" style="color:#7fff00;">eliaspfeffer@gmail.com</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/eliaspfeffer/MinecraftHUD" style="color:#7fff00;">GitHub</a>
+  </div>
+</div>
+</body>
+</html>

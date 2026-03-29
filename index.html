@@ -234,14 +234,18 @@
           <li><span>✓</span> macOS 13 Ventura or later</li>
           <li><span>✓</span> No dock icon — runs silently</li>
         </ul>
-        <form action="https://www.paypal.com/donate" method="post" target="_blank">
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" id="paypalForm">
+          <input type="hidden" name="cmd" value="_xclick" />
           <input type="hidden" name="business" value="eliaspfeffer@gmail.com" />
-          <input type="hidden" name="item_name" value="MinecraftHUD for macOS" />
+          <input type="hidden" name="item_name" value="MinecraftHUD for macOS v1.1" />
           <input type="hidden" name="amount" value="4.99" />
           <input type="hidden" name="currency_code" value="USD" />
+          <input type="hidden" name="return" value="https://minecrafthud.vercel.app/thank-you" />
+          <input type="hidden" name="cancel_return" value="https://minecrafthud.vercel.app/#download" />
+          <input type="hidden" name="notify_url" value="https://eczgwwpesnjlvwqrelzz.supabase.co/functions/v1/paypal-ipn" />
+          <input type="hidden" name="no_shipping" value="1" />
           <button type="submit" class="btn-paypal">💳 Buy via PayPal — $4.99</button>
         </form>
-        <a href="https://github.com/eliaspfeffer/MinecraftHUD/releases/latest/download/MinecraftHUD.dmg" class="btn-download">⬇ Download .app (free / pay what you want)</a>
       </div>
 
       <!-- Windows -->
@@ -280,7 +284,7 @@
       <h3>🔔 Get notified for Windows &amp; Linux</h3>
       <p>Drop your email and we'll ping you the moment it's ready.</p>
       <form class="notify-form" onsubmit="handleNotify(event)">
-        <input type="email" placeholder="your@email.com" class="mc-input" required />
+        <input type="email" id="notifyEmail" placeholder="your@email.com" class="mc-input" required />
         <button type="submit" class="btn-primary" style="white-space:nowrap">Notify Me</button>
       </form>
       <p class="notify-confirm" id="notifyConfirm" style="display:none">✓ You're on the list. We'll ping you.</p>
@@ -303,6 +307,7 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
