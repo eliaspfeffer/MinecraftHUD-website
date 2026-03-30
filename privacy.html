@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MinecraftHUD – Privacy Policy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛏</text></svg>" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #7fff00;
+      --bg: #080c08;
+      --card: #0f160f;
+      --border: rgba(127,255,0,0.15);
+      --text: #e8ffe8;
+      --dim: #7a9a7a;
+      --pixel: 'Press Start 2P', monospace;
+      --sans: 'Inter', sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.7; }
+    a { color: var(--green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .nav {
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-family: var(--pixel); font-size: 11px; color: var(--green); }
+    .nav a { font-family: var(--pixel); font-size: 8px; color: var(--dim); }
+
+    .hero {
+      text-align: center;
+      padding: 80px 40px 60px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero h1 { font-family: var(--pixel); font-size: clamp(14px, 2vw, 20px); color: var(--green); margin-bottom: 16px; }
+    .hero p { color: var(--dim); font-size: 16px; max-width: 500px; margin: 0 auto; }
+
+    .content { max-width: 760px; margin: 0 auto; padding: 60px 40px; }
+
+    .section { margin-bottom: 48px; }
+    .section h2 { font-family: var(--pixel); font-size: 11px; color: var(--green); margin-bottom: 20px; }
+    .section p { color: var(--dim); font-size: 14px; margin-bottom: 14px; }
+    .section ul { color: var(--dim); font-size: 14px; padding-left: 20px; }
+    .section ul li { margin-bottom: 8px; }
+
+    .footer {
+      text-align: center; padding: 40px;
+      border-top: 1px solid var(--border);
+      font-size: 12px; color: #333;
+    }
+
+    @media (max-width: 600px) {
+      .nav { padding: 16px 20px; }
+      .content { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-logo">⛏ MinecraftHUD</span>
+  <a href="/">← Back</a>
+</nav>
+
+<div class="hero">
+  <h1>Privacy Policy</h1>
+  <p>MinecraftHUD does not collect, store, or transmit any personal data.</p>
+</div>
+
+<div class="content">
+
+  <div class="section">
+    <h2>// Overview</h2>
+    <p>MinecraftHUD is a macOS menu bar app that plays Minecraft sounds while you type. Your privacy is straightforward: we collect nothing.</p>
+  </div>
+
+  <div class="section">
+    <h2>// Data We Do NOT Collect</h2>
+    <ul>
+      <li>Keystrokes — the app listens for key events to trigger sounds, but no key data is recorded, stored, or transmitted anywhere.</li>
+      <li>Personal information — no name, email, or account is required to use the app.</li>
+      <li>Usage analytics — no crash reports, telemetry, or analytics are collected.</li>
+      <li>Location data — the app does not access your location.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>// Permissions Explained</h2>
+    <p><strong style="color: var(--text)">Accessibility</strong> — required to detect keyboard shortcuts (e.g. Cmd+S, Cmd+C) so the matching Minecraft sound can be played. No keystrokes are logged.</p>
+    <p><strong style="color: var(--text)">Input Monitoring</strong> — required to play the dirt sound while you type. No key data is stored or transmitted.</p>
+  </div>
+
+  <div class="section">
+    <h2>// Third Parties</h2>
+    <p>MinecraftHUD does not share data with any third parties because no data is collected in the first place. The app makes no network requests during normal use.</p>
+  </div>
+
+  <div class="section">
+    <h2>// Purchase</h2>
+    <p>Purchases are processed by Stripe or the Mac App Store. Payment information is handled entirely by those platforms — MinecraftHUD never sees or stores payment data.</p>
+  </div>
+
+  <div class="section">
+    <h2>// Contact</h2>
+    <p>Questions about this policy? Email <a href="mailto:eliaspfeffer@gmail.com">eliaspfeffer@gmail.com</a>.</p>
+  </div>
+
+  <div class="section">
+    <h2>// Changes</h2>
+    <p>If this policy ever changes, the updated version will be posted at this URL. Last updated: March 2026.</p>
+  </div>
+
+</div>
+
+<div class="footer">
+  © 2026 Elias Pfeffer · MinecraftHUD · Not affiliated with Mojang or Microsoft.
+</div>
+
+</body>
+</html>
