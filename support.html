@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MinecraftHUD – Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛏</text></svg>" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #7fff00;
+      --green-glow: rgba(127,255,0,0.3);
+      --bg: #080c08;
+      --card: #0f160f;
+      --border: rgba(127,255,0,0.15);
+      --text: #e8ffe8;
+      --dim: #7a9a7a;
+      --pixel: 'Press Start 2P', monospace;
+      --sans: 'Inter', sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.7; }
+    a { color: var(--green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .nav {
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-family: var(--pixel); font-size: 11px; color: var(--green); }
+    .nav a { font-family: var(--pixel); font-size: 8px; color: var(--dim); }
+
+    .hero {
+      text-align: center;
+      padding: 80px 40px 60px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero h1 { font-family: var(--pixel); font-size: clamp(14px, 2vw, 20px); color: var(--green); margin-bottom: 16px; }
+    .hero p { color: var(--dim); font-size: 16px; max-width: 500px; margin: 0 auto; }
+
+    .content { max-width: 760px; margin: 0 auto; padding: 60px 40px; }
+
+    .section { margin-bottom: 56px; }
+    .section h2 { font-family: var(--pixel); font-size: 11px; color: var(--green); margin-bottom: 24px; }
+
+    .faq-item { margin-bottom: 28px; }
+    .faq-q { font-weight: 600; color: var(--text); margin-bottom: 8px; font-size: 15px; }
+    .faq-a { color: var(--dim); font-size: 14px; }
+
+    .code-block {
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 14px 18px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      color: var(--green);
+      margin-top: 10px;
+      user-select: all;
+      overflow-x: auto;
+    }
+
+    .step-list { list-style: none; counter-reset: steps; }
+    .step-list li {
+      counter-increment: steps;
+      display: flex; gap: 16px;
+      margin-bottom: 16px; font-size: 14px; color: var(--dim);
+    }
+    .step-list li::before {
+      content: counter(steps);
+      font-family: var(--pixel); font-size: 9px;
+      color: var(--green); background: rgba(127,255,0,0.08);
+      border: 1px solid var(--border);
+      min-width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-list li strong { color: var(--text); }
+
+    .contact-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 32px;
+      text-align: center;
+    }
+    .contact-card h2 { font-family: var(--pixel); font-size: 11px; color: var(--green); margin-bottom: 12px; }
+    .contact-card p { color: var(--dim); font-size: 14px; margin-bottom: 20px; }
+    .contact-card a.btn {
+      display: inline-block;
+      background: var(--green); color: #000;
+      font-family: var(--pixel); font-size: 9px;
+      padding: 14px 28px; border-radius: 2px;
+    }
+
+    .footer {
+      text-align: center; padding: 40px;
+      border-top: 1px solid var(--border);
+      font-size: 12px; color: #333;
+    }
+
+    @media (max-width: 600px) {
+      .nav { padding: 16px 20px; }
+      .content { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-logo">⛏ MinecraftHUD</span>
+  <a href="/">← Back</a>
+</nav>
+
+<div class="hero">
+  <h1>Support</h1>
+  <p>Answers to the most common questions. Still stuck? Email us directly.</p>
+</div>
+
+<div class="content">
+
+  <!-- Installation -->
+  <div class="section">
+    <h2>// Installation</h2>
+    <ol class="step-list">
+      <li>Download <strong>MinecraftHUD.dmg</strong> from the confirmation email or purchase page.</li>
+      <li>Open the DMG and drag <strong>MinecraftHUD.app</strong> into your Applications folder.</li>
+      <li><strong>Right-click</strong> MinecraftHUD.app → click <strong>Open</strong> → click <strong>Open</strong> again in the dialog.</li>
+      <li>Grant <strong>Accessibility</strong> permission when prompted (required for keyboard shortcuts).</li>
+      <li>Grant <strong>Input Monitoring</strong> permission when prompted (required for typing sounds).</li>
+      <li>The HUD appears at the bottom of your screen. Start typing to hear sounds ⛏</li>
+    </ol>
+  </div>
+
+  <!-- Gatekeeper -->
+  <div class="section">
+    <h2>// "Apple could not verify…" warning</h2>
+    <div class="faq-item">
+      <div class="faq-q">Why do I see a security warning when opening the app?</div>
+      <div class="faq-a">
+        macOS Gatekeeper shows this for apps downloaded outside the App Store. MinecraftHUD is safe — it's just an indie app.
+        The quickest fix: right-click the app → <strong>Open</strong> → <strong>Open</strong>. You only need to do this once.<br/><br/>
+        Alternatively, open Terminal and paste:
+        <div class="code-block">xattr -cr /Applications/MinecraftHUD.app && open /Applications/MinecraftHUD.app</div>
+        Or: System Settings → Privacy &amp; Security → scroll down → <strong>Open Anyway</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- Permissions -->
+  <div class="section">
+    <h2>// Permissions</h2>
+    <div class="faq-item">
+      <div class="faq-q">Why does the app need Accessibility access?</div>
+      <div class="faq-a">Accessibility permission lets the app detect keyboard shortcuts (like Cmd+S, Cmd+C) to play the matching Minecraft sound. No keystrokes are recorded or transmitted.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Why does the app need Input Monitoring?</div>
+      <div class="faq-a">Input Monitoring is required to play the dirt sound while you type. Again — no key data is logged, stored, or sent anywhere.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">The sounds aren't playing / the HUD doesn't react to typing</div>
+      <div class="faq-a">
+        Check that both permissions are granted:<br/>
+        System Settings → Privacy &amp; Security → <strong>Accessibility</strong> → MinecraftHUD ✓<br/>
+        System Settings → Privacy &amp; Security → <strong>Input Monitoring</strong> → MinecraftHUD ✓<br/><br/>
+        After enabling, quit and reopen MinecraftHUD.
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section">
+    <h2>// Common Questions</h2>
+    <div class="faq-item">
+      <div class="faq-q">The app doesn't appear after opening</div>
+      <div class="faq-a">MinecraftHUD lives in the menu bar (top right, pickaxe icon ⛏). The HUD bar is at the very bottom of the screen. If you don't see it, click the menu bar icon and make sure the HUD is enabled.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do I quit the app?</div>
+      <div class="faq-a">Click the ⛏ icon in the menu bar → Quit MinecraftHUD.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do I disable the background animation?</div>
+      <div class="faq-a">Click ⛏ in the menu bar → toggle <strong>Minecraft Background</strong>.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Which Macs are supported?</div>
+      <div class="faq-a">macOS 13 (Ventura) or later. Apple Silicon and Intel both supported.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I get a refund?</div>
+      <div class="faq-a">Yes — email us within 7 days of purchase and we'll refund you, no questions asked.</div>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="contact-card">
+    <h2>// Still need help?</h2>
+    <p>Email us and we'll get back to you within 24 hours.</p>
+    <a class="btn" href="mailto:eliaspfeffer@gmail.com">eliaspfeffer@gmail.com</a>
+  </div>
+
+</div>
+
+<div class="footer">
+  © 2026 Elias Pfeffer · MinecraftHUD · Not affiliated with Mojang or Microsoft.
+</div>
+
+</body>
+</html>
