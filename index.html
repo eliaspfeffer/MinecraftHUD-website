@@ -47,18 +47,18 @@
   <div class="cc-badge">v1.1 · macOS 13+</div>
   <div class="cc-title">⛏ MinecraftHUD</div>
   <div class="cc-sub">Your Mac.<br/>In Survival Mode.</div>
-  <div class="waitlist-wrap">
-    <div class="waitlist-label">🚀 Launching soon — get notified first</div>
-    <form class="waitlist-form" id="waitlistForm">
-      <input type="email" id="waitlistEmail" placeholder="your@email.com" required autocomplete="email" />
-      <button type="submit" class="btn-notify" id="waitlistBtn">Notify me</button>
-    </form>
-    <div class="waitlist-success" id="waitlistSuccess">⛏ You're on the list! We'll message you when it drops.</div>
-    <a class="btn-tiktok" href="https://www.tiktok.com/@minecrafthud" target="_blank" rel="noopener">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:6px"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
-      Follow on TikTok for the launch
-    </a>
-  </div>
+  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+    <input type="hidden" name="cmd" value="_xclick" />
+    <input type="hidden" name="business" value="eliaspfeffer@gmail.com" />
+    <input type="hidden" name="item_name" value="MinecraftHUD for macOS v1.1" />
+    <input type="hidden" name="amount" value="4.99" />
+    <input type="hidden" name="currency_code" value="USD" />
+    <input type="hidden" name="return" value="https://minecrafthud.vercel.app/thank-you" />
+    <input type="hidden" name="cancel_return" value="https://minecrafthud.vercel.app/" />
+    <input type="hidden" name="notify_url" value="https://eczgwwpesnjlvwqrelzz.supabase.co/functions/v1/paypal-ipn" />
+    <input type="hidden" name="no_shipping" value="1" />
+    <button type="submit" class="btn-buy">⬇ &nbsp;Download for Mac — $4.99</button>
+  </form>
   <div class="cc-features">
     <span>❤️ Battery hearts</span>
     <span>✨ XP from keystrokes</span>
