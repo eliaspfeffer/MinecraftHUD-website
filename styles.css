@@ -111,25 +111,69 @@ html, body {
   color: rgba(255,255,255,0.55); line-height: 2.2;
   margin-bottom: 30px;
 }
-.btn-buy {
-  display: block; width: 100%;
+/* ─── WAITLIST ─── */
+.waitlist-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 12px; margin-bottom: 20px;
+}
+.waitlist-label {
+  font-family: var(--pixel); font-size: clamp(7px, 1vw, 9px);
+  color: rgba(255,255,255,0.55); text-align: center;
+}
+.waitlist-form {
+  display: flex; width: 100%; gap: 0;
+}
+.waitlist-form input[type="email"] {
+  flex: 1;
+  background: rgba(0,0,0,0.5);
+  border: 2px solid var(--green);
+  border-right: none;
+  color: #fff;
+  font-family: var(--pixel); font-size: clamp(7px, 1vw, 9px);
+  padding: 14px 12px;
+  outline: none;
+}
+.waitlist-form input[type="email"]::placeholder { color: rgba(255,255,255,0.28); }
+.waitlist-form input[type="email"]:focus { border-color: #fff; }
+.btn-notify {
   background: var(--green); color: #000;
-  font-family: var(--pixel); font-size: clamp(8px, 1.2vw, 11px);
-  padding: 18px 28px;
+  font-family: var(--pixel); font-size: clamp(7px, 1vw, 9px);
+  padding: 14px 16px;
   border: none; cursor: pointer;
   transition: box-shadow .2s, transform .1s;
-  box-shadow: 0 0 30px var(--green-glow);
-  margin-bottom: 20px;
-  position: relative; overflow: hidden;
+  box-shadow: 0 0 20px var(--green-glow);
+  white-space: nowrap;
 }
-.btn-buy::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
-  transform: translateX(-100%); transition: transform .5s;
+.btn-notify:hover { box-shadow: 0 0 40px var(--green-glow); transform: translateY(-1px); }
+.btn-notify:active { transform: translateY(0); }
+.btn-notify:disabled { opacity: 0.5; cursor: default; transform: none; }
+.waitlist-success {
+  display: none;
+  font-family: var(--pixel); font-size: clamp(7px, 1vw, 8px);
+  color: var(--green); text-align: center; line-height: 2;
 }
-.btn-buy:hover::after { transform: translateX(100%); }
-.btn-buy:hover { box-shadow: 0 0 50px var(--green-glow); transform: translateY(-2px); }
-.btn-buy:active { transform: translateY(0); }
+.waitlist-success.visible { display: block; }
+.btn-tiktok {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.15);
+  color: #fff;
+  font-family: var(--pixel); font-size: clamp(7px, 1vw, 9px);
+  padding: 13px 20px;
+  text-decoration: none;
+  transition: background .2s, border-color .2s, transform .1s;
+}
+.btn-tiktok:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.4);
+  transform: translateY(-1px);
+}
+
+/* Legacy buy button (kept for reference, hidden) */
+.btn-buy {
+  display: none;
+}
 
 .cc-features {
   display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;

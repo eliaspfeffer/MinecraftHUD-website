@@ -550,3 +550,43 @@ function spawnMob() {
 setTimeout(spawnMob, 1200);
 setTimeout(spawnMob, 4000);
 setInterval(() => { if (Math.random() < 0.75) spawnMob(); }, 5500);
+
+// ── WAITLIST FORM ─────────────────────────────────────────────
+const waitlistForm    = document.getElementById('waitlistForm');
+const waitlistEmail   = document.getElementById('waitlistEmail');
+const waitlistBtn     = document.getElementById('waitlistBtn');
+const waitlistSuccess = document.getElementById('waitlistSuccess');
+
+if (waitlistForm) {
+  waitlistForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = waitlistEmail.value.trim();
+    if (!email) return;
+
+    waitlistBtn.disabled = true;
+    waitlistBtn.textContent = '...';
+
+    try {
+      const res = await fetch(
+        'https://eczgwwpesnjlvwqrelzz.supabase.co/functions/v1/waitlist-signup',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        }
+      );
+      if (res.ok) {
+        waitlistForm.style.display = 'none';
+        waitlistSuccess.classList.add('visible');
+      } else {
+        waitlistBtn.disabled = false;
+        waitlistBtn.textContent = 'Notify me';
+        alert('Something went wrong. Please try again.');
+      }
+    } catch {
+      waitlistBtn.disabled = false;
+      waitlistBtn.textContent = 'Notify me';
+      alert('Network error. Please try again.');
+    }
+  });
+}
