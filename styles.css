@@ -185,6 +185,8 @@ html, body {
   transition: color .15s, border-color .15s;
 }
 .btn-free-dl:hover { color: var(--green); border-color: rgba(127,255,0,0.3); }
+.btn-windows { color: rgba(100,180,255,0.6); border-color: rgba(100,180,255,0.15); margin-top: 6px; }
+.btn-windows:hover { color: #64b4ff; border-color: rgba(100,180,255,0.4); }
 
 /* ─── HUD OVERLAY ─── */
 .hud-overlay {
