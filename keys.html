@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MinecraftHUD – Get License Key</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #1D1D1D;
+      color: #FFF;
+      font-family: 'Press Start 2P', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      gap: 24px;
+    }
+    h1 { font-size: 14px; color: #FFFF55; letter-spacing: 1px; }
+    p  { font-size: 8px; color: #AAA; text-align: center; line-height: 2.2; max-width: 500px; }
+    .key-box {
+      background: #111;
+      border: 3px solid #55FF55;
+      padding: 18px 32px;
+      font-size: 16px;
+      color: #55FF55;
+      letter-spacing: 4px;
+      text-align: center;
+      min-width: 380px;
+      text-shadow: 0 0 10px #55FF5544;
+      user-select: all;
+      cursor: text;
+    }
+    .key-box.loading { color: #888; border-color: #555; }
+    .key-box.error   { color: #FF5555; border-color: #FF5555; font-size: 9px; letter-spacing: 1px; }
+    button {
+      background: #555;
+      border: none;
+      border-top: 2px solid #888;
+      border-left: 2px solid #888;
+      border-bottom: 2px solid #333;
+      border-right: 2px solid #333;
+      color: #FFF;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    button:hover { background: #666; }
+    button:active {
+      border-top: 2px solid #333; border-left: 2px solid #333;
+      border-bottom: 2px solid #888; border-right: 2px solid #888;
+    }
+    .btn-row { display: flex; gap: 12px; }
+    .btn-copy { background: #1a6e0e; border-color: #55FF55 #1a3e0e #1a3e0e #55FF55; }
+    .btn-copy:hover { background: #267c18; }
+    .btn-new  { background: #555; }
+    #status { font-size: 7px; color: #55FF55; min-height: 16px; }
+    a { color: #FFFF55; text-decoration: none; font-size: 8px; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>⛏ LICENSE KEY</h1>
+  <p>Click "Generate" to create a new license key.<br>Copy it and paste into MinecraftHUD on first launch.</p>
+
+  <div class="key-box loading" id="key-display">Click Generate...</div>
+
+  <div class="btn-row">
+    <button class="btn-copy" id="btn-copy" onclick="copyKey()">📋 COPY</button>
+    <button class="btn-new" onclick="generateKey()">🔄 GENERATE NEW</button>
+  </div>
+
+  <div id="status"></div>
+  <a href="/">← Back to MinecraftHUD</a>
+
+<script>
+const display = document.getElementById('key-display');
+const status  = document.getElementById('status');
+let currentKey = '';
+
+async function generateKey() {
+  display.className = 'key-box loading';
+  display.textContent = 'Generating...';
+  status.textContent = '';
+
+  try {
+    const res = await fetch('/api/generate-key', { method: 'POST' });
+    const data = await res.json();
+
+    if (!res.ok || !data.key) throw new Error(data.error || 'Failed');
+
+    currentKey = data.key;
+    display.className = 'key-box';
+    display.textContent = data.key;
+    status.textContent = 'Key created! Copy and paste into MinecraftHUD.';
+  } catch (err) {
+    display.className = 'key-box error';
+    display.textContent = 'Failed to create key. Try again.';
+    status.textContent = err.message || '';
+  }
+}
+
+async function copyKey() {
+  if (!currentKey) { generateKey(); return; }
+  try {
+    await navigator.clipboard.writeText(currentKey);
+    status.textContent = 'Copied to clipboard!';
+  } catch {
+    status.textContent = 'Copy failed. Select the key manually.';
+  }
+}
+</script>
+</body>
+</html>
