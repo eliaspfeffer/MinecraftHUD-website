@@ -146,6 +146,46 @@ html, body {
   color: rgba(255,255,255,0.22); line-height: 2;
 }
 
+/* ─── FRIEND SHARE ─── */
+.cc-friend-share {
+  margin-bottom: 20px;
+  border: 1px solid rgba(127,255,0,0.2);
+  padding: 14px 16px;
+  background: rgba(0,0,0,0.35);
+}
+.friend-label {
+  font-family: var(--pixel); font-size: 8px;
+  color: var(--gold); margin-bottom: 10px;
+}
+.friend-row {
+  display: flex; gap: 8px; margin-bottom: 10px;
+}
+.friend-link-input {
+  flex: 1; background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(127,255,0,0.25);
+  color: rgba(255,255,255,0.7);
+  font-family: var(--pixel); font-size: 7px;
+  padding: 7px 10px; outline: none;
+}
+.btn-copy {
+  font-family: var(--pixel); font-size: 7px;
+  background: rgba(127,255,0,0.15); color: var(--green);
+  border: 1px solid var(--green); padding: 7px 12px;
+  cursor: pointer; transition: background .15s;
+  white-space: nowrap;
+}
+.btn-copy:hover { background: rgba(127,255,0,0.3); }
+.btn-copy.copied { color: var(--gold); border-color: var(--gold); }
+.btn-free-dl {
+  display: block; text-align: center;
+  font-family: var(--pixel); font-size: 8px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none; padding: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: color .15s, border-color .15s;
+}
+.btn-free-dl:hover { color: var(--green); border-color: rgba(127,255,0,0.3); }
+
 /* ─── HUD OVERLAY ─── */
 .hud-overlay {
   position: fixed; bottom: var(--dock-height); left: 0; right: 0;

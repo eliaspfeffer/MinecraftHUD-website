@@ -44,13 +44,13 @@
 
 <!-- Center Card -->
 <div class="center-card">
-  <div class="cc-badge">v1.1 · macOS 13+</div>
+  <div class="cc-badge">v1.2 · macOS 13+</div>
   <div class="cc-title">⛏ MinecraftHUD</div>
   <div class="cc-sub">Your Mac.<br/>In Survival Mode.</div>
   <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
     <input type="hidden" name="cmd" value="_xclick" />
     <input type="hidden" name="business" value="eliaspfeffer@gmail.com" />
-    <input type="hidden" name="item_name" value="MinecraftHUD for macOS v1.1" />
+    <input type="hidden" name="item_name" value="MinecraftHUD for macOS v1.2" />
     <input type="hidden" name="amount" value="4.99" />
     <input type="hidden" name="currency_code" value="USD" />
     <input type="hidden" name="return" value="https://minecrafthud.vercel.app/thank-you" />
@@ -59,11 +59,24 @@
     <input type="hidden" name="no_shipping" value="1" />
     <button type="submit" class="btn-buy">⬇ &nbsp;Download for Mac — $4.99</button>
   </form>
+  <div class="cc-friend-share">
+    <div class="friend-label">🎮 Share with a friend</div>
+    <div class="friend-row">
+      <input class="friend-link-input" id="friendLink" type="text" readonly
+             value="https://minecrafthud.vercel.app/MinecraftHUD.dmg" />
+      <button class="btn-copy" onclick="copyFriendLink()">COPY</button>
+    </div>
+    <a class="btn-free-dl" href="/MinecraftHUD.dmg" download>⬇ Free Download (macOS)</a>
+  </div>
   <div class="cc-features">
     <span>❤️ Battery hearts</span>
     <span>✨ XP from keystrokes</span>
     <span>💀 Kill feed</span>
     <span>🐄 Walking mobs</span>
+    <span>🕷 Creeper on Cmd+X</span>
+    <span>🏆 Achievements</span>
+    <span>👥 Friends leaderboard</span>
+    <span>🛡 Focus Mode</span>
   </div>
   <div class="cc-note">One-time · No subscription · Apple Silicon &amp; Intel</div>
 </div>

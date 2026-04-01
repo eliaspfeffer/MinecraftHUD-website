@@ -1,3 +1,17 @@
+// ── FRIEND SHARE ─────────────────────────────────────────────
+function copyFriendLink() {
+  const input = document.getElementById('friendLink');
+  const btn = document.querySelector('.btn-copy');
+  navigator.clipboard.writeText(input.value).then(() => {
+    btn.textContent = 'COPIED!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => {
+    input.select();
+    document.execCommand('copy');
+  });
+}
+
 // ── OS DETECTION + TASKBAR ───────────────────────────────────
 const OS = (() => {
   const ua = navigator.userAgent;
