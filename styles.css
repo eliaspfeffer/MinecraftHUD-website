@@ -175,6 +175,31 @@ html, body {
   text-shadow: 0 0 12px rgba(255,215,0,0.4);
 }
 
+/* ─── DEMO VIDEO ─── */
+.cc-demo-video {
+  margin-bottom: 18px;
+}
+.demo-label {
+  font-family: var(--pixel); font-size: 8px;
+  color: var(--gold); margin-bottom: 10px;
+  text-align: center;
+}
+.demo-placeholder {
+  border: 1px solid rgba(127,255,0,0.2);
+  background: rgba(0,0,0,0.35);
+  overflow: hidden;
+}
+.demo-coming-soon {
+  padding: 28px 16px;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.demo-icon { font-size: 24px; }
+.demo-text {
+  font-family: var(--pixel); font-size: 7px;
+  color: rgba(255,255,255,0.35);
+}
+
 /* ─── TESTIMONIALS ─── */
 .cc-testimonials {
   margin-top: 18px;
