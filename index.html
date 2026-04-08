@@ -8,14 +8,14 @@
 
   <!-- OpenGraph / Social preview -->
   <meta property="og:type"        content="website" />
-  <meta property="og:url"         content="https://minecrafthud.vercel.app/" />
+  <meta property="og:url"         content="https://minecrafthud.eliaspfeffer.de/" />
   <meta property="og:title"       content="MinecraftHUD – Your Mac in Survival Mode" />
   <meta property="og:description" content="Minecraft-style HUD for your Mac. Battery = hearts. Work = XP. Apps = kill feed. Loved by 1,200+ players." />
-  <meta property="og:image"       content="https://minecrafthud.vercel.app/screenshot1.png" />
+  <meta property="og:image"       content="https://minecrafthud.eliaspfeffer.de/screenshot1.png" />
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="MinecraftHUD – Your Mac in Survival Mode" />
   <meta name="twitter:description" content="Minecraft-style HUD for your Mac. Battery = hearts. Work = XP. Apps = kill feed." />
-  <meta name="twitter:image"       content="https://minecrafthud.vercel.app/screenshot1.png" />
+  <meta name="twitter:image"       content="https://minecrafthud.eliaspfeffer.de/screenshot1.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
@@ -71,8 +71,8 @@
     <input type="hidden" name="item_name" value="MinecraftHUD for macOS v1.2" />
     <input type="hidden" name="amount" value="4.99" />
     <input type="hidden" name="currency_code" value="USD" />
-    <input type="hidden" name="return" value="https://minecrafthud.vercel.app/thank-you" />
-    <input type="hidden" name="cancel_return" value="https://minecrafthud.vercel.app/" />
+    <input type="hidden" name="return" value="https://minecrafthud.eliaspfeffer.de/thank-you" />
+    <input type="hidden" name="cancel_return" value="https://minecrafthud.eliaspfeffer.de/" />
     <input type="hidden" name="notify_url" value="https://eczgwwpesnjlvwqrelzz.supabase.co/functions/v1/paypal-ipn" />
     <input type="hidden" name="no_shipping" value="1" />
     <button type="submit" class="btn-buy btn-buy-mac" onclick="if(window.va)va('event',{name:'mac_purchase_click'})">⬇ &nbsp;Download for Mac — $4.99</button>
@@ -118,11 +118,11 @@
     <div class="friend-label">🎮 Share with a friend</div>
     <div class="friend-row">
       <input class="friend-link-input" id="friendLink" type="text" readonly
-             value="https://minecrafthud.vercel.app/MinecraftHUD.dmg" />
+             value="https://minecrafthud.eliaspfeffer.de/MinecraftHUD.dmg" />
       <button class="btn-copy" onclick="copyFriendLink()">COPY</button>
     </div>
-    <a class="btn-free-dl" href="/MinecraftHUD.dmg" download>⬇ Free Download (macOS)</a>
-    <a class="btn-free-dl btn-windows" href="https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/MinecraftHUD-Setup.exe">⬇ Free Download (Windows)</a>
+    <a class="btn-free-dl" id="friendDlMac" href="/MinecraftHUD.dmg" download>⬇ Free Download (macOS)</a>
+    <a class="btn-free-dl btn-windows" id="friendDlWin" href="https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/MinecraftHUD-Setup.exe" style="display:none">⬇ Free Download (Windows)</a>
   </div>
   <div class="cc-features">
     <span>❤️ Battery hearts</span>

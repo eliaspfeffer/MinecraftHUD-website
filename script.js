@@ -7,6 +7,15 @@
     const winCTA = document.getElementById('winCTA');
     if (macCTA) macCTA.style.display = 'none';
     if (winCTA) winCTA.style.display = 'block';
+
+    // Friend share: show Windows download + update copy link
+    const friendLink = document.getElementById('friendLink');
+    const friendDlMac = document.getElementById('friendDlMac');
+    const friendDlWin = document.getElementById('friendDlWin');
+    const WIN_DL = 'https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/MinecraftHUD-Setup.exe';
+    if (friendLink) friendLink.value = WIN_DL;
+    if (friendDlMac) friendDlMac.style.display = 'none';
+    if (friendDlWin) friendDlWin.style.display = 'inline-block';
   }
 })();
 
