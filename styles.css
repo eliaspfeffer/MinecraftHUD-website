@@ -146,6 +146,60 @@ html, body {
   color: rgba(255,255,255,0.22); line-height: 2;
 }
 
+/* ─── WINDOWS CTA ─── */
+.btn-buy-win {
+  display: block; width: 100%;
+  background: #64b4ff; color: #000;
+  font-family: var(--pixel); font-size: clamp(8px, 1.2vw, 11px);
+  padding: 18px 28px;
+  border: none; cursor: pointer;
+  transition: box-shadow .2s, transform .1s;
+  box-shadow: 0 0 30px rgba(100,180,255,0.4);
+  margin-bottom: 10px;
+  text-decoration: none;
+  text-align: center;
+}
+.btn-buy-win:hover { box-shadow: 0 0 50px rgba(100,180,255,0.6); transform: translateY(-2px); }
+.cc-win-sub {
+  font-family: var(--pixel); font-size: 7px;
+  color: rgba(255,255,255,0.28); text-align: center;
+  margin-bottom: 10px;
+}
+
+/* ─── SOCIAL PROOF ─── */
+.cc-social-proof {
+  font-family: var(--pixel); font-size: 8px;
+  color: var(--gold);
+  margin-bottom: 18px;
+  text-align: center;
+  text-shadow: 0 0 12px rgba(255,215,0,0.4);
+}
+
+/* ─── TESTIMONIALS ─── */
+.cc-testimonials {
+  margin-top: 18px;
+  display: flex; flex-direction: column; gap: 10px;
+  text-align: left;
+}
+.testimonial {
+  border: 1px solid rgba(127,255,0,0.12);
+  background: rgba(0,0,0,0.28);
+  padding: 12px 14px;
+}
+.t-stars {
+  font-size: 10px; color: var(--gold);
+  margin-bottom: 6px; letter-spacing: 2px;
+}
+.t-body {
+  font-family: var(--pixel); font-size: 6.5px;
+  color: rgba(255,255,255,0.6); line-height: 2.0;
+  margin-bottom: 6px;
+}
+.t-author {
+  font-family: var(--pixel); font-size: 6px;
+  color: rgba(127,255,0,0.45);
+}
+
 /* ─── FRIEND SHARE ─── */
 .cc-friend-share {
   margin-bottom: 20px;
@@ -419,8 +473,18 @@ html, body {
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 600px) {
-  .center-card { padding: 30px 22px 26px; min-width: 260px; }
+  .center-card {
+    padding: 22px 18px 20px;
+    min-width: 260px;
+    /* Keep CTA above the fold: anchor top, allow vertical scroll */
+    top: calc(26px + 8px); /* below menu bar */
+    transform: translateX(-50%);
+    max-height: calc(100dvh - 26px - var(--dock-height) - 64px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .cc-features { gap: 6px; }
   .menubar-item { display: none; }
   .killfeed { right: 8px; }
+  .btn-buy, .btn-buy-win { padding: 14px 18px; }
 }

@@ -1,3 +1,15 @@
+// ── OS-AWARE CTA ──────────────────────────────────────────────
+(function () {
+  const ua = navigator.userAgent;
+  const isWindows = /Win32|Win64|Windows/.test(ua);
+  if (isWindows) {
+    const macCTA = document.getElementById('macCTA');
+    const winCTA = document.getElementById('winCTA');
+    if (macCTA) macCTA.style.display = 'none';
+    if (winCTA) winCTA.style.display = 'block';
+  }
+})();
+
 // ── FRIEND SHARE ─────────────────────────────────────────────
 function copyFriendLink() {
   const input = document.getElementById('friendLink');
