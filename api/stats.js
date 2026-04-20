@@ -52,14 +52,13 @@ export default async function handler(req, res) {
     const today     = views.filter(v => v.created_at?.startsWith(todayStr)).length;
     const yesterday = views.filter(v => v.created_at?.startsWith(yesterdayStr)).length;
 
-    const validPurchases = Array.isArray(purchases)
-      ? purchases.filter(p => p.status === 'Completed' || p.status === 'completed')
+    const completedPurchases = Array.isArray(purchases)
+      ? purchases.filter(p => p.status === 'completed')
       : [];
-    const totalPurchases = validPurchases.length;
+    const totalPurchases = completedPurchases.length;
 
-    // Last 30-day purchase activity for "active users" signal
     const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
-    const recentPurchases = validPurchases.filter(p => p.created_at >= thirtyDaysAgo).length;
+    const recentPurchases = completedPurchases.filter(p => p.created_at >= thirtyDaysAgo).length;
 
     const cc = {};
     views.forEach(v => { const c = v.country || 'Unknown'; cc[c] = (cc[c] || 0) + 1; });

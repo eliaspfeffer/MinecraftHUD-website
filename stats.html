@@ -229,6 +229,47 @@
       66%  { content: '...'; }
     }
 
+    /* Level card */
+    .level-card {
+      background: var(--bg2);
+      border: 3px solid var(--gold);
+      box-shadow: 0 0 24px rgba(255,170,0,0.15), inset -3px -3px 0 rgba(0,0,0,0.4);
+      padding: 32px;
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .level-badge {
+      text-align: center;
+      min-width: 140px;
+    }
+    .level-badge-label { font-size: 7px; color: var(--muted); letter-spacing: 2px; margin-bottom: 12px; }
+    .level-badge-num { font-size: 64px; color: var(--gold); line-height: 1; letter-spacing: -4px; }
+    .level-right { flex: 1; }
+    .level-xp-label { font-size: 7px; color: var(--muted); letter-spacing: 1px; margin-bottom: 10px; }
+    .level-xp-track {
+      width: 100%; height: 20px;
+      background: #0a0a0a;
+      border: 2px solid var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+    .level-xp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #aa7700, #ffaa00);
+      transition: width 1.2s ease;
+    }
+    .level-xp-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 40%;
+      background: rgba(255,255,255,0.15);
+    }
+    .level-xp-text { font-size: 7px; color: var(--dim); margin-top: 8px; }
+    .level-desc { font-size: 8px; color: var(--muted); margin-top: 16px; line-height: 2; }
+
     .footer { border-top: 2px solid var(--border); padding: 24px 0; margin-top: 48px; }
     .footer p { font-size: 7px; color: var(--dim); }
     .footer a { color: var(--muted); text-decoration: none; }
@@ -258,6 +299,22 @@
 
   <div id="loading">Loading</div>
   <div id="content" style="display:none">
+
+    <!-- Level Card -->
+    <div class="level-card">
+      <div class="level-badge">
+        <div class="level-badge-label">Current Level</div>
+        <div class="level-badge-num" id="statLevel">—</div>
+      </div>
+      <div class="level-right">
+        <div class="level-xp-label" id="levelXpLabel">XP Progress</div>
+        <div class="level-xp-track">
+          <div class="level-xp-fill" id="levelXpFill" style="width:0%"></div>
+        </div>
+        <div class="level-xp-text" id="levelXpText">— XP · — to next level</div>
+        <div class="level-desc" id="levelDesc"></div>
+      </div>
+    </div>
 
     <!-- KPIs -->
     <div class="kpis">
@@ -344,6 +401,24 @@ async function load() {
     document.getElementById('content').style.display = 'block';
     document.getElementById('lastUpdated').textContent =
       'Updated ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+    // Level (1 purchase = 10 XP in Minecraft terms)
+    const xp = data.totalPurchases * 10;
+    const level = xpToLevel(xp);
+    const xpThisLevel = xp - levelToXp(level);
+    const xpNextLevel = levelToXp(level + 1) - levelToXp(level);
+    const xpPct = Math.round(xpThisLevel / xpNextLevel * 100);
+    animateCount(document.getElementById('statLevel'), level);
+    document.getElementById('levelXpLabel').textContent = `Level ${level} → ${level + 1}`;
+    setTimeout(() => {
+      document.getElementById('levelXpFill').style.width = xpPct + '%';
+    }, 400);
+    document.getElementById('levelXpText').textContent =
+      `${xp.toLocaleString()} XP total · ${xpNextLevel - xpThisLevel} XP to next level`;
+    const titles = ['Noob','Apprentice','Crafter','Explorer','Warrior','Veteran','Expert','Master','Champion','Legend'];
+    const titleIdx = Math.min(Math.floor(level / 10), titles.length - 1);
+    document.getElementById('levelDesc').textContent =
+      `Rank: ${titles[titleIdx]} · ${data.totalPurchases} players served`;
 
     // KPIs
     animateCount(document.getElementById('statTotal'),     data.total);
@@ -471,6 +546,17 @@ async function load() {
   }
 }
 
+function xpToLevel(xp) {
+  if (xp < 352)  return Math.floor(-3 + Math.sqrt(xp + 9));
+  if (xp < 1507) return Math.floor(8.1 + Math.sqrt(0.4 * (xp - 195.975)));
+  return Math.floor(18.056 + Math.sqrt(0.222 * (xp - 54.5)));
+}
+function levelToXp(level) {
+  if (level <= 16) return level * level + 6 * level;
+  if (level <= 31) return 2.5 * level * level - 40.5 * level + 360;
+  return 4.5 * level * level - 162.5 * level + 2220;
+}
+
 function animateCount(el, target) {
   const dur = 1000, steps = 40;
   let i = 0;
@@ -482,6 +568,12 @@ function animateCount(el, target) {
 }
 
 load();
+
+fetch('/api/track', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ path: '/stats', referrer: document.referrer }),
+}).catch(() => {});
 </script>
 </body>
 </html>
