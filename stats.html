@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stats — MinecraftHUD</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛏</text></svg>" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #1a1a2e;
+      --bg2:      #16213e;
+      --bg3:      #0f3460;
+      --green:    #5aff5a;
+      --gold:     #ffaa00;
+      --red:      #ff5555;
+      --text:     #e0e0e0;
+      --muted:    #8a8a8a;
+      --dim:      #555;
+      --border:   #2a2a4a;
+      --font:     'Press Start 2P', monospace;
+    }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Pixel border utility */
+    .pixel-box {
+      border: 3px solid var(--border);
+      box-shadow: inset -3px -3px 0 rgba(0,0,0,0.4), inset 3px 3px 0 rgba(255,255,255,0.05);
+      image-rendering: pixelated;
+    }
+
+    /* Nav */
+    .nav {
+      background: var(--bg2);
+      border-bottom: 3px solid var(--border);
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .nav-brand {
+      font-size: 14px;
+      color: var(--green);
+      text-decoration: none;
+      letter-spacing: 2px;
+    }
+    .nav-brand span { color: var(--gold); }
+    .nav-label { font-size: 8px; color: var(--muted); letter-spacing: 2px; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 40px; }
+
+    .page-header {
+      padding: 48px 0 32px;
+      border-bottom: 3px solid var(--border);
+      margin-bottom: 48px;
+    }
+    .page-header h1 {
+      font-size: 20px;
+      color: var(--green);
+      letter-spacing: 3px;
+      margin-bottom: 12px;
+    }
+    .page-header h1 span { color: var(--gold); }
+    .page-header p { font-size: 8px; color: var(--muted); letter-spacing: 1px; }
+
+    /* KPIs */
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .kpi {
+      background: var(--bg2);
+      padding: 24px 20px;
+      border: 3px solid var(--border);
+      box-shadow: inset -3px -3px 0 rgba(0,0,0,0.4), inset 3px 3px 0 rgba(255,255,255,0.05);
+    }
+    .kpi-label { font-size: 7px; letter-spacing: 1px; color: var(--muted); margin-bottom: 16px; }
+    .kpi-value { font-size: 28px; color: var(--green); letter-spacing: -1px; line-height: 1; }
+    .kpi-value.gold { color: var(--gold); }
+    .kpi-sub { font-size: 7px; color: var(--dim); margin-top: 10px; }
+    .kpi-delta { font-size: 7px; margin-top: 10px; }
+    .kpi-delta.up   { color: var(--green); }
+    .kpi-delta.down { color: var(--red); }
+
+    /* Section */
+    .section-title {
+      font-size: 10px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+    }
+    .chart-section { margin-bottom: 48px; }
+
+    /* Map */
+    .map-wrap {
+      border: 3px solid var(--border);
+      box-shadow: inset -3px -3px 0 rgba(0,0,0,0.4);
+      margin-bottom: 48px;
+    }
+    #visitor-map { width: 100%; height: 440px; }
+    .map-note {
+      font-size: 7px;
+      color: var(--dim);
+      letter-spacing: 1px;
+      padding: 8px 12px;
+      border-top: 2px solid var(--border);
+      background: var(--bg2);
+    }
+    .leaflet-container { background: #1a2a1a !important; }
+    .leaflet-popup-content-wrapper {
+      border-radius: 0 !important;
+      background: var(--bg) !important;
+      color: var(--green) !important;
+      font-family: var(--font) !important;
+      font-size: 9px !important;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.6) !important;
+      border: 2px solid var(--green) !important;
+    }
+    .leaflet-popup-tip { background: var(--bg) !important; }
+    .leaflet-popup-content { margin: 8px 12px !important; line-height: 1.8 !important; }
+    .leaflet-control-zoom a {
+      border-radius: 0 !important;
+      font-family: var(--font) !important;
+      background: var(--bg2) !important;
+      color: var(--green) !important;
+      border-color: var(--border) !important;
+    }
+    .marker-cluster-small  { background-color: rgba(90,255,90,0.15); }
+    .marker-cluster-medium { background-color: rgba(255,170,0,0.2); }
+    .marker-cluster-large  { background-color: rgba(255,85,85,0.25); }
+    .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
+      background-color: rgba(90,255,90,0.6);
+      color: #000;
+      font-family: var(--font);
+      font-size: 9px;
+      font-weight: 700;
+      border-radius: 0;
+      margin: 3px;
+    }
+    .marker-cluster-medium div { background-color: rgba(255,170,0,0.7); }
+    .marker-cluster-large  div { background-color: rgba(255,85,85,0.7); color: #fff; }
+    .marker-cluster { border-radius: 0; }
+
+    /* Sparkline */
+    .sparkline-wrap {
+      background: var(--bg2);
+      border: 3px solid var(--border);
+      padding: 24px;
+      margin-bottom: 48px;
+    }
+    #sparkline { width: 100%; height: 120px; display: block; }
+
+    /* Country bars */
+    .bar-chart { display: flex; flex-direction: column; gap: 12px; }
+    .bar-row { display: flex; align-items: center; gap: 12px; }
+    .bar-label { font-size: 8px; color: var(--text); min-width: 180px; display: flex; align-items: center; gap: 8px; }
+    .bar-flag { font-size: 14px; }
+    .bar-track { flex: 1; height: 16px; background: var(--bg2); border: 2px solid var(--border); overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--green); transition: width 0.8s ease; }
+    .bar-fill-gold { background: var(--gold); }
+    .bar-count { font-size: 8px; color: var(--muted); min-width: 40px; text-align: right; }
+
+    /* XP bar style for "active users" */
+    .xp-section {
+      background: var(--bg2);
+      border: 3px solid var(--border);
+      padding: 24px;
+      margin-bottom: 48px;
+    }
+    .xp-label { font-size: 8px; color: var(--muted); margin-bottom: 12px; }
+    .xp-bar-track {
+      width: 100%;
+      height: 24px;
+      background: #0a0a0a;
+      border: 2px solid var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+    .xp-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2ecc40, #5aff5a);
+      transition: width 1.2s ease;
+      position: relative;
+    }
+    .xp-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 40%;
+      background: rgba(255,255,255,0.15);
+    }
+    .xp-bar-text { font-size: 8px; color: var(--muted); margin-top: 8px; }
+
+    #loading { padding: 80px 0; text-align: center; font-size: 10px; color: var(--green); }
+    #loading::after {
+      content: '...';
+      animation: dots 1.2s steps(3, end) infinite;
+    }
+    @keyframes dots {
+      0%   { content: '.'; }
+      33%  { content: '..'; }
+      66%  { content: '...'; }
+    }
+
+    .footer { border-top: 2px solid var(--border); padding: 24px 0; margin-top: 48px; }
+    .footer p { font-size: 7px; color: var(--dim); }
+    .footer a { color: var(--muted); text-decoration: none; }
+    .footer a:hover { color: var(--green); }
+
+    @media (max-width: 700px) {
+      .kpis { grid-template-columns: repeat(2, 1fr); }
+      .nav, .container { padding-left: 16px; padding-right: 16px; }
+      #visitor-map { height: 260px; }
+      .bar-label { min-width: 120px; font-size: 7px; }
+      .page-header h1 { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-brand" href="/">⛏ Minecraft<span>HUD</span></a>
+  <span class="nav-label">Player Stats</span>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Player <span>Stats</span></h1>
+    <p id="lastUpdated">Loading world data...</p>
+  </div>
+
+  <div id="loading">Loading</div>
+  <div id="content" style="display:none">
+
+    <!-- KPIs -->
+    <div class="kpis">
+      <div class="kpi">
+        <div class="kpi-label">Website Visitors</div>
+        <div class="kpi-value" id="statTotal">—</div>
+        <div class="kpi-sub">all time</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Today</div>
+        <div class="kpi-value" id="statToday">—</div>
+        <div class="kpi-delta" id="statDelta"></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Downloads</div>
+        <div class="kpi-value gold" id="statPurchases">—</div>
+        <div class="kpi-sub">Mac app sold</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Countries</div>
+        <div class="kpi-value" id="statCountries">—</div>
+        <div class="kpi-sub">unique</div>
+      </div>
+    </div>
+
+    <!-- Active Players -->
+    <div class="chart-section">
+      <div class="section-title">Active Players (Last 30 Days)</div>
+      <div class="xp-section">
+        <div class="xp-label">Recent downloads vs all-time downloads</div>
+        <div class="xp-bar-track">
+          <div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div>
+        </div>
+        <div class="xp-bar-text" id="xpBarText">— / — purchases in last 30 days</div>
+      </div>
+    </div>
+
+    <!-- Visitor Map -->
+    <div class="chart-section">
+      <div class="section-title">Where They Come From</div>
+      <div class="map-wrap">
+        <div id="visitor-map"></div>
+        <div class="map-note">Precision: city level · IP-based geolocation · Zoom in for detail</div>
+      </div>
+    </div>
+
+    <!-- Daily sparkline -->
+    <div class="chart-section">
+      <div class="section-title">Last 30 Days</div>
+      <div class="sparkline-wrap">
+        <svg id="sparkline" viewBox="0 0 880 120" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+
+    <!-- Countries -->
+    <div class="chart-section">
+      <div class="section-title">Top Countries</div>
+      <div class="bar-chart" id="countryChart"></div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <p>Data from Supabase · <a href="/">← Back to site</a></p>
+  </footer>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+async function load() {
+  try {
+    const r = await fetch('/api/stats');
+    const data = await r.json();
+
+    document.getElementById('loading').style.display = 'none';
+
+    if (!data.configured) {
+      document.getElementById('loading').textContent = 'Stats not configured yet.';
+      document.getElementById('loading').style.display = 'block';
+      return;
+    }
+
+    document.getElementById('content').style.display = 'block';
+    document.getElementById('lastUpdated').textContent =
+      'Updated ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+    // KPIs
+    animateCount(document.getElementById('statTotal'),     data.total);
+    animateCount(document.getElementById('statToday'),     data.today);
+    animateCount(document.getElementById('statPurchases'), data.totalPurchases);
+    animateCount(document.getElementById('statCountries'), data.countries.length);
+
+    const delta = document.getElementById('statDelta');
+    if (data.yesterday > 0) {
+      const pct = Math.round((data.today - data.yesterday) / data.yesterday * 100);
+      delta.textContent = (pct >= 0 ? '+' : '') + pct + '% vs yesterday';
+      delta.className = 'kpi-delta ' + (pct >= 0 ? 'up' : 'down');
+    } else {
+      delta.textContent = 'vs yesterday: —';
+      delta.className = 'kpi-delta';
+    }
+
+    // XP bar (recent vs all-time purchases)
+    if (data.totalPurchases > 0) {
+      const pct = Math.round(data.recentPurchases / data.totalPurchases * 100);
+      setTimeout(() => {
+        document.getElementById('xpBarFill').style.width = pct + '%';
+      }, 300);
+      document.getElementById('xpBarText').textContent =
+        data.recentPurchases + ' / ' + data.totalPurchases + ' purchases in last 30 days';
+    } else {
+      document.getElementById('xpBarText').textContent = 'No purchase data yet';
+    }
+
+    // Leaflet map
+    const map = L.map('visitor-map', { zoomSnap: 0.5 });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO',
+      subdomains: 'abcd',
+      maxZoom: 18,
+    }).addTo(map);
+
+    const markers = L.markerClusterGroup({
+      maxClusterRadius: 40,
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+    });
+
+    if (data.points && data.points.length > 0) {
+      data.points.forEach(p => {
+        const circle = L.circleMarker([p.lat, p.lng], {
+          radius: 6,
+          fillColor: '#5aff5a',
+          color: '#2ecc40',
+          weight: 1.5,
+          opacity: 1,
+          fillOpacity: 0.8,
+        });
+        const flag = data.countries.find(c => c.code === p.country)?.flag || '';
+        circle.bindPopup(`<strong>${flag} ${p.city || p.country}</strong><br/>${p.country}`);
+        markers.addLayer(circle);
+      });
+      map.addLayer(markers);
+      map.fitBounds(markers.getBounds().pad(0.2));
+    } else {
+      map.setView([30, 10], 2);
+    }
+
+    // Sparkline
+    if (data.daily.length > 0) {
+      const svg = document.getElementById('sparkline');
+      const max = Math.max(...data.daily.map(d => d.count), 1);
+      const W = 880, H = 120, PAD = 8;
+      const pts = data.daily.map((d, i) => {
+        const x = PAD + (i / (data.daily.length - 1 || 1)) * (W - PAD * 2);
+        const y = H - PAD - (d.count / max) * (H - PAD * 2);
+        return [x, y];
+      });
+
+      const areaPath = `M${pts[0][0]},${H - PAD} ` +
+        pts.map(p => `L${p[0]},${p[1]}`).join(' ') +
+        ` L${pts[pts.length-1][0]},${H - PAD} Z`;
+      const area = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      area.setAttribute('d', areaPath);
+      area.setAttribute('fill', 'rgba(90,255,90,0.08)');
+      svg.appendChild(area);
+
+      const linePath = `M${pts.map(p => p.join(',')).join(' L')}`;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      line.setAttribute('d', linePath);
+      line.setAttribute('fill', 'none');
+      line.setAttribute('stroke', '#5aff5a');
+      line.setAttribute('stroke-width', '2');
+      svg.appendChild(line);
+
+      pts.forEach(([x, y], i) => {
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 3);
+        c.setAttribute('fill', '#5aff5a');
+        const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+        title.textContent = `${data.daily[i].date}: ${data.daily[i].count}`;
+        c.appendChild(title);
+        svg.appendChild(c);
+      });
+    }
+
+    // Country bars
+    const chart = document.getElementById('countryChart');
+    const maxBar = data.countries[0]?.count || 1;
+    data.countries.forEach((c, i) => {
+      const row = document.createElement('div');
+      row.className = 'bar-row';
+      row.innerHTML = `
+        <div class="bar-label"><span class="bar-flag">${c.flag}</span>${c.name}</div>
+        <div class="bar-track">
+          <div class="bar-fill${i === 0 ? ' bar-fill-gold' : ''}" style="width:0%" data-pct="${c.count / maxBar * 100}"></div>
+        </div>
+        <div class="bar-count">${c.count}</div>
+      `;
+      chart.appendChild(row);
+    });
+    setTimeout(() => {
+      document.querySelectorAll('.bar-fill').forEach(el => {
+        el.style.width = el.dataset.pct + '%';
+      });
+    }, 100);
+
+  } catch (err) {
+    document.getElementById('loading').textContent = 'Could not load stats: ' + err.message;
+  }
+}
+
+function animateCount(el, target) {
+  const dur = 1000, steps = 40;
+  let i = 0;
+  const iv = setInterval(() => {
+    i++;
+    el.textContent = Math.round(target * (i / steps)).toLocaleString();
+    if (i >= steps) clearInterval(iv);
+  }, dur / steps);
+}
+
+load();
+</script>
+</body>
+</html>
