@@ -1,0 +1,58 @@
+# MinecraftHUD
+
+> A Minecraft-style HUD overlay for Mac and Windows. Battery = hearts. Keystrokes = XP. Closed apps = kill feed.
+
+## What is MinecraftHUD?
+
+MinecraftHUD is a desktop overlay application that gamifies your computer in real time using Minecraft's iconic HUD aesthetic. It displays a persistent overlay at the bottom of your screen (like a Minecraft game HUD) and animates background elements that react to your real system activity.
+
+## Who is it for?
+
+- Minecraft fans who want their Mac or Windows PC to feel like a game
+- Developers and knowledge workers who want a fun, gamified productivity boost
+- Anyone who wants to see their battery as hearts instead of a percentage
+- Gamers who use their Mac for work and want it to feel like an RPG
+
+## Key Features
+
+- **Battery as hearts**: Battery level is displayed as Minecraft heart containers — low battery = low health
+- **XP bar from keystrokes**: Every keystroke fills your XP bar and levels you up
+- **Kill feed**: When you close an app, a kill feed notification appears ("Chrome was slain")
+- **Walking mobs**: Passive mobs walk across the background of your screen
+- **Creeper explosion on Cmd+X**: Cutting text triggers a Creeper explosion animation
+- **Achievements**: Unlock achievements for productivity milestones
+- **Friends leaderboard**: Compare XP with friends
+- **Focus Mode**: Hide distractions for deep work sessions
+- **No subscription**: One-time purchase, yours forever
+
+## Pricing
+
+- macOS: $4.99 one-time (supports Apple Silicon and Intel)
+- Windows: Free download
+
+## System Requirements
+
+- macOS 13 (Ventura) or later
+- Windows 10 or later
+
+## Download / Access
+
+- Website & purchase: https://minecrafthud.eliaspfeffer.de/
+- Windows download: https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/MinecraftHUD-Setup.exe
+
+## FAQs
+
+**What is MinecraftHUD?**
+A desktop overlay app that shows your Mac/Windows system stats as Minecraft UI elements — hearts for battery, XP bar for keystrokes, kill feed for closed apps.
+
+**Is MinecraftHUD free?**
+Windows version is free. macOS is a one-time $4.99 purchase — no subscription.
+
+**Does it work on Apple Silicon (M1/M2/M3/M4)?**
+Yes, fully supports Apple Silicon and Intel Macs running macOS 13+.
+
+**Will it slow down my Mac?**
+No. It's a lightweight overlay with minimal CPU and memory footprint.
+
+**What does the kill feed show?**
+When you quit an application, a message appears in the top-right corner like "Chrome was slain" or "Spotify eliminated", styled like Minecraft's kill feed.
