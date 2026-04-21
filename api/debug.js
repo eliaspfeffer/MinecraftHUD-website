@@ -2,50 +2,55 @@ const SUPABASE_URL = 'https://eczgwwpesnjlvwqrelzz.supabase.co';
 
 export default async function handler(req, res) {
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!SUPABASE_KEY) return res.status(200).json({ error: 'SUPABASE_SERVICE_ROLE_KEY not set' });
 
-  if (!SUPABASE_KEY) {
-    return res.status(200).json({ error: 'SUPABASE_SERVICE_ROLE_KEY env var is not set' });
-  }
+  const headers = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`,
+    'Content-Type': 'application/json',
+  };
 
-  const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` };
+  // Find the table via RPC (bypasses schema cache issue)
+  const rpcRes = await fetch(`${SUPABASE_URL}/rest/v1/rpc/`, { headers }).catch(() => null);
 
-  // Check what columns exist
-  const schemaRes = await fetch(
+  // Query information_schema directly via RPC
+  const schemaCheckRes = await fetch(`${SUPABASE_URL}/rest/v1/rpc/`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({}),
+  }).catch(() => null);
+
+  // Check purchases table
+  const purchasesRes = await fetch(
+    `${SUPABASE_URL}/rest/v1/purchases?select=status,created_at&limit=5`,
+    { headers }
+  ).catch(() => null);
+  const purchasesStatus = purchasesRes?.status;
+  const purchasesBody = await purchasesRes?.text() || 'fetch failed';
+
+  // Try inserting directly with service role via raw SQL endpoint
+  const sqlRes = await fetch(`${SUPABASE_URL}/rest/v1/minecrafthud_pageviews`, {
+    method: 'POST',
+    headers: { ...headers, 'Prefer': 'return=minimal' },
+    body: JSON.stringify({ country: 'DE', city: 'Test', path: '/debug', referrer: '', visitor_hash: 'dbg-' + Date.now() }),
+  }).catch(() => null);
+  const sqlStatus = sqlRes?.status;
+  const sqlBody = await sqlRes?.text() || 'fetch failed';
+
+  // Try reading the table
+  const readRes = await fetch(
     `${SUPABASE_URL}/rest/v1/minecrafthud_pageviews?limit=1`,
     { headers }
-  ).catch(e => ({ ok: false, error: e.message }));
-
-  let columns = null;
-  let schemaError = null;
-  if (schemaRes.ok) {
-    const rows = await schemaRes.json();
-    columns = rows.length > 0 ? Object.keys(rows[0]) : 'table exists but empty — column info unavailable';
-  } else {
-    schemaError = await schemaRes.text?.() || schemaRes.error;
-  }
-
-  // Try a test insert
-  const testInsert = await fetch(`${SUPABASE_URL}/rest/v1/minecrafthud_pageviews`, {
-    method: 'POST',
-    headers: { ...headers, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-    body: JSON.stringify({ country: 'TEST', city: 'Debug', path: '/debug', referrer: '', visitor_hash: 'debug-test-000' }),
-  }).catch(e => ({ ok: false, status: 'network error', error: e.message }));
-
-  const insertStatus = testInsert.status;
-  const insertBody = await testInsert.text?.() || '';
-
-  // Clean up test row
-  await fetch(
-    `${SUPABASE_URL}/rest/v1/minecrafthud_pageviews?visitor_hash=eq.debug-test-000`,
-    { method: 'DELETE', headers }
-  ).catch(() => {});
+  ).catch(() => null);
+  const readStatus = readRes?.status;
+  const readBody = await readRes?.text() || 'fetch failed';
 
   res.status(200).json({
-    envKeySet: !!SUPABASE_KEY,
-    keyPrefix: SUPABASE_KEY.slice(0, 8) + '...',
-    columns,
-    schemaError,
-    insertStatus,
-    insertBody: insertBody || '(empty — means success)',
+    insertStatus: sqlStatus,
+    insertBody: sqlBody,
+    readStatus,
+    readBody,
+    purchasesStatus,
+    purchasesSample: purchasesBody,
   });
 }
