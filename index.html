@@ -420,14 +420,20 @@
 
   const parts = buildSteve(container);
 
-  // Head + body cursor tracking (mirrors SteveCornerWindow.swift logic exactly)
+  // Head + body cursor tracking
   let targetYaw = 0, headYaw = 0, bodyYaw = 0;
   let targetPitch = 0, headPitch = 0, bodyPitch = 0;
+  const steveEl = document.getElementById('corner-steve');
   document.addEventListener('mousemove', function(e) {
-    const dx = e.clientX - 44;
-    const dy = e.clientY - (window.innerHeight - 180);
-    targetYaw   = Math.max(-55, Math.min(55,  dx / window.innerWidth  * 80));
-    targetPitch = Math.max(-30, Math.min(30, -dy / window.innerHeight * 60));
+    const rect = steveEl.getBoundingClientRect();
+    // Head center: horizontally centered (60px), vertically at top 24px (head is 48px tall)
+    const headX = rect.left + 60;
+    const headY = rect.top  + 24;
+    const dx = e.clientX - headX;
+    const dy = e.clientY - headY;
+    // atan2 gives true angle — depth=350px matches the perspective feel
+    targetYaw   = Math.max(-55, Math.min(55,  Math.atan2(dx, 350) * 180 / Math.PI));
+    targetPitch = Math.max(-30, Math.min(30, -Math.atan2(dy, 350) * 180 / Math.PI));
   });
 
   let walkPhase = 0;
