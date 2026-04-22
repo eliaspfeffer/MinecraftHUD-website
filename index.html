@@ -387,12 +387,13 @@
     headWrap.className = 's-box';
     headWrap._tx = CX + HW / 2;  // pivot X = horizontal center of head
     headWrap._ty = HH;            // pivot Y = neck (bottom of head)
+    headWrap._tz = -HD / 2;       // pivot Z = center of head depth (avoids chin-anchor)
     headWrap.style.cssText =
       `width:0;height:0;` +
-      `transform:translate3d(${headWrap._tx}px,${headWrap._ty}px,0px);` +
+      `transform:translate3d(${headWrap._tx}px,${headWrap._ty}px,${headWrap._tz}px);` +
       `transform-style:preserve-3d;`;
-    // Head box: offset so bottom-center aligns with pivot (0,0,0)
-    buildBox(headWrap, -HW/2, -HH, -HD/2, HW,HH,HD,
+    // Head box: Z=0 because pivot is already at head center-depth
+    buildBox(headWrap, -HW/2, -HH, 0, HW,HH,HD,
       {front:[8,8,8,8],back:[24,8,8,8],left:[0,8,8,8],right:[16,8,8,8],top:[8,0,8,8],bottom:[16,0,8,8]});
     parent.appendChild(headWrap);
 
@@ -418,6 +419,8 @@
   }
 
   const parts = buildSteve(container);
+  // Tilt the whole model so side faces are visible (gives 3D depth to body/arms/legs)
+  container.style.transform = 'rotateY(-20deg) rotateX(8deg)';
 
   // Head follows cursor — yaw (left/right) + pitch (up/down)
   let targetYaw = 0, headYaw = 0;
@@ -437,7 +440,7 @@
     const sw = Math.sin(walkPhase) * 25;
 
     parts.headWrap.style.transform =
-      `translate3d(${parts.headWrap._tx}px,${parts.headWrap._ty}px,0px)` +
+      `translate3d(${parts.headWrap._tx}px,${parts.headWrap._ty}px,${parts.headWrap._tz}px)` +
       ` rotateY(${headYaw.toFixed(2)}deg) rotateX(${headPitch.toFixed(2)}deg)`;
 
     function setLimb(el, a) {
