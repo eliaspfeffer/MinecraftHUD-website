@@ -625,10 +625,10 @@ html, body {
   pointer-events: none;
 }
 .steve-wrap {
-  width: 96px;
-  height: 192px;
-  perspective: 400px;
-  perspective-origin: 50% 30%;
+  width: 120px;   /* (32+16+16)*S = 64*3 — enough for arms */
+  height: 192px;  /* (16+24+24)*S at S=3 */
+  perspective: 600px;
+  perspective-origin: 50% 20%;
 }
 .steve-model {
   width: 100%;
