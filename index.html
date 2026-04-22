@@ -419,21 +419,26 @@
 
   const parts = buildSteve(container);
 
-  // Head follows cursor (same lerp approach as the app's SteveCornerWindow)
+  // Head follows cursor — yaw (left/right) + pitch (up/down)
   let targetYaw = 0, headYaw = 0;
+  let targetPitch = 0, headPitch = 0;
   document.addEventListener('mousemove', function(e) {
-    const dx = e.clientX - 44; // Steve sits at ~44px from left edge
-    targetYaw = Math.max(-55, Math.min(55, dx / window.innerWidth * 80));
+    const dx = e.clientX - 44;
+    const dy = e.clientY - (window.innerHeight - 180); // Steve's head Y on screen
+    targetYaw   = Math.max(-55, Math.min(55,  dx / window.innerWidth  * 80));
+    targetPitch = Math.max(-30, Math.min(30, -dy / window.innerHeight * 60));
   });
 
   let walkPhase = 0;
   (function animate() {
     walkPhase += 0.05;
-    headYaw += (targetYaw - headYaw) * 0.13;
+    headYaw   += (targetYaw   - headYaw)   * 0.13;
+    headPitch += (targetPitch - headPitch) * 0.13;
     const sw = Math.sin(walkPhase) * 25;
 
     parts.headWrap.style.transform =
-      `translate3d(${parts.headWrap._tx}px,${parts.headWrap._ty}px,0px) rotateY(${headYaw.toFixed(2)}deg)`;
+      `translate3d(${parts.headWrap._tx}px,${parts.headWrap._ty}px,0px)` +
+      ` rotateY(${headYaw.toFixed(2)}deg) rotateX(${headPitch.toFixed(2)}deg)`;
 
     function setLimb(el, a) {
       el.style.transform =
