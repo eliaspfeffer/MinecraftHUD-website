@@ -157,68 +157,32 @@
 <div class="center-card">
   <div class="cc-badge">v1.2 · macOS 13+ &amp; Windows 10+</div>
   <div class="cc-title">⛏ MinecraftHUD</div>
-  <div class="cc-sub">Your Mac.<br/>In Survival Mode.</div>
+  <div class="cc-sub">Your Desktop.<br/>In Survival Mode.</div>
 
-  <!-- Primary CTA — macOS paid -->
-  <form action="https://www.paypal.com/cgi-bin/webscr" method="post" id="macCTA">
-    <input type="hidden" name="cmd" value="_xclick" />
-    <input type="hidden" name="business" value="eliaspfeffer@gmail.com" />
-    <input type="hidden" name="item_name" value="MinecraftHUD for macOS v1.2" />
-    <input type="hidden" name="amount" value="4.99" />
-    <input type="hidden" name="currency_code" value="USD" />
-    <input type="hidden" name="return" value="https://minecrafthud.eliaspfeffer.de/thank-you" />
-    <input type="hidden" name="cancel_return" value="https://minecrafthud.eliaspfeffer.de/" />
-    <input type="hidden" name="notify_url" value="https://eczgwwpesnjlvwqrelzz.supabase.co/functions/v1/paypal-ipn" />
-    <input type="hidden" name="no_shipping" value="1" />
-    <button type="submit" class="btn-buy btn-buy-mac" onclick="if(window.va)va('event',{name:'mac_purchase_click'})">⬇ &nbsp;Download for Mac — $4.99</button>
-  </form>
+  <!-- Mac CTA (shown by default, hidden on Windows) -->
+  <div id="macCTA">
+    <a class="btn-buy btn-buy-mac"
+       href="/MinecraftHUD.dmg"
+       download
+       onclick="if(window.va)va('event',{name:'mac_download_click'})">
+      ⬇ &nbsp;Download for Mac
+    </a>
+    <div class="cc-win-sub" style="margin-bottom:18px;">7-day free trial, then $4.99</div>
+  </div>
 
-  <!-- Windows CTA — free -->
-  <div id="winCTA" style="display:none; margin-bottom:20px;">
+  <!-- Windows CTA (hidden by default, shown on Windows) -->
+  <div id="winCTA" style="display:none;">
     <a class="btn-buy btn-buy-win"
        href="https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/MinecraftHUD-Setup.exe"
        onclick="if(window.va)va('event',{name:'windows_download_click'})">
       ⬇ &nbsp;Download for Windows — Free
     </a>
-    <div class="cc-win-sub">macOS version also available · $4.99</div>
+    <div class="cc-win-sub" style="margin-bottom:18px;">macOS version: 7-day free trial, then $4.99</div>
   </div>
 
   <!-- Social proof -->
   <div class="cc-social-proof">🎮 Joined by 1,200+ players worldwide</div>
 
-  <!-- Demo Video -->
-  <div class="cc-demo-video">
-    <div class="demo-label">▶ See it in action</div>
-    <!-- Replace VIDEO_ID with the actual YouTube video ID when available -->
-    <div class="demo-placeholder" id="demoVideo">
-      <iframe
-        width="100%"
-        height="200"
-        src="https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
-        title="MinecraftHUD Demo"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        style="display:none"
-        id="demoIframe"
-      ></iframe>
-      <div class="demo-coming-soon" id="demoComingSoon">
-        <div class="demo-icon">🎬</div>
-        <div class="demo-text">Demo video coming soon</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="cc-friend-share">
-    <div class="friend-label">🎮 Share with a friend</div>
-    <div class="friend-row">
-      <input class="friend-link-input" id="friendLink" type="text" readonly
-             value="https://minecrafthud.eliaspfeffer.de/MinecraftHUD.dmg" />
-      <button class="btn-copy" onclick="copyFriendLink()">COPY</button>
-    </div>
-    <a class="btn-free-dl" id="friendDlMac" href="/MinecraftHUD.dmg" download>⬇ Free Download (macOS)</a>
-    <a class="btn-free-dl btn-windows" id="friendDlWin" href="https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/MinecraftHUD-Setup.exe" style="display:none">⬇ Free Download (Windows)</a>
-  </div>
   <div class="cc-features">
     <span>❤️ Battery hearts</span>
     <span>✨ XP from keystrokes</span>
@@ -231,33 +195,16 @@
   </div>
   <div class="cc-note">One-time · No subscription · Apple Silicon &amp; Intel · Windows 10+</div>
 
-  <!-- Testimonials -->
-  <div class="cc-testimonials">
-    <div class="testimonial">
-      <div class="t-stars">★★★★★</div>
-      <div class="t-body">"Saw 'Slack has fallen' in my kill feed and felt zero guilt. Closed another app. Got 200 XP. This is how I want to work."</div>
-      <div class="t-author">— @griefcraft, Twitter</div>
+  <!-- Friend share -->
+  <div class="cc-friend-share">
+    <div class="friend-label">🎮 Share with a friend</div>
+    <div class="friend-row">
+      <input class="friend-link-input" id="friendLink" type="text" readonly
+             value="https://minecrafthud.eliaspfeffer.de/MinecraftHUD.dmg" />
+      <button class="btn-copy" onclick="copyFriendLink()">COPY</button>
     </div>
-    <div class="testimonial">
-      <div class="t-stars">★★★★★</div>
-      <div class="t-body">"I've never paid attention to my battery before. Six hearts down to four hearts is somehow more stressful than any progress bar."</div>
-      <div class="t-author">— u/PigFarmOptimizer, r/macapps</div>
-    </div>
-    <div class="testimonial">
-      <div class="t-stars">★★★★★</div>
-      <div class="t-body">"I hit Level 12 this week. My actual productivity probably hasn't changed but it feels like I'm speedrunning my to-do list."</div>
-      <div class="t-author">— App Store review</div>
-    </div>
-    <div class="testimonial">
-      <div class="t-stars">★★★★★</div>
-      <div class="t-body">"Installed this for the meme. My coworker saw it and bought it the same day. Now we have a leaderboard. Stupidly addictive."</div>
-      <div class="t-author">— @kobbicraft, Reddit</div>
-    </div>
-    <div class="testimonial">
-      <div class="t-stars">★★★★★</div>
-      <div class="t-body">"The creeper explosion on Cmd+X is my new favorite thing. Turns accidental cuts into a tiny game. I've never enjoyed deleting text more."</div>
-      <div class="t-author">— @withers_irl, Discord</div>
-    </div>
+    <a class="btn-free-dl" id="friendDlMac" href="/MinecraftHUD.dmg" download>⬇ Free Download (macOS)</a>
+    <a class="btn-free-dl btn-windows" id="friendDlWin" href="https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/MinecraftHUD-Setup.exe" style="display:none">⬇ Free Download (Windows)</a>
   </div>
 </div>
 
@@ -286,6 +233,24 @@
   </div>
 </div>
 
+<script>
+  // Platform detection: show appropriate CTA
+  (function() {
+    var ua = navigator.userAgent;
+    var isMac = /Macintosh|Mac OS X/.test(ua);
+    var isWin = /Windows/.test(ua);
+    if (isWin && !isMac) {
+      document.getElementById('macCTA').style.display = 'none';
+      document.getElementById('winCTA').style.display = 'block';
+      document.getElementById('friendDlMac').style.display = 'none';
+      document.getElementById('friendDlWin').style.display = 'block';
+    }
+    // On non-Mac non-Windows (Linux, etc.) or Mac: show both or default to Mac
+    if (!isMac && !isWin) {
+      document.getElementById('winCTA').style.display = 'block';
+    }
+  })();
+</script>
 <script src="script.js"></script>
 <script>
   fetch('/api/track', {
