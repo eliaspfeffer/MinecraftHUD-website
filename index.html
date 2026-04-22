@@ -336,147 +336,122 @@
   const model = document.getElementById('steveModel');
   if (!model) return;
 
-  const S = 3; // px per MC unit
+  const S = 3;
 
-  // Steve skin color palette
   const C = {
-    skin:     '#c8906a',
-    skinDark: '#b07858',
-    hair:     '#5a3a1a',
-    hairDark: '#3a2208',
-    shirt:    '#2255cc',
-    shirtDk:  '#1a44aa',
-    pants:    '#886633',
-    pantsDk:  '#6a4f22',
-    boot:     '#334499',
+    skin:'#c8906a', skinDk:'#b07858',
+    hair:'#5a3a1a', hairDk:'#3a2208',
+    shirt:'#2255cc', shirtDk:'#1a44aa',
+    pants:'#886633', pantsDk:'#6a4f22',
+    boot:'#334499',
   };
 
-  // Build a 3D box and add it to parent; return the box element
   function makeBox(parent, xPx, yPx, zPx, wPx, hPx, dPx, colors) {
     const box = document.createElement('div');
     box.className = 's-box';
-    box.style.cssText = `width:${wPx}px;height:${hPx}px;transform:translate3d(${xPx}px,${yPx}px,${zPx}px);`;
-    const faces = [
+    box.style.cssText = `width:${wPx}px;height:${hPx}px;` +
+      `transform:translate3d(${xPx}px,${yPx}px,${zPx}px);` +
+      `transform-style:preserve-3d;`;
+    [
       { w:wPx, h:hPx, t:`translateZ(${dPx/2}px)`,                     c:colors.front  },
       { w:wPx, h:hPx, t:`translateZ(${-dPx/2}px) rotateY(180deg)`,    c:colors.back   },
       { w:dPx, h:hPx, t:`translateX(${-dPx/2}px) rotateY(-90deg)`,    c:colors.left   },
       { w:dPx, h:hPx, t:`translateX(${wPx-dPx/2}px) rotateY(90deg)`,  c:colors.right  },
       { w:wPx, h:dPx, t:`translateY(${-dPx/2}px) rotateX(90deg)`,     c:colors.top    },
       { w:wPx, h:dPx, t:`translateY(${hPx-dPx/2}px) rotateX(-90deg)`, c:colors.bottom },
-    ];
-    faces.forEach(f => {
+    ].forEach(f => {
       const face = document.createElement('div');
       face.className = 's-face';
-      const css = `width:${f.w}px;height:${f.h}px;transform:${f.t};background:${f.c || '#888'};`;
-      // Front face of head: add Steve's face via a tiny inlined SVG background
-      face.style.cssText = css;
+      face.style.cssText = `width:${f.w}px;height:${f.h}px;transform:${f.t};background:${f.c||'#888'};`;
       box.appendChild(face);
     });
     parent.appendChild(box);
     return box;
   }
 
-  // Build Steve, return limb elements for animation
   function buildSteve(container) {
-    const HW=16*S, HH=16*S, HD=16*S;
-    const BW=16*S, BH=24*S, BD= 8*S;
-    const AW= 8*S, AH=24*S, AD= 8*S;
-    const LW= 8*S, LH=24*S, LD= 8*S;
-    const CX = (32*S - BW) / 2; // = 0 at S=3
+    const HW=16*S,HH=16*S,HD=16*S;
+    const BW=16*S,BH=24*S,BD= 8*S;
+    const AW= 8*S,AH=24*S,AD= 8*S;
+    const LW= 8*S,LH=24*S,LD= 8*S;
+    const CX = (32*S - BW) / 2; // center X = 24 at S=3
 
-    // Build head (will be rotated by JS)
+    // Head pivot wrapper — rotated by JS for cursor follow
     const headWrap = document.createElement('div');
     headWrap.className = 's-box';
-    headWrap.id = 'cornerSteveHead';
-    headWrap.style.cssText = `width:${HW}px;height:${HH}px;transform:translate3d(${CX}px,0px,0px);transform-origin:${HW/2}px ${HH*0.8}px 0px;`;
-    // Build head as inner box so we can rotate headWrap without fighting translate
-    const headFront = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Crect width='8' height='8' fill='%23c8906a'/%3E%3Crect x='0' y='0' width='8' height='2' fill='%235a3a1a'/%3E%3Crect x='1' y='3' width='2' height='2' fill='%230000cc'/%3E%3Crect x='5' y='3' width='2' height='2' fill='%230000cc'/%3E%3Crect x='2' y='6' width='4' height='1' fill='%23b07050'/%3E%3C/svg%3E")`;
+    // transform-origin at bottom-center of head (= neck pivot)
+    headWrap.style.cssText =
+      `width:${HW}px;height:${HH}px;` +
+      `transform:translate3d(${CX}px,0px,0px);` +
+      `transform-origin:${HW/2}px ${HH}px 0px;` +
+      `transform-style:preserve-3d;`;
+    headWrap._cx = CX;
+
+    const headFace = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Crect width='8' height='8' fill='%23c8906a'/%3E%3Crect x='0' y='0' width='8' height='2' fill='%235a3a1a'/%3E%3Crect x='1' y='3' width='2' height='2' fill='%230000cc'/%3E%3Crect x='5' y='3' width='2' height='2' fill='%230000cc'/%3E%3Crect x='3' y='5' width='2' height='1' fill='%23a06040'/%3E%3Crect x='2' y='6' width='4' height='1' fill='%23b07050'/%3E%3C/svg%3E")`;
     const innerHead = makeBox(headWrap, 0, 0, -HD/2, HW, HH, HD, {
-      front: C.skin, back: C.hairDark, left: C.hair, right: C.hair, top: C.hairDark, bottom: C.skin,
+      front:C.skin, back:C.hairDk, left:C.hair, right:C.hair, top:C.hairDk, bottom:C.skin,
     });
-    // Override front face with face texture
-    innerHead.children[0].style.background = '';
-    innerHead.children[0].style.backgroundImage = headFront;
-    innerHead.children[0].style.backgroundSize = '100% 100%';
+    // Swap front face to pixel-art Steve face
+    const frontFace = innerHead.children[0];
+    frontFace.style.background = '';
+    frontFace.style.backgroundImage = headFace;
+    frontFace.style.backgroundSize = '100% 100%';
     container.appendChild(headWrap);
 
-    // Body
     makeBox(container, CX, HH, -BD/2, BW, BH, BD, {
-      front: C.shirt, back: C.shirtDk, left: C.shirtDk, right: C.shirtDk,
-      top: C.shirtDk, bottom: C.pants,
+      front:C.shirt, back:C.shirtDk, left:C.shirtDk, right:C.shirtDk, top:C.shirtDk, bottom:C.pants,
     });
 
-    // Right arm
-    const rArm = makeBox(container, CX - AW - S, HH, -AD/2, AW, AH, AD, {
-      front: C.shirt, back: C.shirtDk, left: C.skinDark, right: C.shirtDk,
-      top: C.skinDark, bottom: C.skin,
+    const rArm = makeBox(container, CX-AW-S, HH, -AD/2, AW, AH, AD, {
+      front:C.shirt, back:C.shirtDk, left:C.skinDk, right:C.shirtDk, top:C.skinDk, bottom:C.skin,
+    });
+    const lArm = makeBox(container, CX+BW+S, HH, -AD/2, AW, AH, AD, {
+      front:C.shirt, back:C.shirtDk, left:C.shirtDk, right:C.skinDk, top:C.skinDk, bottom:C.skin,
+    });
+    const rLeg = makeBox(container, CX,    HH+BH, -LD/2, LW, LH, LD, {
+      front:C.pants, back:C.pantsDk, left:C.pantsDk, right:C.pants, top:C.pantsDk, bottom:C.boot,
+    });
+    const lLeg = makeBox(container, CX+LW, HH+BH, -LD/2, LW, LH, LD, {
+      front:C.pants, back:C.pantsDk, left:C.pants, right:C.pantsDk, top:C.pantsDk, bottom:C.boot,
     });
 
-    // Left arm
-    const lArm = makeBox(container, CX + BW + S, HH, -AD/2, AW, AH, AD, {
-      front: C.shirt, back: C.shirtDk, left: C.shirtDk, right: C.skinDark,
-      top: C.skinDark, bottom: C.skin,
-    });
-
-    // Right leg
-    const rLeg = makeBox(container, CX, HH + BH, -LD/2, LW, LH, LD, {
-      front: C.pants, back: C.pantsDk, left: C.pantsDk, right: C.pants,
-      top: C.pantsDk, bottom: C.boot,
-    });
-
-    // Left leg
-    const lLeg = makeBox(container, CX + LW, HH + BH, -LD/2, LW, LH, LD, {
-      front: C.pants, back: C.pantsDk, left: C.pants, right: C.pantsDk,
-      top: C.pantsDk, bottom: C.boot,
-    });
-
-    // Store base transforms on limbs for animation
-    function storeBase(el, ox, oy, oz) {
-      el._ox = ox; el._oy = oy; el._oz = oz;
-    }
-    storeBase(rArm, CX - AW - S, HH, -AD/2);
-    storeBase(lArm, CX + BW + S, HH, -AD/2);
-    storeBase(rLeg, CX,          HH + BH, -LD/2);
-    storeBase(lLeg, CX + LW,     HH + BH, -LD/2);
+    function store(el, ox, oy, oz) { el._ox=ox; el._oy=oy; el._oz=oz; }
+    store(rArm, CX-AW-S, HH,    -AD/2);
+    store(lArm, CX+BW+S, HH,    -AD/2);
+    store(rLeg, CX,      HH+BH, -LD/2);
+    store(lLeg, CX+LW,   HH+BH, -LD/2);
 
     return { headWrap, rArm, lArm, rLeg, lLeg };
   }
 
   const parts = buildSteve(model);
 
-  // Cursor-following head rotation
-  let targetHeadYaw = 0, headYaw = 0;
-  let targetBodyYaw = 0, bodyYaw = 0;
+  // Cursor follow — head yaw relative to Steve's position
+  let targetYaw = 0, headYaw = 0;
 
   document.addEventListener('mousemove', function(e) {
-    const rect = document.getElementById('corner-steve').getBoundingClientRect();
-    const steveCX = rect.left + rect.width  / 2;
-    const steveCY = rect.top  + rect.height / 2;
+    // Steve center X is ~20 (left margin) + 48 (half model width) = ~68px from left
+    const steveCX = 20 + 16 * S / 2; // ≈ 44px
     const dx = e.clientX - steveCX;
-    const dy = e.clientY - steveCY;
-    targetHeadYaw  = Math.max(-55, Math.min(55,  dx / 5));
-    targetBodyYaw  = Math.max(-25, Math.min(25,  dx / 14));
+    // Scale so full screen width = ~60°, clamped at ±60°
+    targetYaw = Math.max(-60, Math.min(60, dx / window.innerWidth * 90));
   });
 
-  // Walk cycle
   let walkPhase = 0;
-  const SWING = 28;
 
   (function animate() {
     walkPhase += 0.05;
-    headYaw  += (targetHeadYaw  - headYaw)  * 0.13;
-    bodyYaw  += (targetBodyYaw  - bodyYaw)  * 0.08;
+    headYaw += (targetYaw - headYaw) * 0.10;
 
-    const sw = Math.sin(walkPhase) * SWING;
+    const sw = Math.sin(walkPhase) * 28;
 
-    // Head yaw (CX = 0 at S=3)
+    // Head: preserve translate3d position and apply yaw around neck pivot
     parts.headWrap.style.transform =
-      `translate3d(0px,0px,0px) rotateY(${headYaw}deg)`;
+      `translate3d(${parts.headWrap._cx}px,0px,0px) rotateY(${headYaw.toFixed(2)}deg)`;
 
-    // Limb swing (rotateX around top of each limb)
     function setLimb(el, angle) {
       el.style.transform =
-        `translate3d(${el._ox}px,${el._oy}px,${el._oz}px) rotateX(${angle}deg)`;
+        `translate3d(${el._ox}px,${el._oy}px,${el._oz}px) rotateX(${angle.toFixed(2)}deg)`;
     }
     setLimb(parts.rArm,  sw);
     setLimb(parts.lArm, -sw);
@@ -485,6 +460,61 @@
 
     requestAnimationFrame(animate);
   })();
+})();
+</script>
+
+<!-- ── XP PARTICLES ──────────────────────────────────────── -->
+<script>
+(function() {
+  const layer = document.createElement('div');
+  layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden;';
+  document.body.appendChild(layer);
+
+  let mx = -200, my = -200;
+  document.addEventListener('mousemove', function(e) { mx = e.clientX; my = e.clientY; });
+
+  function spawnXP() {
+    if (mx < 0) return;
+    const el = document.createElement('div');
+    const size = 5 + Math.random() * 4;
+    const vx   = (Math.random() - 0.5) * 2.2;
+    const vy   = -1.5 - Math.random() * 2;
+    const hue  = Math.random() < 0.6 ? 105 : 55; // green or gold
+    el.style.cssText =
+      `position:absolute;width:${size}px;height:${size}px;` +
+      `border-radius:1px;` +
+      `background:hsl(${hue},100%,60%);` +
+      `box-shadow:0 0 4px hsl(${hue},100%,70%);` +
+      `left:${mx - size/2}px;top:${my - size/2}px;` +
+      `pointer-events:none;image-rendering:pixelated;`;
+    layer.appendChild(el);
+
+    let t = 0;
+    let x = mx, y = my;
+    let vy_ = vy;
+    (function tick() {
+      t += 1;
+      x += vx;
+      y += vy_;
+      vy_ += 0.06; // gravity
+      const opacity = Math.max(0, 1 - t / 45);
+      el.style.left = (x - size/2) + 'px';
+      el.style.top  = (y - size/2) + 'px';
+      el.style.opacity = opacity;
+      if (opacity > 0) requestAnimationFrame(tick);
+      else el.remove();
+    })();
+  }
+
+  // Spawn on mouse move (throttled) and occasionally idle
+  let lastSpawn = 0;
+  document.addEventListener('mousemove', function() {
+    const now = performance.now();
+    if (now - lastSpawn < 80) return;
+    lastSpawn = now;
+    spawnXP();
+    if (Math.random() < 0.4) spawnXP(); // occasional burst
+  });
 })();
 </script>
 </body>
