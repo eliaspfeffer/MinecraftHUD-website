@@ -419,15 +419,13 @@
   }
 
   const parts = buildSteve(container);
-  // Tilt the whole model so side faces are visible (gives 3D depth to body/arms/legs)
-  container.style.transform = 'rotateY(-20deg) rotateX(8deg)';
 
-  // Head follows cursor — yaw (left/right) + pitch (up/down)
-  let targetYaw = 0, headYaw = 0;
-  let targetPitch = 0, headPitch = 0;
+  // Head + body cursor tracking (mirrors SteveCornerWindow.swift logic exactly)
+  let targetYaw = 0, headYaw = 0, bodyYaw = 0;
+  let targetPitch = 0, headPitch = 0, bodyPitch = 0;
   document.addEventListener('mousemove', function(e) {
     const dx = e.clientX - 44;
-    const dy = e.clientY - (window.innerHeight - 180); // Steve's head Y on screen
+    const dy = e.clientY - (window.innerHeight - 180);
     targetYaw   = Math.max(-55, Math.min(55,  dx / window.innerWidth  * 80));
     targetPitch = Math.max(-30, Math.min(30, -dy / window.innerHeight * 60));
   });
@@ -437,11 +435,23 @@
     walkPhase += 0.05;
     headYaw   += (targetYaw   - headYaw)   * 0.13;
     headPitch += (targetPitch - headPitch) * 0.13;
+
+    // Body follows head slowly (55% yaw, 40% pitch) — same as Swift app
+    bodyYaw   += (headYaw   * 0.55 - bodyYaw)   * 0.04;
+    bodyPitch += (headPitch * 0.40 - bodyPitch)  * 0.04;
+
+    // Base tilt + body rotation applied to whole model
+    container.style.transform =
+      `rotateY(${(-20 + bodyYaw).toFixed(2)}deg) rotateX(${(8 + bodyPitch).toFixed(2)}deg)`;
+
     const sw = Math.sin(walkPhase) * 25;
 
+    // Head rotates relative to body (same as app: relYaw = headYaw - bodyYaw)
+    const relYaw   = headYaw   - bodyYaw;
+    const relPitch = headPitch - bodyPitch;
     parts.headWrap.style.transform =
       `translate3d(${parts.headWrap._tx}px,${parts.headWrap._ty}px,${parts.headWrap._tz}px)` +
-      ` rotateY(${headYaw.toFixed(2)}deg) rotateX(${headPitch.toFixed(2)}deg)`;
+      ` rotateY(${relYaw.toFixed(2)}deg) rotateX(${relPitch.toFixed(2)}deg)`;
 
     function setLimb(el, a) {
       el.style.transform =
