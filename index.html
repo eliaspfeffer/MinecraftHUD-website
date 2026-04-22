@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+    }
+  }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MinecraftHUD — Minecraft Style Desktop Overlay for Mac &amp; Windows</title>
   <meta name="description" content="MinecraftHUD is a Minecraft-style desktop overlay for Mac and Windows. Battery = heart containers, keystrokes = XP bar, closed apps = kill feed. Gamify your Mac for $4.99. Loved by 1,200+ players." />
@@ -524,6 +532,195 @@
     if (Math.random() < 0.4) spawnXP(); // occasional burst
   });
 })();
+</script>
+
+<!-- ── 3D MOBS (Three.js) ────────────────────────────────────── -->
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
+import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
+
+// ── Fullscreen transparent canvas ──
+const canvas = document.createElement('canvas');
+canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:6;';
+document.body.appendChild(canvas);
+
+let W = window.innerWidth, H = window.innerHeight;
+
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(W, H);
+
+const scene = new THREE.Scene();
+
+// Perspective camera where 1 world unit = 1 screen pixel at z=0
+const FOV    = 45;
+const CAM_Z  = H / (2 * Math.tan(FOV / 2 * Math.PI / 180));
+const camera = new THREE.PerspectiveCamera(FOV, W / H, 1, CAM_Z * 4);
+camera.position.set(0, 0, CAM_Z);
+
+// Lighting
+scene.add(new THREE.AmbientLight(0xffffff, 1.6));
+const sun = new THREE.DirectionalLight(0xffffff, 1.2);
+sun.position.set(2, 4, 3);
+scene.add(sun);
+
+window.addEventListener('resize', () => {
+  W = window.innerWidth; H = window.innerHeight;
+  camera.aspect = W / H;
+  camera.updateProjectionMatrix();
+  renderer.setSize(W, H);
+});
+
+// ── Model loading ──
+const MOB_H = { cow: 72, pig: 52, wolf: 56 };
+const templates = {};
+const loader = new GLTFLoader();
+
+function loadMob(name, path) {
+  return new Promise(resolve => {
+    loader.load(path, gltf => {
+      const root = gltf.scene;
+      // Scale so bounding-box height = target pixel height
+      const box = new THREE.Box3().setFromObject(root);
+      const scale = MOB_H[name] / (box.max.y - box.min.y);
+      root.scale.setScalar(scale);
+      // Shift feet to y = 0
+      box.setFromObject(root);
+      root.position.y -= box.min.y;
+      root.updateMatrixWorld(true);
+      templates[name] = root;
+      resolve();
+    }, undefined, e => console.warn('[mobs] load error', name, e));
+  });
+}
+
+Promise.all([
+  loadMob('cow',  'models/minecraft_cow.glb'),
+  loadMob('pig',  'models/minecraft_-_pig.glb'),
+  loadMob('wolf', 'models/minecraft_wolf_rig.glb'),
+]);
+
+// ── Walk animation bone names ──
+const ANIM = {
+  cow: {
+    swing: 0.5,
+    // [right-phase bone, left-phase bone] pairs; back pair is opposite phase
+    pairs: [
+      ['FRLeg_03',  'FLLeg_05' ],
+      ['BRLeg_010', 'BLLeg_08' ],
+    ],
+  },
+  wolf: {
+    swing: 0.5,
+    pairs: [
+      ['Leg_Front_Right_Top_Armature', 'Leg_Front_Left_Top_Armature'],
+      ['Leg_Back_Right_Top_Armature',  'Leg_Back_Left_Top_Armature' ],
+    ],
+    tail: 'Tail_1_Armature',
+  },
+  pig: { swing: 0 }, // single merged mesh — whole-body bob only
+};
+
+// ── Active mob instances ──
+const mobs = [];
+
+// Ground line: same height as old sprite system
+const GROUND_SCREEN_Y = () => H - 90; // px from top
+function groundWorldY() { return H / 2 - GROUND_SCREEN_Y(); } // world Y of mob feet
+
+function spawnMob3D() {
+  const available = Object.keys(templates);
+  if (!available.length) return;
+
+  // Weighted: 55% cow, 25% pig, 20% wolf (matches old ~58% cow split)
+  const r = Math.random();
+  const type = templates.cow  && r < 0.55 ? 'cow'
+             : templates.pig  && r < 0.80 ? 'pig'
+             : templates.wolf             ? 'wolf' : available[0];
+  const tmpl = templates[type];
+  if (!tmpl) return;
+
+  const fromRight = Math.random() < 0.5;
+  const speed     = 70 + Math.random() * 40; // px/s
+  const startX    = fromRight ? W / 2 + 120 : -W / 2 - 120;
+  const endX      = fromRight ? -W / 2 - 120 : W / 2 + 120;
+  const gy        = groundWorldY();
+
+  const clone = SkeletonUtils.clone(tmpl);
+
+  // Face travel direction + slight angle to show depth
+  clone.rotation.y = fromRight ? -(Math.PI / 2 - 0.25) : (Math.PI / 2 - 0.25);
+
+  clone.position.set(startX, gy, 0);
+  scene.add(clone);
+
+  // Index all nodes by name for animation
+  const nodes = {};
+  clone.traverse(n => { if (n.name) nodes[n.name] = n; });
+
+  mobs.push({
+    type, clone, nodes,
+    x: startX, endX,
+    y: gy,
+    speed: fromRight ? -speed : speed,
+    walkPhase: Math.random() * Math.PI * 2,
+  });
+
+  // Sound (functions live on window from script.js)
+  if (type === 'cow') window.playCow?.();
+  else if (type === 'pig') window.playPig?.();
+}
+
+function animateMob(mob, dt) {
+  mob.walkPhase += dt * 3.8;
+  const cfg = ANIM[mob.type];
+  if (!cfg) return;
+
+  if (mob.type === 'pig') {
+    mob.clone.position.y = mob.y + Math.abs(Math.sin(mob.walkPhase)) * 2.5;
+    return;
+  }
+
+  const s = Math.sin(mob.walkPhase);
+  cfg.pairs.forEach(([rName, lName], i) => {
+    const phase = i % 2 === 0 ? s : -s; // alternate pairs stay in opposite phase
+    const rNode = mob.nodes[rName];
+    const lNode = mob.nodes[lName];
+    if (rNode) rNode.rotation.x =  phase * cfg.swing;
+    if (lNode) lNode.rotation.x = -phase * cfg.swing;
+  });
+
+  if (cfg.tail) {
+    const tail = mob.nodes[cfg.tail];
+    if (tail) tail.rotation.z = Math.sin(mob.walkPhase * 1.6) * 0.35;
+  }
+}
+
+// ── Main loop ──
+let lastT = 0;
+(function loop(t) {
+  requestAnimationFrame(loop);
+  const dt = Math.min((t - lastT) / 1000, 0.05);
+  lastT = t;
+
+  for (let i = mobs.length - 1; i >= 0; i--) {
+    const mob = mobs[i];
+    mob.x += mob.speed * dt;
+    mob.clone.position.x = mob.x;
+    mob.clone.position.y = groundWorldY(); // follow screen resize
+    animateMob(mob, dt);
+    const done = mob.speed < 0 ? mob.x < mob.endX : mob.x > mob.endX;
+    if (done) { scene.remove(mob.clone); mobs.splice(i, 1); }
+  }
+
+  renderer.render(scene, camera);
+})();
+
+// ── Spawn schedule (same timing as old sprite system) ──
+setTimeout(spawnMob3D, 1200);
+setTimeout(spawnMob3D, 4000);
+setInterval(() => { if (Math.random() < 0.75) spawnMob3D(); }, 5500);
 </script>
 </body>
 </html>
