@@ -436,9 +436,9 @@
     headYaw   += (targetYaw   - headYaw)   * 0.13;
     headPitch += (targetPitch - headPitch) * 0.13;
 
-    // Body fully follows cursor, slightly behind head
-    bodyYaw   += (headYaw   - bodyYaw)   * 0.06;
-    bodyPitch += (headPitch - bodyPitch) * 0.06;
+    // Body follows cursor yaw fully, barely any pitch (10%)
+    bodyYaw   += (headYaw         - bodyYaw)   * 0.06;
+    bodyPitch += (headPitch * 0.1 - bodyPitch) * 0.06;
 
     // Base tilt + body rotation applied to whole model
     container.style.transform =
