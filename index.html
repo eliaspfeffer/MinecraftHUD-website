@@ -203,8 +203,6 @@
              value="https://minecrafthud.eliaspfeffer.de/MinecraftHUD.dmg" />
       <button class="btn-copy" onclick="copyFriendLink()">COPY</button>
     </div>
-    <a class="btn-free-dl" id="friendDlMac" href="/MinecraftHUD.dmg" download>⬇ Free Download (macOS)</a>
-    <a class="btn-free-dl btn-windows" id="friendDlWin" href="https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/MinecraftHUD-Setup.exe" style="display:none">⬇ Free Download (Windows)</a>
   </div>
 </div>
 
@@ -242,8 +240,6 @@
     if (isWin && !isMac) {
       document.getElementById('macCTA').style.display = 'none';
       document.getElementById('winCTA').style.display = 'block';
-      document.getElementById('friendDlMac').style.display = 'none';
-      document.getElementById('friendDlWin').style.display = 'block';
     }
     // On non-Mac non-Windows (Linux, etc.) or Mac: show both or default to Mac
     if (!isMac && !isWin) {
