@@ -2,14 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
-    }
-  }
-  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MinecraftHUD — Minecraft Style Desktop Overlay for Mac &amp; Windows</title>
   <meta name="description" content="MinecraftHUD is a Minecraft-style desktop overlay for Mac and Windows. Battery = heart containers, keystrokes = XP bar, closed apps = kill feed. Gamify your Mac for $4.99. Loved by 1,200+ players." />
@@ -534,193 +526,246 @@
 })();
 </script>
 
-<!-- ── 3D MOBS (Three.js) ────────────────────────────────────── -->
-<script type="module">
-import * as THREE from 'three';
-import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
-import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
+<!-- ── 3D MOBS (CSS box, built from scratch like Steve) ─────── -->
+<script>
 
-// ── Fullscreen transparent canvas ──
-const canvas = document.createElement('canvas');
-canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:6;';
-document.body.appendChild(canvas);
+(function() {
+'use strict';
 
-let W = window.innerWidth, H = window.innerHeight;
+// ── Constants ─────────────────────────────────────────────────
+const S = 3;           // px per Minecraft unit
+const TW = 64, TH = 32; // mob texture dimensions
 
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.setSize(W, H);
-
-const scene = new THREE.Scene();
-
-// Perspective camera where 1 world unit = 1 screen pixel at z=0
-const FOV    = 45;
-const CAM_Z  = H / (2 * Math.tan(FOV / 2 * Math.PI / 180));
-const camera = new THREE.PerspectiveCamera(FOV, W / H, 1, CAM_Z * 4);
-camera.position.set(0, 0, CAM_Z);
-
-// Lighting
-scene.add(new THREE.AmbientLight(0xffffff, 1.6));
-const sun = new THREE.DirectionalLight(0xffffff, 1.2);
-sun.position.set(2, 4, 3);
-scene.add(sun);
-
-window.addEventListener('resize', () => {
-  W = window.innerWidth; H = window.innerHeight;
-  camera.aspect = W / H;
-  camera.updateProjectionMatrix();
-  renderer.setSize(W, H);
-});
-
-// ── Model loading ──
-const MOB_H = { cow: 72, pig: 52, wolf: 56 };
-const templates = {};
-const loader = new GLTFLoader();
-
-function loadMob(name, path) {
-  return new Promise(resolve => {
-    loader.load(path, gltf => {
-      const root = gltf.scene;
-      // Scale so bounding-box height = target pixel height
-      const box = new THREE.Box3().setFromObject(root);
-      const scale = MOB_H[name] / (box.max.y - box.min.y);
-      root.scale.setScalar(scale);
-      // Shift feet to y = 0
-      box.setFromObject(root);
-      root.position.y -= box.min.y;
-      root.updateMatrixWorld(true);
-      templates[name] = root;
-      resolve();
-    }, undefined, e => console.warn('[mobs] load error', name, e));
-  });
+// ── Helpers ───────────────────────────────────────────────────
+// Maps a UV region (u,v,w,h) from a 64×32 mob texture onto a face element
+function mFace(skin, u, v, w, h, fw, fh) {
+  return `background-image:url('sprites/${skin}');` +
+         `background-size:${fw*TW/w}px ${fh*TH/h}px;` +
+         `background-position:${-u*fw/w}px ${-v*fh/h}px;` +
+         `image-rendering:pixelated;`;
 }
 
-Promise.all([
-  loadMob('cow',  'models/minecraft_cow.glb'),
-  loadMob('pig',  'models/minecraft_-_pig.glb'),
-  loadMob('wolf', 'models/minecraft_wolf_rig.glb'),
-]);
+// Builds a 3D CSS box with 6 UV-mapped faces.
+// uv = { front:[u,v,w,h], back, left, right, top, bottom }
+function buildBox(parent, xPx, yPx, zPx, wPx, hPx, dPx, uv, skin) {
+  const box = document.createElement('div');
+  box.style.cssText = `position:absolute;width:${wPx}px;height:${hPx}px;` +
+    `transform:translate3d(${xPx}px,${yPx}px,${zPx}px);transform-style:preserve-3d;`;
+  [
+    { w:wPx, h:hPx, t:`translateZ(${dPx/2}px)`,                      uv:uv.front  },
+    { w:wPx, h:hPx, t:`translateZ(${-dPx/2}px) rotateY(180deg)`,     uv:uv.back   },
+    { w:dPx, h:hPx, t:`translateX(${-dPx/2}px) rotateY(-90deg)`,     uv:uv.left   },
+    { w:dPx, h:hPx, t:`translateX(${wPx-dPx/2}px) rotateY(90deg)`,   uv:uv.right  },
+    { w:wPx, h:dPx, t:`translateY(${-dPx/2}px) rotateX(90deg)`,      uv:uv.top    },
+    { w:wPx, h:dPx, t:`translateY(${hPx-dPx/2}px) rotateX(-90deg)`,  uv:uv.bottom },
+  ].forEach(f => {
+    const face = document.createElement('div');
+    face.style.cssText = `position:absolute;width:${f.w}px;height:${f.h}px;transform:${f.t};` +
+      `-webkit-backface-visibility:hidden;backface-visibility:hidden;` +
+      (f.uv ? mFace(skin, ...f.uv, f.w, f.h) : 'background:#555;');
+    box.appendChild(face);
+  });
+  parent.appendChild(box);
+  return box;
+}
 
-// ── Walk animation bone names ──
-const ANIM = {
-  cow: {
-    swing: 0.5,
-    // [right-phase bone, left-phase bone] pairs; back pair is opposite phase
-    pairs: [
-      ['FRLeg_03',  'FLLeg_05' ],
-      ['BRLeg_010', 'BLLeg_08' ],
-    ],
-  },
-  wolf: {
-    swing: 0.5,
-    pairs: [
-      ['Leg_Front_Right_Top_Armature', 'Leg_Front_Left_Top_Armature'],
-      ['Leg_Back_Right_Top_Armature',  'Leg_Back_Left_Top_Armature' ],
-    ],
-    tail: 'Tail_1_Armature',
-  },
-  pig: { swing: 0 }, // single merged mesh — whole-body bob only
-};
+// Zero-size pivot node — standard game-engine pattern for off-center rotation.
+// The actual box is a child offset from the pivot point.
+function makePivot(parent, tx, ty, tz) {
+  const p = document.createElement('div');
+  p.style.cssText = `position:absolute;width:0;height:0;` +
+    `transform:translate3d(${tx}px,${ty}px,${tz}px);transform-style:preserve-3d;`;
+  p._tx = tx; p._ty = ty; p._tz = tz;
+  parent.appendChild(p);
+  return p;
+}
 
-// ── Active mob instances ──
-const mobs = [];
+// UV shorthand for a box at textureOffset (u0,v0) with Minecraft size (W,H,D):
+// right:(u0, v0+D, D,H)  front:(u0+D, v0+D, W,H)  left:(u0+D+W, v0+D, D,H)
+// back:(u0+2D+W, v0+D, W,H)  top:(u0+D, v0, W,D)  bottom:(u0+D+W, v0, W,D)
+function quadUV(u0, v0, W, H, D) {
+  return {
+    right:  [u0,         v0+D, D, H],
+    front:  [u0+D,       v0+D, W, H],
+    left:   [u0+D+W,     v0+D, D, H],
+    back:   [u0+2*D+W,   v0+D, W, H],
+    top:    [u0+D,       v0,   W, D],
+    bottom: [u0+D+W,     v0,   W, D],
+  };
+}
 
-// Ground line: same height as old sprite system
-const GROUND_SCREEN_Y = () => H - 90; // px from top
-function groundWorldY() { return H / 2 - GROUND_SCREEN_Y(); } // world Y of mob feet
+// ── Mob builders ──────────────────────────────────────────────
+// Each returns { legFL, legFR, legBL, legBR } for animation.
+// The model faces +Z. It is rotated by the spawn code to face travel direction.
 
-function spawnMob3D() {
-  const available = Object.keys(templates);
-  if (!available.length) return;
+function buildCow(parent) {
+  const skin = 'mob_cow.png';
+  // Dimensions (Minecraft units → px at S=3)
+  const HW=8*S, HH=8*S, HD=6*S;   // head  24×24×18
+  const BW=8*S, BH=6*S, BD=10*S;  // body  24×18×30
+  const LW=4*S, LH=12*S,LD=4*S;  // leg   12×36×12
 
-  // Weighted: 55% cow, 25% pig, 20% wolf (matches old ~58% cow split)
-  const r = Math.random();
-  const type = templates.cow  && r < 0.55 ? 'cow'
-             : templates.pig  && r < 0.80 ? 'pig'
-             : templates.wolf             ? 'wolf' : available[0];
-  const tmpl = templates[type];
-  if (!tmpl) return;
+  const CX = 12; // container center X (body centered in 48px wide container)
+
+  // Head (UV offset 0,0 — W=8,H=8,D=6)
+  buildBox(parent, CX-HW/2, 0, -HD/2, HW, HH, HD, quadUV(0,0,8,8,6), skin);
+
+  // Body (UV offset 18,4 — W=8,H=6,D=10, lying on its side)
+  buildBox(parent, CX-BW/2, HH, -BD/2, BW, BH, BD, quadUV(18,4,8,6,10), skin);
+
+  // Four leg pivots at corners of body bottom
+  // Front-left (viewer's left when facing +Z)
+  const legFL = makePivot(parent, CX-BW/2,       HH+BH, -BD/2+LD);
+  buildBox(legFL, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,12,4), skin);
+
+  const legFR = makePivot(parent, CX+BW/2-LW,    HH+BH, -BD/2+LD);
+  buildBox(legFR, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,12,4), skin);
+
+  const legBL = makePivot(parent, CX-BW/2,       HH+BH,  BD/2-LD);
+  buildBox(legBL, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,12,4), skin);
+
+  const legBR = makePivot(parent, CX+BW/2-LW,    HH+BH,  BD/2-LD);
+  buildBox(legBR, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,12,4), skin);
+
+  return { legFL, legFR, legBL, legBR };
+}
+
+function buildPig(parent) {
+  const skin = 'mob_pig.png';
+  const HW=8*S, HH=8*S, HD=8*S;
+  const BW=8*S, BH=8*S, BD=6*S;
+  const LW=4*S, LH=10*S,LD=4*S;
+  const CX = 12;
+
+  buildBox(parent, CX-HW/2, 0, -HD/2, HW, HH, HD, quadUV(0,0,8,8,8), skin);
+  buildBox(parent, CX-BW/2, HH, -BD/2, BW, BH, BD, quadUV(28,8,8,8,6), skin);
+
+  const legFL = makePivot(parent, CX-BW/2,    HH+BH, -BD/2+LD);
+  buildBox(legFL, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,10,4), skin);
+
+  const legFR = makePivot(parent, CX+BW/2-LW, HH+BH, -BD/2+LD);
+  buildBox(legFR, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,10,4), skin);
+
+  const legBL = makePivot(parent, CX-BW/2,    HH+BH,  BD/2-LD);
+  buildBox(legBL, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,10,4), skin);
+
+  const legBR = makePivot(parent, CX+BW/2-LW, HH+BH,  BD/2-LD);
+  buildBox(legBR, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,10,4), skin);
+
+  return { legFL, legFR, legBL, legBR };
+}
+
+function buildCreeper(parent) {
+  const skin = 'mob_creeper.png';
+  const HW=8*S, HH=8*S, HD=8*S;
+  const BW=4*S, BH=12*S,BD=8*S;
+  const LW=4*S, LH=6*S, LD=4*S;
+  const CX = 12;
+
+  buildBox(parent, CX-HW/2, 0, -HD/2, HW, HH, HD, quadUV(0,0,8,8,8), skin);
+  buildBox(parent, CX-BW/2, HH, -BD/2, BW, BH, BD, quadUV(16,16,4,12,8), skin);
+
+  const legFL = makePivot(parent, CX-BW/2,    HH+BH, -BD/2+LD);
+  buildBox(legFL, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,6,4), skin);
+
+  const legFR = makePivot(parent, CX+BW/2-LW, HH+BH, -BD/2+LD);
+  buildBox(legFR, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,6,4), skin);
+
+  const legBL = makePivot(parent, CX-BW/2,    HH+BH,  BD/2-LD);
+  buildBox(legBL, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,6,4), skin);
+
+  const legBR = makePivot(parent, CX+BW/2-LW, HH+BH,  BD/2-LD);
+  buildBox(legBR, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,6,4), skin);
+
+  return { legFL, legFR, legBL, legBR };
+}
+
+// ── Mob instance ──────────────────────────────────────────────
+const activeMobs = [];
+
+function spawnMob() {
+  const types = ['cow', 'cow', 'pig', 'creeper']; // weighted
+  const type = types[Math.floor(Math.random() * types.length)];
+  const builders = { cow: buildCow, pig: buildPig, creeper: buildCreeper };
 
   const fromRight = Math.random() < 0.5;
-  const speed     = 70 + Math.random() * 40; // px/s
-  const startX    = fromRight ? W / 2 + 120 : -W / 2 - 120;
-  const endX      = fromRight ? -W / 2 - 120 : W / 2 + 120;
-  const gy        = groundWorldY();
 
-  const clone = SkeletonUtils.clone(tmpl);
+  // Wrapper: perspective container, moves across screen
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;z-index:6;pointer-events:none;' +
+    'width:80px;height:120px;perspective:500px;perspective-origin:50% 10%;';
+  document.body.appendChild(wrap);
 
-  // Face travel direction + slight angle to show depth
-  clone.rotation.y = fromRight ? -(Math.PI / 2 - 0.25) : (Math.PI / 2 - 0.25);
+  // Model: faces +Z, rotated toward travel direction + slight viewing angle
+  const model = document.createElement('div');
+  model.style.cssText = 'position:absolute;transform-style:preserve-3d;';
+  wrap.appendChild(model);
 
-  clone.position.set(startX, gy, 0);
-  scene.add(clone);
+  const parts = builders[type](model);
 
-  // Index all nodes by name for animation
-  const nodes = {};
-  clone.traverse(n => { if (n.name) nodes[n.name] = n; });
+  // Mob total height: head + body + legs
+  const mobH = { cow: (8+6+12)*S, pig: (8+8+10)*S, creeper: (8+12+6)*S }[type];
+  const groundY = window.innerHeight - 90; // bottom of mob on screen
+  const startX  = fromRight ? window.innerWidth + 10 : -90;
+  const endX    = fromRight ? -90 : window.innerWidth + 10;
+  const speed   = 55 + Math.random() * 35;
 
-  mobs.push({
-    type, clone, nodes,
+  wrap.style.top  = (groundY - mobH) + 'px';
+  wrap.style.left = startX + 'px';
+
+  // Angle mob toward direction of travel + slight top-down tilt for depth
+  const yaw = fromRight ? -75 : 75; // degrees
+  model.style.transform = `rotateY(${yaw}deg) rotateX(5deg)`;
+
+  // Play sound
+  if (type === 'cow')     window.playCow?.();
+  else if (type === 'pig') window.playPig?.();
+
+  activeMobs.push({
+    wrap, model, parts,
     x: startX, endX,
-    y: gy,
     speed: fromRight ? -speed : speed,
     walkPhase: Math.random() * Math.PI * 2,
+    groundY: groundY - mobH,
   });
-
-  // Sound (functions live on window from script.js)
-  if (type === 'cow') window.playCow?.();
-  else if (type === 'pig') window.playPig?.();
 }
 
-function animateMob(mob, dt) {
-  mob.walkPhase += dt * 3.8;
-  const cfg = ANIM[mob.type];
-  if (!cfg) return;
-
-  if (mob.type === 'pig') {
-    mob.clone.position.y = mob.y + Math.abs(Math.sin(mob.walkPhase)) * 2.5;
-    return;
-  }
-
-  const s = Math.sin(mob.walkPhase);
-  cfg.pairs.forEach(([rName, lName], i) => {
-    const phase = i % 2 === 0 ? s : -s; // alternate pairs stay in opposite phase
-    const rNode = mob.nodes[rName];
-    const lNode = mob.nodes[lName];
-    if (rNode) rNode.rotation.x =  phase * cfg.swing;
-    if (lNode) lNode.rotation.x = -phase * cfg.swing;
-  });
-
-  if (cfg.tail) {
-    const tail = mob.nodes[cfg.tail];
-    if (tail) tail.rotation.z = Math.sin(mob.walkPhase * 1.6) * 0.35;
-  }
+// Animate pivot: rotateX swings the leg forward/back around its top joint
+function swingLeg(pivot, angle) {
+  pivot.style.transform =
+    `translate3d(${pivot._tx}px,${pivot._ty}px,${pivot._tz}px) rotateX(${angle}deg)`;
 }
 
-// ── Main loop ──
-let lastT = 0;
+// ── Main animation loop ────────────────────────────────────────
+let lastT2 = 0;
 (function loop(t) {
   requestAnimationFrame(loop);
-  const dt = Math.min((t - lastT) / 1000, 0.05);
-  lastT = t;
+  const dt = Math.min((t - lastT2) / 1000, 0.05);
+  lastT2 = t;
 
-  for (let i = mobs.length - 1; i >= 0; i--) {
-    const mob = mobs[i];
+  for (let i = activeMobs.length - 1; i >= 0; i--) {
+    const mob = activeMobs[i];
     mob.x += mob.speed * dt;
-    mob.clone.position.x = mob.x;
-    mob.clone.position.y = groundWorldY(); // follow screen resize
-    animateMob(mob, dt);
-    const done = mob.speed < 0 ? mob.x < mob.endX : mob.x > mob.endX;
-    if (done) { scene.remove(mob.clone); mobs.splice(i, 1); }
-  }
+    mob.wrap.style.left = mob.x + 'px';
+    mob.wrap.style.top  = (window.innerHeight - 90 - parseFloat(mob.wrap.style.height || 120)) + 'px';
 
-  renderer.render(scene, camera);
+    mob.walkPhase += dt * 4;
+    const sw = Math.sin(mob.walkPhase) * 28;
+    const { legFL, legFR, legBL, legBR } = mob.parts;
+    swingLeg(legFL,  sw); swingLeg(legFR, -sw);
+    swingLeg(legBL, -sw); swingLeg(legBR,  sw);
+
+    const done = mob.speed < 0 ? mob.x < mob.endX : mob.x > mob.endX;
+    if (done) { mob.wrap.remove(); activeMobs.splice(i, 1); }
+  }
 })();
 
-// ── Spawn schedule (same timing as old sprite system) ──
-setTimeout(spawnMob3D, 1200);
-setTimeout(spawnMob3D, 4000);
-setInterval(() => { if (Math.random() < 0.75) spawnMob3D(); }, 5500);
+// ── Spawn schedule ────────────────────────────────────────────
+setTimeout(spawnMob, 1200);
+setTimeout(spawnMob, 4000);
+setInterval(() => { if (Math.random() < 0.75) spawnMob(); }, 5500);
+
+})();
 </script>
 </body>
 </html>
