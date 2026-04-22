@@ -526,18 +526,17 @@
 })();
 </script>
 
-<!-- ── 3D MOBS (CSS box, built from scratch like Steve) ─────── -->
+<!-- ── 3D MOBS (CSS box, quadruped geometry) ─────────────────── -->
 <script>
-
 (function() {
 'use strict';
 
-// ── Constants ─────────────────────────────────────────────────
-const S = 3;           // px per Minecraft unit
-const TW = 64, TH = 32; // mob texture dimensions
+// ── Constants ──────────────────────────────────────────────────
+const S  = 3;           // px per Minecraft unit
+const TW = 64, TH = 32; // mob texture sheet dimensions
+const GROUND_Y = 90;    // px within container where feet rest (= container height)
 
-// ── Helpers ───────────────────────────────────────────────────
-// Maps a UV region (u,v,w,h) from a 64×32 mob texture onto a face element
+// ── Texture helper ──────────────────────────────────────────────
 function mFace(skin, u, v, w, h, fw, fh) {
   return `background-image:url('sprites/${skin}');` +
          `background-size:${fw*TW/w}px ${fh*TH/h}px;` +
@@ -545,19 +544,18 @@ function mFace(skin, u, v, w, h, fw, fh) {
          `image-rendering:pixelated;`;
 }
 
-// Builds a 3D CSS box with 6 UV-mapped faces.
-// uv = { front:[u,v,w,h], back, left, right, top, bottom }
+// ── 3D box builder ─────────────────────────────────────────────
 function buildBox(parent, xPx, yPx, zPx, wPx, hPx, dPx, uv, skin) {
   const box = document.createElement('div');
   box.style.cssText = `position:absolute;width:${wPx}px;height:${hPx}px;` +
     `transform:translate3d(${xPx}px,${yPx}px,${zPx}px);transform-style:preserve-3d;`;
   [
-    { w:wPx, h:hPx, t:`translateZ(${dPx/2}px)`,                      uv:uv.front  },
-    { w:wPx, h:hPx, t:`translateZ(${-dPx/2}px) rotateY(180deg)`,     uv:uv.back   },
-    { w:dPx, h:hPx, t:`translateX(${-dPx/2}px) rotateY(-90deg)`,     uv:uv.left   },
-    { w:dPx, h:hPx, t:`translateX(${wPx-dPx/2}px) rotateY(90deg)`,   uv:uv.right  },
-    { w:wPx, h:dPx, t:`translateY(${-dPx/2}px) rotateX(90deg)`,      uv:uv.top    },
-    { w:wPx, h:dPx, t:`translateY(${hPx-dPx/2}px) rotateX(-90deg)`,  uv:uv.bottom },
+    { w:wPx, h:hPx, t:`translateZ(${dPx/2}px)`,                     uv:uv.front  },
+    { w:wPx, h:hPx, t:`translateZ(${-dPx/2}px) rotateY(180deg)`,    uv:uv.back   },
+    { w:dPx, h:hPx, t:`translateX(${-dPx/2}px) rotateY(-90deg)`,    uv:uv.left   },
+    { w:dPx, h:hPx, t:`translateX(${wPx-dPx/2}px) rotateY(90deg)`,  uv:uv.right  },
+    { w:wPx, h:dPx, t:`translateY(${-dPx/2}px) rotateX(90deg)`,     uv:uv.top    },
+    { w:wPx, h:dPx, t:`translateY(${hPx-dPx/2}px) rotateX(-90deg)`, uv:uv.bottom },
   ].forEach(f => {
     const face = document.createElement('div');
     face.style.cssText = `position:absolute;width:${f.w}px;height:${f.h}px;transform:${f.t};` +
@@ -569,201 +567,201 @@ function buildBox(parent, xPx, yPx, zPx, wPx, hPx, dPx, uv, skin) {
   return box;
 }
 
-// Zero-size pivot node — standard game-engine pattern for off-center rotation.
-// The actual box is a child offset from the pivot point.
+// ── Zero-size pivot (pendulum joint) ───────────────────────────
 function makePivot(parent, tx, ty, tz) {
   const p = document.createElement('div');
-  p.style.cssText = `position:absolute;width:0;height:0;` +
-    `transform:translate3d(${tx}px,${ty}px,${tz}px);transform-style:preserve-3d;`;
+  p.style.cssText = `position:absolute;width:0;height:0;transform-style:preserve-3d;` +
+    `transform:translate3d(${tx}px,${ty}px,${tz}px);`;
   p._tx = tx; p._ty = ty; p._tz = tz;
   parent.appendChild(p);
   return p;
 }
 
-// UV shorthand for a box at textureOffset (u0,v0) with Minecraft size (W,H,D):
-// right:(u0, v0+D, D,H)  front:(u0+D, v0+D, W,H)  left:(u0+D+W, v0+D, D,H)
-// back:(u0+2D+W, v0+D, W,H)  top:(u0+D, v0, W,D)  bottom:(u0+D+W, v0, W,D)
+// ── Minecraft UV unwrap helper ─────────────────────────────────
+// Given textureOffset (u0,v0) and box size W×H×D in Minecraft units:
 function quadUV(u0, v0, W, H, D) {
   return {
-    right:  [u0,         v0+D, D, H],
-    front:  [u0+D,       v0+D, W, H],
-    left:   [u0+D+W,     v0+D, D, H],
-    back:   [u0+2*D+W,   v0+D, W, H],
-    top:    [u0+D,       v0,   W, D],
-    bottom: [u0+D+W,     v0,   W, D],
+    right:  [u0,       v0+D, D, H],
+    front:  [u0+D,     v0+D, W, H],
+    left:   [u0+D+W,   v0+D, D, H],
+    back:   [u0+2*D+W, v0+D, W, H],
+    top:    [u0+D,     v0,   W, D],
+    bottom: [u0+D+W,   v0,   W, D],
   };
 }
 
-// ── Mob builders ──────────────────────────────────────────────
-// Each returns { legFL, legFR, legBL, legBR } for animation.
-// The model faces +Z. It is rotated by the spawn code to face travel direction.
+// ── Mob builders ───────────────────────────────────────────────
+// Quadruped layout: body horizontal (depth along Z), head in front (-Z), legs at 4 corners.
+// All coordinates are within the container (Y=0 top, Y=GROUND_Y bottom/feet).
+// CX = container horizontal center.
 
 function buildCow(parent) {
   const skin = 'mob_cow.png';
-  // Dimensions (Minecraft units → px at S=3)
-  const HW=8*S, HH=8*S, HD=6*S;   // head  24×24×18
-  const BW=8*S, BH=6*S, BD=10*S;  // body  24×18×30
-  const LW=4*S, LH=12*S,LD=4*S;  // leg   12×36×12
+  const HW=8*S, HH=8*S, HD=6*S;    // head 24×24×18
+  const BW=8*S, BH=6*S, BD=10*S;   // body 24×18×30
+  const LW=4*S, LH=12*S, LD=4*S;   // leg  12×36×12
+  const CX = 40;
 
-  const CX = 12; // container center X (body centered in 48px wide container)
+  // Body center: legs hang to ground, body sits on top
+  const hipY    = GROUND_Y - LH;          // Y of hip (top of legs = bottom of body)
+  const bodyTopY = hipY - BH;             // Y of body top
 
-  // Head (UV offset 0,0 — W=8,H=8,D=6)
-  buildBox(parent, CX-HW/2, 0, -HD/2, HW, HH, HD, quadUV(0,0,8,8,6), skin);
+  // Body (horizontal, runs along Z)
+  buildBox(parent, CX-BW/2, bodyTopY, -BD/2, BW, BH, BD, quadUV(18,4,8,6,10), skin);
 
-  // Body (UV offset 18,4 — W=8,H=6,D=10, lying on its side)
-  buildBox(parent, CX-BW/2, HH, -BD/2, BW, BH, BD, quadUV(18,4,8,6,10), skin);
+  // Head: in front of body (most negative Z), at body-top height
+  const headWrap = makePivot(parent, CX, bodyTopY+HH/2, -(BD/2+HD/2));
+  buildBox(headWrap, -HW/2, -HH/2, -HD/2, HW, HH, HD, quadUV(0,0,8,8,6), skin);
 
-  // Four leg pivots at corners of body bottom
-  // Front-left (viewer's left when facing +Z)
-  const legFL = makePivot(parent, CX-BW/2,       HH+BH, -BD/2+LD);
-  buildBox(legFL, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,12,4), skin);
+  // Leg pivots at 4 body corners (X left/right, Z front/back)
+  const lx = CX - BW/2,  rx = CX + BW/2 - LW;
+  const fz  = -BD/2,      bz = BD/2;
+  const legFL = makePivot(parent, lx+LW/2, hipY, fz); buildBox(legFL, -LW/2,0,-LD/2, LW,LH,LD, quadUV(0,16,4,12,4), skin);
+  const legFR = makePivot(parent, rx+LW/2, hipY, fz); buildBox(legFR, -LW/2,0,-LD/2, LW,LH,LD, quadUV(0,16,4,12,4), skin);
+  const legBL = makePivot(parent, lx+LW/2, hipY, bz); buildBox(legBL, -LW/2,0,-LD/2, LW,LH,LD, quadUV(0,16,4,12,4), skin);
+  const legBR = makePivot(parent, rx+LW/2, hipY, bz); buildBox(legBR, -LW/2,0,-LD/2, LW,LH,LD, quadUV(0,16,4,12,4), skin);
 
-  const legFR = makePivot(parent, CX+BW/2-LW,    HH+BH, -BD/2+LD);
-  buildBox(legFR, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,12,4), skin);
-
-  const legBL = makePivot(parent, CX-BW/2,       HH+BH,  BD/2-LD);
-  buildBox(legBL, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,12,4), skin);
-
-  const legBR = makePivot(parent, CX+BW/2-LW,    HH+BH,  BD/2-LD);
-  buildBox(legBR, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,12,4), skin);
-
-  return { legFL, legFR, legBL, legBR };
+  return { headWrap, legFL, legFR, legBL, legBR };
 }
 
 function buildPig(parent) {
   const skin = 'mob_pig.png';
   const HW=8*S, HH=8*S, HD=8*S;
-  const BW=8*S, BH=8*S, BD=6*S;
-  const LW=4*S, LH=10*S,LD=4*S;
-  const CX = 12;
+  const BW=8*S, BH=6*S, BD=8*S;
+  const LW=4*S, LH=10*S, LD=4*S;
+  const CX = 40;
+  const hipY = GROUND_Y - LH, bodyTopY = hipY - BH;
 
-  buildBox(parent, CX-HW/2, 0, -HD/2, HW, HH, HD, quadUV(0,0,8,8,8), skin);
-  buildBox(parent, CX-BW/2, HH, -BD/2, BW, BH, BD, quadUV(28,8,8,8,6), skin);
+  buildBox(parent, CX-BW/2, bodyTopY, -BD/2, BW, BH, BD, quadUV(28,8,8,6,8), skin);
+  const headWrap = makePivot(parent, CX, bodyTopY+HH/2, -(BD/2+HD/2));
+  buildBox(headWrap, -HW/2, -HH/2, -HD/2, HW, HH, HD, quadUV(0,0,8,8,8), skin);
 
-  const legFL = makePivot(parent, CX-BW/2,    HH+BH, -BD/2+LD);
-  buildBox(legFL, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,10,4), skin);
-
-  const legFR = makePivot(parent, CX+BW/2-LW, HH+BH, -BD/2+LD);
-  buildBox(legFR, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,10,4), skin);
-
-  const legBL = makePivot(parent, CX-BW/2,    HH+BH,  BD/2-LD);
-  buildBox(legBL, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,10,4), skin);
-
-  const legBR = makePivot(parent, CX+BW/2-LW, HH+BH,  BD/2-LD);
-  buildBox(legBR, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,10,4), skin);
-
-  return { legFL, legFR, legBL, legBR };
+  const lx=CX-BW/2, rx=CX+BW/2-LW, fz=-BD/2, bz=BD/2;
+  const legFL=makePivot(parent,lx+LW/2,hipY,fz); buildBox(legFL,-LW/2,0,-LD/2,LW,LH,LD,quadUV(0,16,4,10,4),skin);
+  const legFR=makePivot(parent,rx+LW/2,hipY,fz); buildBox(legFR,-LW/2,0,-LD/2,LW,LH,LD,quadUV(0,16,4,10,4),skin);
+  const legBL=makePivot(parent,lx+LW/2,hipY,bz); buildBox(legBL,-LW/2,0,-LD/2,LW,LH,LD,quadUV(0,16,4,10,4),skin);
+  const legBR=makePivot(parent,rx+LW/2,hipY,bz); buildBox(legBR,-LW/2,0,-LD/2,LW,LH,LD,quadUV(0,16,4,10,4),skin);
+  return { headWrap, legFL, legFR, legBL, legBR };
 }
 
 function buildCreeper(parent) {
   const skin = 'mob_creeper.png';
   const HW=8*S, HH=8*S, HD=8*S;
-  const BW=4*S, BH=12*S,BD=8*S;
-  const LW=4*S, LH=6*S, LD=4*S;
-  const CX = 12;
+  const BW=4*S, BH=12*S, BD=8*S;
+  const LW=4*S, LH=6*S,  LD=4*S;
+  const CX = 40;
+  const hipY = GROUND_Y - LH, bodyTopY = hipY - BH;
 
-  buildBox(parent, CX-HW/2, 0, -HD/2, HW, HH, HD, quadUV(0,0,8,8,8), skin);
-  buildBox(parent, CX-BW/2, HH, -BD/2, BW, BH, BD, quadUV(16,16,4,12,8), skin);
+  buildBox(parent, CX-BW/2, bodyTopY, -BD/2, BW, BH, BD, quadUV(16,16,4,12,8), skin);
+  const headWrap = makePivot(parent, CX, bodyTopY+HH/2, -(BD/2+HD/2));
+  buildBox(headWrap, -HW/2, -HH/2, -HD/2, HW, HH, HD, quadUV(0,0,8,8,8), skin);
 
-  const legFL = makePivot(parent, CX-BW/2,    HH+BH, -BD/2+LD);
-  buildBox(legFL, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,6,4), skin);
-
-  const legFR = makePivot(parent, CX+BW/2-LW, HH+BH, -BD/2+LD);
-  buildBox(legFR, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,6,4), skin);
-
-  const legBL = makePivot(parent, CX-BW/2,    HH+BH,  BD/2-LD);
-  buildBox(legBL, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,6,4), skin);
-
-  const legBR = makePivot(parent, CX+BW/2-LW, HH+BH,  BD/2-LD);
-  buildBox(legBR, -LW/2, 0, -LD/2, LW, LH, LD, quadUV(0,16,4,6,4), skin);
-
-  return { legFL, legFR, legBL, legBR };
+  const lx=CX-BW/2, rx=CX+BW/2-LW, fz=-BD/2, bz=BD/2;
+  const legFL=makePivot(parent,lx+LW/2,hipY,fz); buildBox(legFL,-LW/2,0,-LD/2,LW,LH,LD,quadUV(0,16,4,6,4),skin);
+  const legFR=makePivot(parent,rx+LW/2,hipY,fz); buildBox(legFR,-LW/2,0,-LD/2,LW,LH,LD,quadUV(0,16,4,6,4),skin);
+  const legBL=makePivot(parent,lx+LW/2,hipY,bz); buildBox(legBL,-LW/2,0,-LD/2,LW,LH,LD,quadUV(0,16,4,6,4),skin);
+  const legBR=makePivot(parent,rx+LW/2,hipY,bz); buildBox(legBR,-LW/2,0,-LD/2,LW,LH,LD,quadUV(0,16,4,6,4),skin);
+  return { headWrap, legFL, legFR, legBL, legBR };
 }
 
-// ── Mob instance ──────────────────────────────────────────────
+// ── Active mobs + cursor tracking ──────────────────────────────
 const activeMobs = [];
+let mouseX = window.innerWidth/2, mouseY = window.innerHeight/2;
+document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
 
 function spawnMob() {
-  const types = ['cow', 'cow', 'pig', 'creeper']; // weighted
-  const type = types[Math.floor(Math.random() * types.length)];
-  const builders = { cow: buildCow, pig: buildPig, creeper: buildCreeper };
+  const types = ['cow','cow','pig','creeper'];
+  const type  = types[Math.floor(Math.random()*types.length)];
+  const build = { cow:buildCow, pig:buildPig, creeper:buildCreeper }[type];
 
   const fromRight = Math.random() < 0.5;
+  const bodyYaw   = fromRight ? -75 : 75; // body faces travel direction
 
-  // Wrapper: perspective container, moves across screen
   const wrap = document.createElement('div');
-  wrap.style.cssText = 'position:fixed;z-index:6;pointer-events:none;' +
-    'width:80px;height:120px;perspective:500px;perspective-origin:50% 10%;';
+  wrap.style.cssText = 'position:fixed;z-index:6;pointer-events:none;overflow:visible;' +
+    'width:80px;height:' + GROUND_Y + 'px;perspective:500px;perspective-origin:50% 30%;';
   document.body.appendChild(wrap);
 
-  // Model: faces +Z, rotated toward travel direction + slight viewing angle
   const model = document.createElement('div');
   model.style.cssText = 'position:absolute;transform-style:preserve-3d;';
+  model.style.transform = `rotateY(${bodyYaw}deg) rotateX(5deg)`;
   wrap.appendChild(model);
 
-  const parts = builders[type](model);
+  const parts = build(model);
 
-  // Mob total height: head + body + legs
-  const mobH = { cow: (8+6+12)*S, pig: (8+8+10)*S, creeper: (8+12+6)*S }[type];
-  const groundY = window.innerHeight - 90; // bottom of mob on screen
-  const startX  = fromRight ? window.innerWidth + 10 : -90;
-  const endX    = fromRight ? -90 : window.innerWidth + 10;
-  const speed   = 55 + Math.random() * 35;
+  const startX = fromRight ? window.innerWidth+10 : -90;
+  const endX   = fromRight ? -90 : window.innerWidth+10;
+  const speed  = 55 + Math.random()*35;
 
-  wrap.style.top  = (groundY - mobH) + 'px';
   wrap.style.left = startX + 'px';
+  wrap.style.top  = (window.innerHeight - 90 - GROUND_Y) + 'px';
 
-  // Angle mob toward direction of travel + slight top-down tilt for depth
-  const yaw = fromRight ? -75 : 75; // degrees
-  model.style.transform = `rotateY(${yaw}deg) rotateX(5deg)`;
-
-  // Play sound
-  if (type === 'cow')     window.playCow?.();
-  else if (type === 'pig') window.playPig?.();
+  if (type==='cow')     window.playCow?.();
+  else if (type==='pig') window.playPig?.();
 
   activeMobs.push({
-    wrap, model, parts,
+    wrap, model, parts, type, fromRight, bodyYaw,
     x: startX, endX,
     speed: fromRight ? -speed : speed,
-    walkPhase: Math.random() * Math.PI * 2,
-    groundY: groundY - mobH,
+    walkPhase: Math.random()*Math.PI*2,
+    headYaw: 0, headPitch: 0,
+    targetHeadYaw: 0, targetHeadPitch: 0,
   });
 }
 
-// Animate pivot: rotateX swings the leg forward/back around its top joint
 function swingLeg(pivot, angle) {
   pivot.style.transform =
     `translate3d(${pivot._tx}px,${pivot._ty}px,${pivot._tz}px) rotateX(${angle}deg)`;
 }
 
-// ── Main animation loop ────────────────────────────────────────
+// ── Main loop ──────────────────────────────────────────────────
 let lastT2 = 0;
 (function loop(t) {
   requestAnimationFrame(loop);
-  const dt = Math.min((t - lastT2) / 1000, 0.05);
+  const dt = Math.min((t-lastT2)/1000, 0.05);
   lastT2 = t;
 
-  for (let i = activeMobs.length - 1; i >= 0; i--) {
+  for (let i = activeMobs.length-1; i >= 0; i--) {
     const mob = activeMobs[i];
+
+    // Walk
     mob.x += mob.speed * dt;
     mob.wrap.style.left = mob.x + 'px';
-    mob.wrap.style.top  = (window.innerHeight - 90 - parseFloat(mob.wrap.style.height || 120)) + 'px';
+    mob.wrap.style.top  = (window.innerHeight - 90 - GROUND_Y) + 'px';
 
+    // Leg swing
     mob.walkPhase += dt * 4;
     const sw = Math.sin(mob.walkPhase) * 28;
-    const { legFL, legFR, legBL, legBR } = mob.parts;
+    const { headWrap, legFL, legFR, legBL, legBR } = mob.parts;
     swingLeg(legFL,  sw); swingLeg(legFR, -sw);
     swingLeg(legBL, -sw); swingLeg(legBR,  sw);
+
+    // Head cursor look-at
+    const headScreenX = mob.x + 40;  // approx head X center on screen
+    const headScreenY = mob.wrap.getBoundingClientRect().top + 20; // approx head Y
+    const dx = mouseX - headScreenX;
+    const dy = mouseY - headScreenY;
+    const worldYaw = Math.atan2(dx, 350) * 180 / Math.PI;
+    // Head yaw is relative to body direction; clamp so head doesn't spin around
+    mob.targetHeadYaw   = Math.max(-50, Math.min(50, worldYaw - mob.bodyYaw));
+    mob.targetHeadPitch = Math.max(-25, Math.min(25, -Math.atan2(dy, 350) * 180 / Math.PI));
+    mob.headYaw   += (mob.targetHeadYaw   - mob.headYaw)   * 0.12;
+    mob.headPitch += (mob.targetHeadPitch - mob.headPitch) * 0.12;
+    if (headWrap) {
+      headWrap.style.transform =
+        `translate3d(${headWrap._tx}px,${headWrap._ty}px,${headWrap._tz}px)` +
+        ` rotateY(${mob.headYaw.toFixed(2)}deg) rotateX(${mob.headPitch.toFixed(2)}deg)`;
+    }
 
     const done = mob.speed < 0 ? mob.x < mob.endX : mob.x > mob.endX;
     if (done) { mob.wrap.remove(); activeMobs.splice(i, 1); }
   }
 })();
 
-// ── Spawn schedule ────────────────────────────────────────────
+// ── Spawn schedule ─────────────────────────────────────────────
 setTimeout(spawnMob, 1200);
 setTimeout(spawnMob, 4000);
-setInterval(() => { if (Math.random() < 0.75) spawnMob(); }, 5500);
+setInterval(() => { if (Math.random()<0.75) spawnMob(); }, 5500);
 
 })();
 </script>
