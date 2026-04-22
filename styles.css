@@ -281,15 +281,135 @@ html, body {
   display: flex; justify-content: space-between;
   margin-bottom: 5px; align-items: center; position: relative;
 }
-.hearts { display: flex; gap: 3px; }
-.h { font-size: clamp(16px, 2.8vw, 22px); line-height: 1; }
-.h.on   { color: #ff3333; filter: drop-shadow(0 0 5px rgba(255,0,0,0.7)); }
-.h.half { color: #ff8888; }
-.h.off  { color: #330000; }
-.foods  { display: flex; gap: 2px; flex-direction: row-reverse; }
-.f { font-size: clamp(14px, 2.5vw, 20px); line-height: 1; }
-.f.on  { filter: saturate(1.5) drop-shadow(0 0 3px rgba(255,150,0,0.5)); }
-.f.off { filter: saturate(0) opacity(0.3); }
+
+/* ─── PIXEL-ART HEARTS ─── */
+.hearts { display: flex; gap: 3px; align-items: center; }
+.h {
+  display: inline-block;
+  width: 18px; height: 18px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  flex-shrink: 0;
+}
+/* Full heart — bright red pixel heart shape via box-shadow mosaic */
+.h.on {
+  /* 9×9 pixel heart rendered at 2px/pixel = 18×18px */
+  /* Using background gradient to draw pixel pattern */
+  background:
+    /* row 1: cols 2-3, 6-7 (0-indexed) */
+    /* We use a single color fill + clip via drop-shadow trick */
+    transparent;
+  position: relative;
+}
+.h.on::before, .h.half::before, .h.off::before {
+  content: '';
+  display: block;
+  width: 18px; height: 18px;
+  image-rendering: pixelated;
+}
+
+/* Use SVG data URLs for crisp Minecraft-style pixel hearts */
+.h.on::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9'%3E%3Crect x='1' y='0' width='2' height='1' fill='%23ff4444'/%3E%3Crect x='5' y='0' width='2' height='1' fill='%23ff4444'/%3E%3Crect x='0' y='1' width='4' height='2' fill='%23ff4444'/%3E%3Crect x='5' y='1' width='4' height='2' fill='%23ff4444'/%3E%3Crect x='0' y='3' width='9' height='2' fill='%23ff4444'/%3E%3Crect x='1' y='5' width='7' height='2' fill='%23ff4444'/%3E%3Crect x='2' y='7' width='5' height='1' fill='%23ff4444'/%3E%3Crect x='3' y='8' width='3' height='1' fill='%23ff4444'/%3E%3C!-- dark shading --%3E%3Crect x='1' y='0' width='1' height='1' fill='%23aa1111'/%3E%3Crect x='5' y='0' width='1' height='1' fill='%23aa1111'/%3E%3Crect x='0' y='1' width='1' height='2' fill='%23aa1111'/%3E%3Crect x='5' y='1' width='1' height='2' fill='%23aa1111'/%3E%3C!-- highlight --%3E%3Crect x='2' y='1' width='2' height='1' fill='%23ff8888'/%3E%3Crect x='6' y='1' width='2' height='1' fill='%23ff8888'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  filter: drop-shadow(0 0 4px rgba(255,0,0,0.8));
+}
+.h.half::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9'%3E%3C!-- left half (full red) --%3E%3Crect x='1' y='0' width='2' height='1' fill='%23ff4444'/%3E%3Crect x='0' y='1' width='4' height='2' fill='%23ff4444'/%3E%3Crect x='0' y='3' width='5' height='2' fill='%23ff4444'/%3E%3Crect x='1' y='5' width='4' height='2' fill='%23ff4444'/%3E%3Crect x='2' y='7' width='3' height='1' fill='%23ff4444'/%3E%3Crect x='3' y='8' width='2' height='1' fill='%23ff4444'/%3E%3C!-- right half (empty dark) --%3E%3Crect x='5' y='0' width='2' height='1' fill='%23440000'/%3E%3Crect x='5' y='1' width='4' height='2' fill='%23440000'/%3E%3Crect x='5' y='3' width='4' height='2' fill='%23440000'/%3E%3Crect x='5' y='5' width='3' height='2' fill='%23440000'/%3E%3Crect x='5' y='7' width='2' height='1' fill='%23440000'/%3E%3Crect x='5' y='8' width='1' height='1' fill='%23440000'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+}
+.h.off::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9'%3E%3Crect x='1' y='0' width='2' height='1' fill='%23440000'/%3E%3Crect x='5' y='0' width='2' height='1' fill='%23440000'/%3E%3Crect x='0' y='1' width='4' height='2' fill='%23440000'/%3E%3Crect x='5' y='1' width='4' height='2' fill='%23440000'/%3E%3Crect x='0' y='3' width='9' height='2' fill='%23440000'/%3E%3Crect x='1' y='5' width='7' height='2' fill='%23440000'/%3E%3Crect x='2' y='7' width='5' height='1' fill='%23440000'/%3E%3Crect x='3' y='8' width='3' height='1' fill='%23440000'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+}
+
+/* ─── PIXEL-ART FOOD (CHICKEN LEG) ─── */
+.foods  { display: flex; gap: 3px; flex-direction: row-reverse; align-items: center; }
+.f {
+  display: inline-block;
+  width: 16px; height: 16px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  flex-shrink: 0;
+}
+.f::before {
+  content: '';
+  display: block;
+  width: 16px; height: 16px;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+/* Full chicken leg — orange-brown drumstick */
+.f.on::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3C!-- bone handle bottom --%3E%3Crect x='3' y='6' width='2' height='2' fill='%23ffe0a0'/%3E%3C!-- meat body --%3E%3Crect x='1' y='1' width='6' height='5' fill='%23c47820'/%3E%3Crect x='2' y='0' width='4' height='1' fill='%23c47820'/%3E%3C!-- highlights --%3E%3Crect x='2' y='1' width='2' height='2' fill='%23e09030'/%3E%3C!-- shading --%3E%3Crect x='5' y='3' width='2' height='3' fill='%23904010'/%3E%3Crect x='1' y='5' width='4' height='1' fill='%23904010'/%3E%3C/svg%3E");
+}
+/* Empty chicken leg — grey desaturated */
+.f.off::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Crect x='3' y='6' width='2' height='2' fill='%23888'/%3E%3Crect x='1' y='1' width='6' height='5' fill='%23555'/%3E%3Crect x='2' y='0' width='4' height='1' fill='%23555'/%3E%3Crect x='2' y='1' width='2' height='2' fill='%23666'/%3E%3Crect x='5' y='3' width='2' height='3' fill='%23444'/%3E%3Crect x='1' y='5' width='4' height='1' fill='%23444'/%3E%3C/svg%3E");
+  opacity: 0.45;
+}
+
+/* ─── JUKEBOX ─── */
+.jukebox-wrap {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 16;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.jukebox-label {
+  font-family: var(--pixel);
+  font-size: 6px;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.jukebox-sprite {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3C!-- Jukebox body --%3E%3Crect x='1' y='2' width='14' height='13' fill='%23782800'/%3E%3C!-- Top accent --%3E%3Crect x='2' y='1' width='12' height='2' fill='%23a03c00'/%3E%3C!-- Front panel --%3E%3Crect x='3' y='5' width='10' height='7' fill='%23331100'/%3E%3C!-- Record disc --%3E%3Crect x='5' y='6' width='6' height='6' fill='%23111'/%3E%3Crect x='6' y='7' width='4' height='4' fill='%23222'/%3E%3Crect x='7' y='8' width='2' height='2' fill='%23555'/%3E%3C!-- Speaker grille dots --%3E%3Crect x='3' y='5' width='1' height='1' fill='%23553300'/%3E%3Crect x='3' y='7' width='1' height='1' fill='%23553300'/%3E%3Crect x='3' y='9' width='1' height='1' fill='%23553300'/%3E%3Crect x='3' y='11' width='1' height='1' fill='%23553300'/%3E%3Crect x='12' y='5' width='1' height='1' fill='%23553300'/%3E%3Crect x='12' y='7' width='1' height='1' fill='%23553300'/%3E%3Crect x='12' y='9' width='1' height='1' fill='%23553300'/%3E%3Crect x='12' y='11' width='1' height='1' fill='%23553300'/%3E%3C!-- Base --%3E%3Crect x='1' y='14' width='14' height='1' fill='%23551800'/%3E%3C!-- Highlight --%3E%3Crect x='1' y='2' width='1' height='12' fill='%23993300'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  transition: transform 0.15s;
+  position: relative;
+}
+.jukebox-wrap:hover .jukebox-sprite {
+  transform: scale(1.12);
+}
+.jukebox-wrap.playing .jukebox-sprite {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3C!-- Jukebox body --%3E%3Crect x='1' y='2' width='14' height='13' fill='%23782800'/%3E%3C!-- Top accent lit --%3E%3Crect x='2' y='1' width='12' height='2' fill='%23ff6600'/%3E%3C!-- Front panel --%3E%3Crect x='3' y='5' width='10' height='7' fill='%23331100'/%3E%3C!-- Record disc spinning (lighter center) --%3E%3Crect x='5' y='6' width='6' height='6' fill='%23222'/%3E%3Crect x='6' y='7' width='4' height='4' fill='%23444'/%3E%3Crect x='7' y='8' width='2' height='2' fill='%23888'/%3E%3C!-- Music notes glow --%3E%3Crect x='4' y='3' width='1' height='2' fill='%23ffaa00'/%3E%3Crect x='7' y='2' width='1' height='3' fill='%23ffcc00'/%3E%3Crect x='11' y='3' width='1' height='2' fill='%23ffaa00'/%3E%3C!-- Speaker grille lit --%3E%3Crect x='3' y='5' width='1' height='1' fill='%23ff5500'/%3E%3Crect x='3' y='7' width='1' height='1' fill='%23ff5500'/%3E%3Crect x='3' y='9' width='1' height='1' fill='%23ff5500'/%3E%3Crect x='3' y='11' width='1' height='1' fill='%23ff5500'/%3E%3Crect x='12' y='5' width='1' height='1' fill='%23ff5500'/%3E%3Crect x='12' y='7' width='1' height='1' fill='%23ff5500'/%3E%3Crect x='12' y='9' width='1' height='1' fill='%23ff5500'/%3E%3Crect x='12' y='11' width='1' height='1' fill='%23ff5500'/%3E%3C!-- Base --%3E%3Crect x='1' y='14' width='14' height='1' fill='%23551800'/%3E%3C!-- Highlight --%3E%3Crect x='1' y='2' width='1' height='12' fill='%23cc4400'/%3E%3C/svg%3E");
+  animation: jukebox-pulse 0.6s ease-in-out infinite alternate;
+}
+@keyframes jukebox-pulse {
+  from { transform: scale(1.0) rotate(-2deg); filter: drop-shadow(0 0 4px rgba(255,150,0,0.6)); }
+  to   { transform: scale(1.08) rotate(2deg); filter: drop-shadow(0 0 8px rgba(255,100,0,0.9)); }
+}
+.jukebox-now-playing {
+  font-family: var(--pixel);
+  font-size: 5px;
+  color: rgba(255,170,0,0.8);
+  margin-top: 3px;
+  white-space: nowrap;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: none;
+}
+.jukebox-wrap.playing .jukebox-now-playing {
+  display: block;
+  animation: marquee-scroll 6s linear infinite;
+}
+@keyframes marquee-scroll {
+  0%   { transform: translateX(30px); }
+  100% { transform: translateX(-100%); }
+}
 
 .xp-popup {
   position: absolute; bottom: 32px; left: 50%;
@@ -494,6 +614,99 @@ html, body {
   font-family: 'Ubuntu', 'Cantarell', sans-serif;
   font-size: 13px; color: rgba(255,255,255,0.85);
   min-width: 44px; text-align: right;
+}
+
+/* ─── MINI STEVE CURSOR FOLLOWER ─── */
+#steve-follower {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  width: 32px;
+  height: 64px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  /* Start offscreen */
+  top: -100px;
+  left: -100px;
+  /* Smooth lag follow */
+  transition: top 0.12s cubic-bezier(0.22,1,0.36,1), left 0.12s cubic-bezier(0.22,1,0.36,1);
+  /* Flip horizontally when facing left */
+}
+#steve-follower.facing-left {
+  transform: scaleX(-1);
+}
+/* Steve built from stacked divs using pure CSS pixel art */
+#steve-head {
+  width: 24px; height: 24px;
+  margin: 0 auto;
+  /* Front face of Steve head: blue eyes, skin */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3C!-- Skin base --%3E%3Crect width='8' height='8' fill='%23c8906a'/%3E%3C!-- Top hair band --%3E%3Crect x='0' y='0' width='8' height='2' fill='%235a3a1a'/%3E%3C!-- Eyes --%3E%3Crect x='1' y='3' width='2' height='2' fill='%230000cc'/%3E%3Crect x='5' y='3' width='2' height='2' fill='%230000cc'/%3E%3C!-- Nose/mouth area --%3E%3Crect x='2' y='6' width='4' height='1' fill='%23b07050'/%3E%3Crect x='3' y='5' width='2' height='1' fill='%23a06040'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+#steve-body {
+  width: 24px; height: 28px;
+  margin: 0 auto;
+  /* Blue shirt body */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='10'%3E%3Crect width='8' height='10' fill='%232255cc'/%3E%3C!-- Shirt detail --%3E%3Crect x='1' y='1' width='6' height='1' fill='%233366dd'/%3E%3Crect x='0' y='8' width='8' height='2' fill='%23886633'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+  position: relative;
+}
+/* Arms as pseudo-elements on the body */
+#steve-body::before,
+#steve-body::after {
+  content: '';
+  position: absolute;
+  width: 10px; height: 28px;
+  top: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='10'%3E%3Crect width='4' height='10' fill='%232255cc'/%3E%3Crect x='0' y='8' width='4' height='2' fill='%23c8906a'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+#steve-body::before { left: -10px; transform-origin: top center; }
+#steve-body::after  { right: -10px; transform-origin: top center; }
+
+#steve-legs {
+  width: 24px; height: 28px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0px;
+}
+.steve-leg {
+  width: 12px; height: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='10'%3E%3Crect width='4' height='8' fill='%23886633'/%3E%3Crect x='0' y='8' width='4' height='2' fill='%23334499'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+/* Walking animation */
+#steve-follower.walking #steve-body::before {
+  animation: arm-swing-l 0.35s ease-in-out infinite alternate;
+}
+#steve-follower.walking #steve-body::after {
+  animation: arm-swing-r 0.35s ease-in-out infinite alternate;
+}
+#steve-follower.walking .steve-leg:first-child {
+  animation: leg-swing-l 0.35s ease-in-out infinite alternate;
+}
+#steve-follower.walking .steve-leg:last-child {
+  animation: leg-swing-r 0.35s ease-in-out infinite alternate;
+}
+@keyframes arm-swing-l {
+  from { transform: rotate(-22deg); }
+  to   { transform: rotate(22deg); }
+}
+@keyframes arm-swing-r {
+  from { transform: rotate(22deg); }
+  to   { transform: rotate(-22deg); }
+}
+@keyframes leg-swing-l {
+  from { transform: rotate(-18deg); transform-origin: top center; }
+  to   { transform: rotate(18deg);  transform-origin: top center; }
+}
+@keyframes leg-swing-r {
+  from { transform: rotate(18deg);  transform-origin: top center; }
+  to   { transform: rotate(-18deg); transform-origin: top center; }
 }
 
 /* ─── RESPONSIVE ─── */

@@ -206,20 +206,37 @@
   </div>
 </div>
 
+<!-- Mini Steve cursor follower -->
+<div id="steve-follower">
+  <div id="steve-head"></div>
+  <div id="steve-body"></div>
+  <div id="steve-legs">
+    <div class="steve-leg" id="steve-leg-l"></div>
+    <div class="steve-leg" id="steve-leg-r"></div>
+  </div>
+</div>
+
 <!-- HUD bar at bottom -->
 <div class="hud-overlay">
+  <!-- Jukebox centered above HUD bar -->
+  <div class="jukebox-wrap" id="jukeboxWrap" title="Click to play/stop music">
+    <div class="jukebox-label">JUKEBOX</div>
+    <div class="jukebox-sprite" id="jukeboxSprite"></div>
+    <div class="jukebox-now-playing" id="jukeboxNowPlaying">Cat — C418</div>
+  </div>
+
   <div class="hud-row">
     <div class="hearts">
-      <span class="h on">♥</span><span class="h on">♥</span><span class="h on">♥</span>
-      <span class="h on">♥</span><span class="h on">♥</span><span class="h on">♥</span>
-      <span class="h on">♥</span><span class="h half">♥</span><span class="h off">♥</span>
+      <span class="h on"></span><span class="h on"></span><span class="h on"></span>
+      <span class="h on"></span><span class="h on"></span><span class="h on"></span>
+      <span class="h on"></span><span class="h half"></span><span class="h off"></span>
     </div>
     <div class="xp-popup" id="xpPopup" style="opacity:0">+2 XP</div>
     <div class="foods">
-      <span class="f off">🍗</span><span class="f off">🍗</span>
-      <span class="f on">🍗</span><span class="f on">🍗</span><span class="f on">🍗</span>
-      <span class="f on">🍗</span><span class="f on">🍗</span><span class="f on">🍗</span>
-      <span class="f on">🍗</span>
+      <span class="f off"></span><span class="f off"></span>
+      <span class="f on"></span><span class="f on"></span><span class="f on"></span>
+      <span class="f on"></span><span class="f on"></span><span class="f on"></span>
+      <span class="f on"></span>
     </div>
   </div>
   <div class="xp-wrap">
@@ -254,6 +271,111 @@
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ path: location.pathname, referrer: document.referrer }),
   }).catch(() => {});
+</script>
+
+<!-- ── JUKEBOX ─────────────────────────────────────────────── -->
+<script>
+(function() {
+  const wrap = document.getElementById('jukeboxWrap');
+  const nowPlaying = document.getElementById('jukeboxNowPlaying');
+  if (!wrap) return;
+
+  // Disc sounds to cycle through (using existing sounds)
+  const tracks = [
+    { name: 'Cat — C418',    sound: 'villager1' },
+    { name: 'Blocks — C418', sound: 'villager2' },
+    { name: 'Chirp — C418',  sound: 'villager3' },
+  ];
+  let trackIdx = 0;
+  let playing = false;
+  let jukeAudio = null;
+
+  function stopJukebox() {
+    playing = false;
+    wrap.classList.remove('playing');
+    if (jukeAudio) {
+      jukeAudio.pause();
+      jukeAudio.currentTime = 0;
+      jukeAudio = null;
+    }
+  }
+
+  function startJukebox() {
+    playing = true;
+    wrap.classList.add('playing');
+    const track = tracks[trackIdx % tracks.length];
+    nowPlaying.textContent = track.name;
+    trackIdx++;
+
+    // Play a looping sound effect to simulate music
+    try {
+      jukeAudio = new Audio('sounds/' + track.sound + '.mp3');
+      jukeAudio.volume = 0.55;
+      jukeAudio.loop = true;
+      jukeAudio.play().catch(() => {});
+    } catch(e) {}
+  }
+
+  wrap.addEventListener('click', function() {
+    if (playing) {
+      stopJukebox();
+    } else {
+      // ensure audio context unlocked
+      if (typeof ensureAudio === 'function') ensureAudio();
+      startJukebox();
+    }
+  });
+})();
+</script>
+
+<!-- ── MINI STEVE CURSOR FOLLOWER ───────────────────────────── -->
+<script>
+(function() {
+  const steve = document.getElementById('steve-follower');
+  if (!steve) return;
+
+  let targetX = -200, targetY = -200;
+  let curX = -200, curY = -200;
+  let prevX = -200;
+  let moveTimer = null;
+  let walking = false;
+
+  // Use RAF lerp for smooth lag
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function setWalking(on) {
+    if (on === walking) return;
+    walking = on;
+    if (on) steve.classList.add('walking');
+    else steve.classList.remove('walking');
+  }
+
+  document.addEventListener('mousemove', function(e) {
+    // Offset so Steve stands to the right of the cursor, feet at cursor level
+    targetX = e.clientX + 16;
+    targetY = e.clientY - 58; // so feet are near cursor
+
+    // Detect direction
+    if (e.clientX < prevX - 2) {
+      steve.classList.add('facing-left');
+    } else if (e.clientX > prevX + 2) {
+      steve.classList.remove('facing-left');
+    }
+    prevX = e.clientX;
+
+    setWalking(true);
+    clearTimeout(moveTimer);
+    moveTimer = setTimeout(function() { setWalking(false); }, 200);
+  });
+
+  (function animateSteve() {
+    curX = lerp(curX, targetX, 0.18);
+    curY = lerp(curY, targetY, 0.18);
+    steve.style.left = Math.round(curX) + 'px';
+    steve.style.top  = Math.round(curY) + 'px';
+    requestAnimationFrame(animateSteve);
+  })();
+})();
 </script>
 </body>
 </html>
