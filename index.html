@@ -206,13 +206,10 @@
   </div>
 </div>
 
-<!-- Mini Steve cursor follower -->
-<div id="steve-follower">
-  <div id="steve-head"></div>
-  <div id="steve-body"></div>
-  <div id="steve-legs">
-    <div class="steve-leg" id="steve-leg-l"></div>
-    <div class="steve-leg" id="steve-leg-r"></div>
+<!-- 3D Corner Steve -->
+<div id="corner-steve">
+  <div class="steve-wrap">
+    <div class="steve-model" id="steveModel"></div>
   </div>
 </div>
 
@@ -280,11 +277,22 @@
   const nowPlaying = document.getElementById('jukeboxNowPlaying');
   if (!wrap) return;
 
-  // Disc sounds to cycle through (using existing sounds)
   const tracks = [
-    { name: 'Cat — C418',    sound: 'villager1' },
-    { name: 'Blocks — C418', sound: 'villager2' },
-    { name: 'Chirp — C418',  sound: 'villager3' },
+    { name: 'Cat — C418',          file: 'disc_cat.m4a'      },
+    { name: 'Chirp — C418',        file: 'disc_chirp.m4a'    },
+    { name: 'Blocks — C418',       file: 'disc_blocks.m4a'   },
+    { name: 'Far — C418',          file: 'disc_far.m4a'      },
+    { name: 'Mall — C418',         file: 'disc_mall.m4a'     },
+    { name: 'Mellohi — C418',      file: 'disc_mellohi.m4a'  },
+    { name: 'Stal — C418',         file: 'disc_stal.m4a'     },
+    { name: 'Strad — C418',        file: 'disc_strad.m4a'    },
+    { name: 'Ward — C418',         file: 'disc_ward.m4a'     },
+    { name: 'Wait — C418',         file: 'disc_wait.m4a'     },
+    { name: 'Otherside — Lena Raine', file: 'disc_otherside.m4a' },
+    { name: 'Pigstep — Lena Raine',   file: 'disc_pigstep.m4a'  },
+    { name: '5 — Samuel Åberg',    file: 'disc_5.m4a'        },
+    { name: '11 — C418',           file: 'disc_11.m4a'       },
+    { name: '13 — C418',           file: 'disc_13.m4a'       },
   ];
   let trackIdx = 0;
   let playing = false;
@@ -293,11 +301,7 @@
   function stopJukebox() {
     playing = false;
     wrap.classList.remove('playing');
-    if (jukeAudio) {
-      jukeAudio.pause();
-      jukeAudio.currentTime = 0;
-      jukeAudio = null;
-    }
+    if (jukeAudio) { jukeAudio.pause(); jukeAudio.currentTime = 0; jukeAudio = null; }
   }
 
   function startJukebox() {
@@ -306,21 +310,19 @@
     const track = tracks[trackIdx % tracks.length];
     nowPlaying.textContent = track.name;
     trackIdx++;
-
-    // Play a looping sound effect to simulate music
     try {
-      jukeAudio = new Audio('sounds/' + track.sound + '.mp3');
-      jukeAudio.volume = 0.55;
-      jukeAudio.loop = true;
+      jukeAudio = new Audio('sounds/' + track.file);
+      jukeAudio.volume = 0.6;
       jukeAudio.play().catch(() => {});
+      jukeAudio.addEventListener('ended', function() {
+        if (playing) startJukebox();
+      });
     } catch(e) {}
   }
 
   wrap.addEventListener('click', function() {
-    if (playing) {
-      stopJukebox();
-    } else {
-      // ensure audio context unlocked
+    if (playing) { stopJukebox(); }
+    else {
       if (typeof ensureAudio === 'function') ensureAudio();
       startJukebox();
     }
@@ -328,52 +330,160 @@
 })();
 </script>
 
-<!-- ── MINI STEVE CURSOR FOLLOWER ───────────────────────────── -->
+<!-- ── 3D CORNER STEVE ───────────────────────────────────── -->
 <script>
 (function() {
-  const steve = document.getElementById('steve-follower');
-  if (!steve) return;
+  const model = document.getElementById('steveModel');
+  if (!model) return;
 
-  let targetX = -200, targetY = -200;
-  let curX = -200, curY = -200;
-  let prevX = -200;
-  let moveTimer = null;
-  let walking = false;
+  const S = 3; // px per MC unit
 
-  // Use RAF lerp for smooth lag
-  function lerp(a, b, t) { return a + (b - a) * t; }
+  // Steve skin color palette
+  const C = {
+    skin:     '#c8906a',
+    skinDark: '#b07858',
+    hair:     '#5a3a1a',
+    hairDark: '#3a2208',
+    shirt:    '#2255cc',
+    shirtDk:  '#1a44aa',
+    pants:    '#886633',
+    pantsDk:  '#6a4f22',
+    boot:     '#334499',
+  };
 
-  function setWalking(on) {
-    if (on === walking) return;
-    walking = on;
-    if (on) steve.classList.add('walking');
-    else steve.classList.remove('walking');
+  // Build a 3D box and add it to parent; return the box element
+  function makeBox(parent, xPx, yPx, zPx, wPx, hPx, dPx, colors) {
+    const box = document.createElement('div');
+    box.className = 's-box';
+    box.style.cssText = `width:${wPx}px;height:${hPx}px;transform:translate3d(${xPx}px,${yPx}px,${zPx}px);`;
+    const faces = [
+      { w:wPx, h:hPx, t:`translateZ(${dPx/2}px)`,                     c:colors.front  },
+      { w:wPx, h:hPx, t:`translateZ(${-dPx/2}px) rotateY(180deg)`,    c:colors.back   },
+      { w:dPx, h:hPx, t:`translateX(${-dPx/2}px) rotateY(-90deg)`,    c:colors.left   },
+      { w:dPx, h:hPx, t:`translateX(${wPx-dPx/2}px) rotateY(90deg)`,  c:colors.right  },
+      { w:wPx, h:dPx, t:`translateY(${-dPx/2}px) rotateX(90deg)`,     c:colors.top    },
+      { w:wPx, h:dPx, t:`translateY(${hPx-dPx/2}px) rotateX(-90deg)`, c:colors.bottom },
+    ];
+    faces.forEach(f => {
+      const face = document.createElement('div');
+      face.className = 's-face';
+      const css = `width:${f.w}px;height:${f.h}px;transform:${f.t};background:${f.c || '#888'};`;
+      // Front face of head: add Steve's face via a tiny inlined SVG background
+      face.style.cssText = css;
+      box.appendChild(face);
+    });
+    parent.appendChild(box);
+    return box;
   }
 
-  document.addEventListener('mousemove', function(e) {
-    // Offset so Steve stands to the right of the cursor, feet at cursor level
-    targetX = e.clientX + 16;
-    targetY = e.clientY - 58; // so feet are near cursor
+  // Build Steve, return limb elements for animation
+  function buildSteve(container) {
+    const HW=16*S, HH=16*S, HD=16*S;
+    const BW=16*S, BH=24*S, BD= 8*S;
+    const AW= 8*S, AH=24*S, AD= 8*S;
+    const LW= 8*S, LH=24*S, LD= 8*S;
+    const CX = (32*S - BW) / 2; // = 0 at S=3
 
-    // Detect direction
-    if (e.clientX < prevX - 2) {
-      steve.classList.add('facing-left');
-    } else if (e.clientX > prevX + 2) {
-      steve.classList.remove('facing-left');
+    // Build head (will be rotated by JS)
+    const headWrap = document.createElement('div');
+    headWrap.className = 's-box';
+    headWrap.id = 'cornerSteveHead';
+    headWrap.style.cssText = `width:${HW}px;height:${HH}px;transform:translate3d(${CX}px,0px,0px);transform-origin:${HW/2}px ${HH*0.8}px 0px;`;
+    // Build head as inner box so we can rotate headWrap without fighting translate
+    const headFront = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Crect width='8' height='8' fill='%23c8906a'/%3E%3Crect x='0' y='0' width='8' height='2' fill='%235a3a1a'/%3E%3Crect x='1' y='3' width='2' height='2' fill='%230000cc'/%3E%3Crect x='5' y='3' width='2' height='2' fill='%230000cc'/%3E%3Crect x='2' y='6' width='4' height='1' fill='%23b07050'/%3E%3C/svg%3E")`;
+    const innerHead = makeBox(headWrap, 0, 0, -HD/2, HW, HH, HD, {
+      front: C.skin, back: C.hairDark, left: C.hair, right: C.hair, top: C.hairDark, bottom: C.skin,
+    });
+    // Override front face with face texture
+    innerHead.children[0].style.background = '';
+    innerHead.children[0].style.backgroundImage = headFront;
+    innerHead.children[0].style.backgroundSize = '100% 100%';
+    container.appendChild(headWrap);
+
+    // Body
+    makeBox(container, CX, HH, -BD/2, BW, BH, BD, {
+      front: C.shirt, back: C.shirtDk, left: C.shirtDk, right: C.shirtDk,
+      top: C.shirtDk, bottom: C.pants,
+    });
+
+    // Right arm
+    const rArm = makeBox(container, CX - AW - S, HH, -AD/2, AW, AH, AD, {
+      front: C.shirt, back: C.shirtDk, left: C.skinDark, right: C.shirtDk,
+      top: C.skinDark, bottom: C.skin,
+    });
+
+    // Left arm
+    const lArm = makeBox(container, CX + BW + S, HH, -AD/2, AW, AH, AD, {
+      front: C.shirt, back: C.shirtDk, left: C.shirtDk, right: C.skinDark,
+      top: C.skinDark, bottom: C.skin,
+    });
+
+    // Right leg
+    const rLeg = makeBox(container, CX, HH + BH, -LD/2, LW, LH, LD, {
+      front: C.pants, back: C.pantsDk, left: C.pantsDk, right: C.pants,
+      top: C.pantsDk, bottom: C.boot,
+    });
+
+    // Left leg
+    const lLeg = makeBox(container, CX + LW, HH + BH, -LD/2, LW, LH, LD, {
+      front: C.pants, back: C.pantsDk, left: C.pants, right: C.pantsDk,
+      top: C.pantsDk, bottom: C.boot,
+    });
+
+    // Store base transforms on limbs for animation
+    function storeBase(el, ox, oy, oz) {
+      el._ox = ox; el._oy = oy; el._oz = oz;
     }
-    prevX = e.clientX;
+    storeBase(rArm, CX - AW - S, HH, -AD/2);
+    storeBase(lArm, CX + BW + S, HH, -AD/2);
+    storeBase(rLeg, CX,          HH + BH, -LD/2);
+    storeBase(lLeg, CX + LW,     HH + BH, -LD/2);
 
-    setWalking(true);
-    clearTimeout(moveTimer);
-    moveTimer = setTimeout(function() { setWalking(false); }, 200);
+    return { headWrap, rArm, lArm, rLeg, lLeg };
+  }
+
+  const parts = buildSteve(model);
+
+  // Cursor-following head rotation
+  let targetHeadYaw = 0, headYaw = 0;
+  let targetBodyYaw = 0, bodyYaw = 0;
+
+  document.addEventListener('mousemove', function(e) {
+    const rect = document.getElementById('corner-steve').getBoundingClientRect();
+    const steveCX = rect.left + rect.width  / 2;
+    const steveCY = rect.top  + rect.height / 2;
+    const dx = e.clientX - steveCX;
+    const dy = e.clientY - steveCY;
+    targetHeadYaw  = Math.max(-55, Math.min(55,  dx / 5));
+    targetBodyYaw  = Math.max(-25, Math.min(25,  dx / 14));
   });
 
-  (function animateSteve() {
-    curX = lerp(curX, targetX, 0.18);
-    curY = lerp(curY, targetY, 0.18);
-    steve.style.left = Math.round(curX) + 'px';
-    steve.style.top  = Math.round(curY) + 'px';
-    requestAnimationFrame(animateSteve);
+  // Walk cycle
+  let walkPhase = 0;
+  const SWING = 28;
+
+  (function animate() {
+    walkPhase += 0.05;
+    headYaw  += (targetHeadYaw  - headYaw)  * 0.13;
+    bodyYaw  += (targetBodyYaw  - bodyYaw)  * 0.08;
+
+    const sw = Math.sin(walkPhase) * SWING;
+
+    // Head yaw (CX = 0 at S=3)
+    parts.headWrap.style.transform =
+      `translate3d(0px,0px,0px) rotateY(${headYaw}deg)`;
+
+    // Limb swing (rotateX around top of each limb)
+    function setLimb(el, angle) {
+      el.style.transform =
+        `translate3d(${el._ox}px,${el._oy}px,${el._oz}px) rotateX(${angle}deg)`;
+    }
+    setLimb(parts.rArm,  sw);
+    setLimb(parts.lArm, -sw);
+    setLimb(parts.rLeg, -sw);
+    setLimb(parts.lLeg,  sw);
+
+    requestAnimationFrame(animate);
   })();
 })();
 </script>

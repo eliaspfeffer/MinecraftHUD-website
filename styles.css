@@ -453,7 +453,7 @@ html, body {
   width: clamp(40px, 6vw, 64px);
   height: auto;
 }
-.mob.rtl .mob-sprite { transform: scaleX(-1); }
+.mob.ltr .mob-sprite { transform: scaleX(-1); }
 .mob-inner {
   display: inline-block;
   animation: mob-bob 0.28s ease-in-out infinite alternate;
@@ -616,97 +616,32 @@ html, body {
   min-width: 44px; text-align: right;
 }
 
-/* ─── MINI STEVE CURSOR FOLLOWER ─── */
-#steve-follower {
+/* ─── 3D CORNER STEVE ─── */
+#corner-steve {
   position: fixed;
+  bottom: 90px;   /* sit above the HUD bar */
+  left: 20px;
+  z-index: 200;
   pointer-events: none;
-  z-index: 9999;
-  width: 32px;
-  height: 64px;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  /* Start offscreen */
-  top: -100px;
-  left: -100px;
-  /* Smooth lag follow */
-  transition: top 0.12s cubic-bezier(0.22,1,0.36,1), left 0.12s cubic-bezier(0.22,1,0.36,1);
-  /* Flip horizontally when facing left */
 }
-#steve-follower.facing-left {
-  transform: scaleX(-1);
+.steve-wrap {
+  width: 96px;
+  height: 192px;
+  perspective: 400px;
+  perspective-origin: 50% 30%;
 }
-/* Steve built from stacked divs using pure CSS pixel art */
-#steve-head {
-  width: 24px; height: 24px;
-  margin: 0 auto;
-  /* Front face of Steve head: blue eyes, skin */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3C!-- Skin base --%3E%3Crect width='8' height='8' fill='%23c8906a'/%3E%3C!-- Top hair band --%3E%3Crect x='0' y='0' width='8' height='2' fill='%235a3a1a'/%3E%3C!-- Eyes --%3E%3Crect x='1' y='3' width='2' height='2' fill='%230000cc'/%3E%3Crect x='5' y='3' width='2' height='2' fill='%230000cc'/%3E%3C!-- Nose/mouth area --%3E%3Crect x='2' y='6' width='4' height='1' fill='%23b07050'/%3E%3Crect x='3' y='5' width='2' height='1' fill='%23a06040'/%3E%3C/svg%3E");
-  background-size: 100% 100%;
-  image-rendering: pixelated;
-}
-#steve-body {
-  width: 24px; height: 28px;
-  margin: 0 auto;
-  /* Blue shirt body */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='10'%3E%3Crect width='8' height='10' fill='%232255cc'/%3E%3C!-- Shirt detail --%3E%3Crect x='1' y='1' width='6' height='1' fill='%233366dd'/%3E%3Crect x='0' y='8' width='8' height='2' fill='%23886633'/%3E%3C/svg%3E");
-  background-size: 100% 100%;
-  image-rendering: pixelated;
+.steve-model {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
   position: relative;
 }
-/* Arms as pseudo-elements on the body */
-#steve-body::before,
-#steve-body::after {
-  content: '';
+.s-box  { position: absolute; transform-style: preserve-3d; }
+.s-face {
   position: absolute;
-  width: 10px; height: 28px;
-  top: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='10'%3E%3Crect width='4' height='10' fill='%232255cc'/%3E%3Crect x='0' y='8' width='4' height='2' fill='%23c8906a'/%3E%3C/svg%3E");
-  background-size: 100% 100%;
   image-rendering: pixelated;
-}
-#steve-body::before { left: -10px; transform-origin: top center; }
-#steve-body::after  { right: -10px; transform-origin: top center; }
-
-#steve-legs {
-  width: 24px; height: 28px;
-  margin: 0 auto;
-  display: flex;
-  gap: 0px;
-}
-.steve-leg {
-  width: 12px; height: 28px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='10'%3E%3Crect width='4' height='8' fill='%23886633'/%3E%3Crect x='0' y='8' width='4' height='2' fill='%23334499'/%3E%3C/svg%3E");
-  background-size: 100% 100%;
-  image-rendering: pixelated;
-}
-/* Walking animation */
-#steve-follower.walking #steve-body::before {
-  animation: arm-swing-l 0.35s ease-in-out infinite alternate;
-}
-#steve-follower.walking #steve-body::after {
-  animation: arm-swing-r 0.35s ease-in-out infinite alternate;
-}
-#steve-follower.walking .steve-leg:first-child {
-  animation: leg-swing-l 0.35s ease-in-out infinite alternate;
-}
-#steve-follower.walking .steve-leg:last-child {
-  animation: leg-swing-r 0.35s ease-in-out infinite alternate;
-}
-@keyframes arm-swing-l {
-  from { transform: rotate(-22deg); }
-  to   { transform: rotate(22deg); }
-}
-@keyframes arm-swing-r {
-  from { transform: rotate(22deg); }
-  to   { transform: rotate(-22deg); }
-}
-@keyframes leg-swing-l {
-  from { transform: rotate(-18deg); transform-origin: top center; }
-  to   { transform: rotate(18deg);  transform-origin: top center; }
-}
-@keyframes leg-swing-r {
-  from { transform: rotate(18deg);  transform-origin: top center; }
-  to   { transform: rotate(-18deg); transform-origin: top center; }
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 /* ─── RESPONSIVE ─── */
