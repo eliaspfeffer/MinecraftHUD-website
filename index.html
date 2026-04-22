@@ -155,47 +155,41 @@
 
 <!-- Center Card -->
 <div class="center-card">
-  <div class="cc-badge">v1.2 · macOS 13+ &amp; Windows 10+</div>
-  <div class="cc-title">⛏ MinecraftHUD</div>
-  <div class="cc-sub">Your Desktop.<br/>In Survival Mode.</div>
+  <div class="cc-brand">⛏ MinecraftHUD  <span class="cc-badge-inline">v1.2</span></div>
+  <div class="cc-title">HAVE FUN<br>WORKING</div>
+  <div class="cc-sub">Your Mac, in Survival Mode.</div>
 
-  <!-- Mac CTA (shown by default, hidden on Windows) -->
   <div id="macCTA">
     <a class="btn-buy btn-buy-mac"
        href="/MinecraftHUD.dmg"
        download
        onclick="if(window.va)va('event',{name:'mac_download_click'})">
-      ⬇ &nbsp;Download for Mac
+      ⬇ &nbsp;Free for 7 Days — Then $4.99 Once
     </a>
-    <div class="cc-win-sub" style="margin-bottom:18px;">7-day free trial, then $4.99 once — no subscription</div>
   </div>
-
-  <!-- Windows CTA (hidden by default, shown on Windows) -->
   <div id="winCTA" style="display:none;">
     <a class="btn-buy btn-buy-win"
        href="https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/MinecraftHUD-Setup.exe"
        onclick="if(window.va)va('event',{name:'windows_download_click'})">
       ⬇ &nbsp;Download for Windows — Free
     </a>
-    <div class="cc-win-sub" style="margin-bottom:18px;">macOS: 7-day free trial, then $4.99 once — no subscription</div>
+    <div class="cc-win-sub">macOS: 7-day free trial · $4.99 once, no subscription</div>
   </div>
 
-  <!-- Social proof -->
-  <div class="cc-social-proof">🎮 Joined by 1,200+ players worldwide</div>
+  <div class="cc-proof">★★★★★ &nbsp; 1,200+ players worldwide</div>
 
   <div class="cc-features">
-    <span>❤️ Battery hearts</span>
-    <span>✨ XP from keystrokes</span>
-    <span>💀 Kill feed</span>
+    <span>❤️ Battery = hearts</span>
+    <span>✨ Typing = XP</span>
+    <span>💀 Close app = kill feed</span>
     <span>🐄 Walking mobs</span>
-    <span>🕷 Creeper on Cmd+X</span>
+    <span>💥 Creeper on cut</span>
     <span>🏆 Achievements</span>
     <span>👥 Friends leaderboard</span>
     <span>🛡 Focus Mode</span>
   </div>
-  <div class="cc-note">One-time · No subscription · Apple Silicon &amp; Intel · Windows 10+</div>
+  <div class="cc-note">No subscription · One-time · Apple Silicon &amp; Intel · Windows 10+</div>
 
-  <!-- Friend share -->
   <div class="cc-friend-share">
     <div class="friend-label">🎮 Share with a friend</div>
     <div class="friend-row">
@@ -213,30 +207,35 @@
   </div>
 </div>
 
-<!-- HUD bar at bottom -->
+<!-- HUD bar at bottom — mirrors the actual app 1:1 -->
 <div class="hud-overlay">
-  <!-- Jukebox centered above HUD bar -->
-  <div class="jukebox-wrap" id="jukeboxWrap" title="Click to play/stop music">
+  <!-- Jukebox — floating above HUD, left-aligned like the app -->
+  <div class="jukebox-wrap" id="jukeboxWrap" title="Click to play/stop Minecraft music">
     <div class="jukebox-label">JUKEBOX</div>
     <div class="jukebox-sprite" id="jukeboxSprite"></div>
     <div class="jukebox-now-playing" id="jukeboxNowPlaying">Cat — C418</div>
   </div>
 
   <div class="hud-row">
-    <div class="hearts">
+    <!-- 9 heart icons (battery) -->
+    <div class="hearts" title="Battery level">
       <span class="h on"></span><span class="h on"></span><span class="h on"></span>
       <span class="h on"></span><span class="h on"></span><span class="h on"></span>
       <span class="h on"></span><span class="h half"></span><span class="h off"></span>
     </div>
     <div class="xp-popup" id="xpPopup" style="opacity:0">+2 XP</div>
-    <div class="foods">
+    <!-- 9 food icons (hunger/activity) — reversed so leftmost is index 9 -->
+    <div class="foods" title="Hunger / activity">
       <span class="f off"></span><span class="f off"></span>
       <span class="f on"></span><span class="f on"></span><span class="f on"></span>
       <span class="f on"></span><span class="f on"></span><span class="f on"></span>
       <span class="f on"></span>
     </div>
   </div>
+
+  <!-- XP bar — full width, Minecraft green -->
   <div class="xp-wrap">
+    <div class="xp-level-badge" id="xpLevel">7</div>
     <div class="xp-track">
       <div class="xp-fill" id="xpFill"></div>
       <div class="xp-shine"></div>
@@ -382,16 +381,18 @@
     const LW= 8*S,LH=24*S,LD= 8*S;
     const CX = (32*S - BW) / 2; // = 24
 
-    // Head: wrapped for yaw rotation
+    // Head: zero-size pivot node at neck position (CX+HW/2, HH)
+    // This is the standard game-engine pivot-child pattern — no transform-origin needed
     const headWrap = document.createElement('div');
     headWrap.className = 's-box';
+    headWrap._tx = CX + HW / 2;  // pivot X = horizontal center of head
+    headWrap._ty = HH;            // pivot Y = neck (bottom of head)
     headWrap.style.cssText =
-      `width:${HW}px;height:${HH}px;` +
-      `transform:translate3d(${CX}px,0px,0px);` +
-      `transform-origin:${HW/2}px ${HH}px 0px;` +
+      `width:0;height:0;` +
+      `transform:translate3d(${headWrap._tx}px,${headWrap._ty}px,0px);` +
       `transform-style:preserve-3d;`;
-    headWrap._cx = CX;
-    buildBox(headWrap, 0,0,-HD/2, HW,HH,HD,
+    // Head box: offset so bottom-center aligns with pivot (0,0,0)
+    buildBox(headWrap, -HW/2, -HH, -HD/2, HW,HH,HD,
       {front:[8,8,8,8],back:[24,8,8,8],left:[0,8,8,8],right:[16,8,8,8],top:[8,0,8,8],bottom:[16,0,8,8]});
     parent.appendChild(headWrap);
 
@@ -432,7 +433,7 @@
     const sw = Math.sin(walkPhase) * 25;
 
     parts.headWrap.style.transform =
-      `translate3d(${parts.headWrap._cx}px,0px,0px) rotateY(${headYaw.toFixed(2)}deg)`;
+      `translate3d(${parts.headWrap._tx}px,${parts.headWrap._ty}px,0px) rotateY(${headYaw.toFixed(2)}deg)`;
 
     function setLimb(el, a) {
       el.style.transform =
