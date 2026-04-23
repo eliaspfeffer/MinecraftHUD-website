@@ -23,12 +23,7 @@ MinecraftHUD is a desktop overlay application that gamifies your computer in rea
 - **Achievements**: Unlock achievements for productivity milestones
 - **Friends leaderboard**: Compare XP with friends
 - **Focus Mode**: Hide distractions for deep work sessions
-- **No subscription**: One-time purchase, yours forever
-
-## Pricing
-
-- macOS: $4.99 one-time (supports Apple Silicon and Intel)
-- Windows: Free download
+- **Free**: No payment required
 
 ## System Requirements
 
@@ -37,7 +32,7 @@ MinecraftHUD is a desktop overlay application that gamifies your computer in rea
 
 ## Download / Access
 
-- Website & purchase: https://minecrafthud.eliaspfeffer.de/
+- Website: https://minecrafthud.eliaspfeffer.de/
 - Windows download: https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/MinecraftHUD-Setup.exe
 
 ## FAQs
@@ -46,7 +41,7 @@ MinecraftHUD is a desktop overlay application that gamifies your computer in rea
 A desktop overlay app that shows your Mac/Windows system stats as Minecraft UI elements — hearts for battery, XP bar for keystrokes, kill feed for closed apps.
 
 **Is MinecraftHUD free?**
-Windows version is free. macOS is a one-time $4.99 purchase — no subscription.
+Yes. Both the macOS and Windows versions are free to download.
 
 **Does it work on Apple Silicon (M1/M2/M3/M4)?**
 Yes, fully supports Apple Silicon and Intel Macs running macOS 13+.
