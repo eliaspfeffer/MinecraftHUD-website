@@ -220,6 +220,55 @@ html, body {
   color: rgba(255,255,255,0.35);
 }
 
+/* ─── FAQ ─── */
+.cc-faq {
+  margin-top: 20px;
+  text-align: left;
+}
+.faq-title {
+  font-family: var(--pixel); font-size: 9px;
+  color: var(--green);
+  margin-bottom: 10px;
+  text-align: center;
+  letter-spacing: 2px;
+  text-shadow: 0 0 12px var(--green-glow);
+}
+.faq-item {
+  border: 1px solid rgba(127,255,0,0.15);
+  background: rgba(0,0,0,0.28);
+  margin-bottom: 3px;
+}
+.faq-item[open] {
+  border-color: rgba(127,255,0,0.35);
+}
+.faq-q {
+  font-family: var(--pixel); font-size: 7px;
+  color: rgba(255,255,255,0.75);
+  padding: 10px 12px;
+  cursor: pointer;
+  list-style: none;
+  display: flex; justify-content: space-between; align-items: center;
+  line-height: 1.6;
+  gap: 10px;
+  user-select: none;
+}
+.faq-q::-webkit-details-marker { display: none; }
+.faq-q::marker { display: none; }
+.faq-q::after {
+  content: '+';
+  font-family: var(--pixel); font-size: 10px;
+  color: var(--green); flex-shrink: 0;
+}
+.faq-item[open] .faq-q::after { content: '−'; }
+.faq-q:hover { color: #fff; background: rgba(127,255,0,0.05); }
+.faq-a {
+  font-family: var(--pixel); font-size: 6.5px;
+  color: rgba(255,255,255,0.5);
+  padding: 8px 12px 10px;
+  line-height: 2;
+  border-top: 1px solid rgba(127,255,0,0.1);
+}
+
 /* ─── TESTIMONIALS ─── */
 .cc-testimonials {
   margin-top: 18px;
