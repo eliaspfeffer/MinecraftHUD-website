@@ -178,6 +178,11 @@
     </a>
   </div>
 
+  <div class="cc-referral-callout">
+    🎮 Love it? <strong>Invite a friend and unlock free access for both of you.</strong>
+    <a class="referral-scroll-link" href="#friendShare" onclick="document.getElementById('friendShare').scrollIntoView({behavior:'smooth'});return false;">Share your link →</a>
+  </div>
+
   <div class="cc-proof">★★★★★ &nbsp; <span id="dlCountText">1,200+</span> downloads worldwide</div>
   <div class="cc-github-badge" id="githubBadge" style="display:none">
     <a href="https://github.com/eliaspfeffer/MinecraftHUD-releases" target="_blank" rel="noopener">
@@ -215,12 +220,13 @@
     </div>
   </div>
 
-  <div class="cc-friend-share">
-    <div class="friend-label">🎮 Share with a friend</div>
+  <div class="cc-friend-share" id="friendShare">
+    <div class="friend-label">🎮 Invite a friend — unlock free access for both of you</div>
+    <div class="friend-desc">Share your link. Once your friend downloads and adds your friend code in the Friends tab, you both get free access forever — no payment needed.</div>
     <div class="friend-row">
       <input class="friend-link-input" id="friendLink" type="text" readonly
              value="https://minecrafthud.eliaspfeffer.de/MinecraftHUD.dmg" />
-      <button class="btn-copy" onclick="copyFriendLink()">COPY</button>
+      <button class="btn-copy" onclick="copyFriendLink()">COPY LINK</button>
     </div>
   </div>
 
@@ -325,7 +331,7 @@
       .then(d => {
         if (d.ok) {
           document.getElementById('emailForm').style.display = 'none';
-          status.textContent = '✔ You\'re on the list!';
+          status.innerHTML = '✔ You\'re on the list! &nbsp;·&nbsp; <a href="#friendShare" style="color:#55FFFF;text-decoration:underline" onclick="document.getElementById(\'friendShare\').scrollIntoView({behavior:\'smooth\'});return false;">Invite a friend → get free access for both</a>';
           status.className = 'email-status email-status-ok';
           if (window.va) va('event', { name: 'email_signup' });
         } else {
