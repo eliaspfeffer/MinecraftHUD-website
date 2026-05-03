@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How I Built a Minecraft HUD for My Mac Desktop (and Why It Actually Helps Me Code) — MinecraftHUD</title>
+  <meta name="description" content="MinecraftHUD overlays real Minecraft hearts, XP bar, and sounds on your Mac. Hear dirt blocks as you type, mobs walk your screen. Free trial available." />
+  <meta name="keywords" content="minecraft hud mac app, minecraft overlay mac, minecraft sounds mac, gamify mac desktop" />
+  <link rel="canonical" href="https://minecrafthud.eliaspfeffer.de/blog/how-i-built-minecraft-hud-mac/" />
+
+  <meta property="og:type"        content="article" />
+  <meta property="og:url"         content="https://minecrafthud.eliaspfeffer.de/blog/how-i-built-minecraft-hud-mac/" />
+  <meta property="og:title"       content="How I Built a Minecraft HUD for My Mac Desktop (and Why It Actually Helps Me Code)" />
+  <meta property="og:description" content="MinecraftHUD overlays real Minecraft hearts, XP bar, and sounds on your Mac. Hear dirt blocks as you type, mobs walk your screen. Free trial available." />
+  <meta property="og:image"       content="https://minecrafthud.eliaspfeffer.de/screenshot1.png" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="How I Built a Minecraft HUD for My Mac Desktop (and Why It Actually Helps Me Code)" />
+  <meta name="twitter:description" content="MinecraftHUD overlays real Minecraft hearts, XP bar, and sounds on your Mac. Free trial available." />
+  <meta name="twitter:image"      content="https://minecrafthud.eliaspfeffer.de/screenshot1.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "How I Built a Minecraft HUD for My Mac Desktop (and Why It Actually Helps Me Code)",
+    "description": "MinecraftHUD overlays real Minecraft hearts, XP bar, and sounds on your Mac. Hear dirt blocks as you type, mobs walk your screen. Free trial available.",
+    "url": "https://minecrafthud.eliaspfeffer.de/blog/how-i-built-minecraft-hud-mac/",
+    "image": "https://minecrafthud.eliaspfeffer.de/screenshot1.png",
+    "author": { "@type": "Person", "name": "Elias Pfeffer", "url": "https://eliaspfeffer.de" },
+    "publisher": { "@type": "Organization", "name": "MinecraftHUD", "url": "https://minecrafthud.eliaspfeffer.de" },
+    "datePublished": "2026-05-03",
+    "keywords": "minecraft hud mac app, minecraft overlay mac, minecraft sounds mac"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛏</text></svg>" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #7fff00;
+      --pixel: 'Press Start 2P', monospace;
+    }
+    html, body {
+      min-height: 100%;
+      background: #060616;
+      color: #ddd;
+      font-family: Georgia, serif;
+    }
+    .nav {
+      background: rgba(0,0,0,0.85);
+      border-bottom: 1px solid rgba(127,255,0,0.25);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav-logo {
+      font-family: var(--pixel);
+      font-size: 10px;
+      color: var(--green);
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+    .nav-link {
+      font-family: var(--pixel);
+      font-size: 8px;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--green); }
+    .article-wrap {
+      max-width: 720px;
+      margin: 60px auto;
+      padding: 0 24px 80px;
+    }
+    .breadcrumb {
+      font-family: var(--pixel);
+      font-size: 7px;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 32px;
+    }
+    .breadcrumb a { color: rgba(127,255,0,0.55); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--green); }
+    .post-kw {
+      font-family: var(--pixel);
+      font-size: 7px;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      letter-spacing: 1px;
+    }
+    h1 {
+      font-family: var(--pixel);
+      font-size: 14px;
+      color: #fff;
+      line-height: 2;
+      margin-bottom: 32px;
+    }
+    .article-body {
+      font-size: 17px;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.82);
+    }
+    .article-body p { margin-bottom: 20px; }
+    .article-body h2 {
+      font-family: var(--pixel);
+      font-size: 10px;
+      color: var(--green);
+      margin: 40px 0 16px;
+      line-height: 1.8;
+    }
+    .article-body ul {
+      margin: 0 0 20px 24px;
+    }
+    .article-body ul li {
+      margin-bottom: 8px;
+    }
+    .article-body a {
+      color: var(--green);
+      text-decoration: underline;
+    }
+    .article-body a:hover { color: #fff; }
+    .article-body strong { color: #fff; }
+    .article-body em { color: rgba(255,255,255,0.6); font-style: italic; }
+    .article-body hr {
+      border: none;
+      border-top: 1px solid rgba(127,255,0,0.2);
+      margin: 40px 0;
+    }
+    .article-body .img-caption {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      margin-top: -14px;
+      margin-bottom: 20px;
+    }
+    .cta-box {
+      background: rgba(0,0,0,0.6);
+      border: 2px solid rgba(127,255,0,0.45);
+      padding: 28px 32px;
+      text-align: center;
+      margin: 40px 0;
+    }
+    .cta-box p {
+      font-family: var(--pixel);
+      font-size: 8px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 18px;
+      line-height: 2;
+    }
+    .btn-cta {
+      display: inline-block;
+      background: var(--green);
+      color: #060616;
+      font-family: var(--pixel);
+      font-size: 9px;
+      padding: 12px 24px;
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+    .btn-cta:hover { background: #fff; color: #060616; }
+    .footer {
+      text-align: center;
+      padding: 48px 24px;
+      font-family: var(--pixel);
+      font-size: 7px;
+      color: rgba(255,255,255,0.25);
+    }
+    .footer a { color: rgba(127,255,0,0.55); text-decoration: none; }
+    .footer a:hover { color: var(--green); }
+  </style>
+  <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">⛏ MinecraftHUD</a>
+  <a class="nav-link active" href="/blog/">Blog</a>
+  <a class="nav-link" href="/#faq">FAQ</a>
+  <a class="nav-link" href="/support.html">Support</a>
+</nav>
+
+<div class="article-wrap">
+  <div class="breadcrumb">
+    <a href="/">Home</a> &nbsp;/&nbsp; <a href="/blog/">Blog</a> &nbsp;/&nbsp; This post
+  </div>
+
+  <div class="post-kw">minecraft hud mac app</div>
+  <h1>How I Built a Minecraft HUD for My Mac Desktop (and Why It Actually Helps Me Code)</h1>
+
+  <div class="article-body">
+
+    <p>I'm a developer. I spend eight hours a day staring at a code editor, a terminal, and a browser. It is, objectively, not that exciting to look at.</p>
+
+    <p>So I built MinecraftHUD.</p>
+
+    <p>It's a Mac app that overlays a live Minecraft-style HUD on top of everything else on your screen — nine pixelated hearts in the bottom-left, a drumstick hunger bar, a green XP bar that fills as you work, and a kill feed in the top-right corner that announces every app you close. Press Cmd+C and a pixelated cow walks across the bottom of your screen. Press any key and you hear the soft sound of a dirt block being placed.</p>
+
+    <p>It sounds ridiculous. It is a little ridiculous. And somehow, it made me a better developer.</p>
+
+    <h2>The Idea</h2>
+
+    <p>I've played Minecraft since 2011. There's something uniquely satisfying about the game's HUD — the hearts that show how close to death you are, the hunger bar that rewards you for eating, the XP that accumulates as you collect orbs. Every number means something. Every bar going down creates mild urgency.</p>
+
+    <p>I started wondering: what if my Mac behaved like a Minecraft world? What if my battery level was my health bar? What if scrolling social media actually drained something tangible?</p>
+
+    <p>That's what <a href="https://minecrafthud.eliaspfeffer.de">MinecraftHUD</a> is.</p>
+
+    <h2>How It Works</h2>
+
+    <p><strong>Hearts = Battery</strong></p>
+
+    <p>Nine pixel-perfect Minecraft hearts sit in the bottom-left corner of your screen. Each heart represents roughly 11% of your battery. Drop below 20% and you hear the classic hurt sound. Let it die completely and — well, you lose. Keeping your Mac charged suddenly feels like keeping your character alive.</p>
+
+    <p><strong>Hunger Bar = Real Productivity</strong></p>
+
+    <p>The hunger bar empties over about six hours — roughly a workday. Three clicks on the drumstick icons and you refill it. But here's the clever bit: scroll YouTube, Instagram, TikTok, Reddit, or Twitter and your hunger drains faster. Stay off social media and you stay fed longer. It turns distraction into a tangible cost you can actually see.</p>
+
+    <p><strong>XP Bar = Your Work</strong></p>
+
+    <p>Every keystroke and mouse click earns XP. Watch the bar fill. Level up. A sound fires when you do. It resets at midnight. What's your high score for the day?</p>
+
+    <p><strong>Kill Feed</strong></p>
+
+    <p>Close Chrome and the top-right corner of your screen reads: <em>"Chrome was slain."</em> Close Zoom: <em>"Zoom has fallen."</em> Close Spotify: <em>"Spotify got rekt."</em> It disappears after a few seconds. It's funny every single time, but more importantly, it makes quitting distracting apps feel like a win rather than a loss.</p>
+
+    <p><strong>Real Minecraft Sounds on Shortcuts</strong></p>
+
+    <p>This is the feature that gets the most comments from people who walk past my desk. Every keyboard shortcut plays a matching Minecraft sound:</p>
+
+    <ul>
+      <li>Any key → dirt block place</li>
+      <li>Cmd+S → XP orb pickup</li>
+      <li>Cmd+C → cow moo (and a cow walks across your screen)</li>
+      <li>Cmd+V → pig oink</li>
+      <li>Cmd+Z → dog bark</li>
+      <li>Force Quit → TNT explosion</li>
+    </ul>
+
+    <p>The sounds are quiet enough that they don't distract, loud enough that you notice them. After a few days, saving a file feels like collecting an orb.</p>
+
+    <h2>Why It Actually Helps</h2>
+
+    <p>I expected MinecraftHUD to be a novelty. What surprised me was how much it changed my relationship to distraction. When I can see my hunger bar dropping because I opened Twitter, I close Twitter faster. When I can see my XP bar filling because I've been typing for twenty minutes straight, I don't want to break the streak.</p>
+
+    <p>Gamification works when the feedback is immediate and visible. The HUD is always there, always updating, always giving you a sense of how your session is going. It makes the abstract (am I being productive today?) into something concrete and immediate.</p>
+
+    <p>It also makes the Mac more fun. That's not nothing.</p>
+
+    <div class="cta-box">
+      <p>✨ 7-DAY FREE TRIAL — NO CREDIT CARD</p>
+      <a class="btn-cta" href="https://minecrafthud.eliaspfeffer.de/MinecraftHUD.dmg" download
+         onclick="if(window.va)va('event',{name:'blog_post1_cta_click'})">
+        ⬇ Start Free Trial — Mac
+      </a>
+      <p style="margin-top:14px;font-size:7px;color:rgba(255,255,255,0.35)">Then $4.99 · One-time · No subscription</p>
+    </div>
+
+    <img src="/screenshot1.png" alt="MinecraftHUD app on Mac desktop showing Minecraft-style health hearts, hunger drumsticks, XP bar, and a walking pixel cow during a coding session." style="width:100%;border:1px solid rgba(127,255,0,0.2);margin-bottom:8px;" />
+    <div class="img-caption">MinecraftHUD overlaid on a code editor — pixel hearts, hunger bar, XP bar, and a cow walking past.</div>
+
+    <hr />
+
+    <p><em>MinecraftHUD is not affiliated with Mojang or Microsoft. Minecraft is a registered trademark of Mojang Studios. <a href="https://minecrafthud.eliaspfeffer.de">Download at minecrafthud.eliaspfeffer.de</a>.</em></p>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <a href="/">⛏ MinecraftHUD</a> &nbsp;·&nbsp;
+  <a href="/blog/">Blog</a> &nbsp;·&nbsp;
+  <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp;
+  <a href="/support.html">Support</a>
+  <br /><br />
+  Not affiliated with Mojang or Microsoft. Minecraft is a registered trademark of Mojang Studios.
+</footer>
+
+<script>
+  fetch('/api/track', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ path: location.pathname, referrer: document.referrer }),
+  }).catch(() => {});
+</script>
+</body>
+</html>

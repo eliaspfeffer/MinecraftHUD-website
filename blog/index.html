@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — MinecraftHUD</title>
+  <meta name="description" content="MinecraftHUD blog — stories, tips, and gamification ideas for turning your Mac into a Minecraft-style survival experience." />
+  <meta name="keywords" content="minecraft hud mac, gamify your mac, minecraft overlay desktop, minecraft hud blog" />
+  <link rel="canonical" href="https://minecrafthud.eliaspfeffer.de/blog/" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://minecrafthud.eliaspfeffer.de/blog/" />
+  <meta property="og:title"       content="Blog — MinecraftHUD" />
+  <meta property="og:description" content="MinecraftHUD blog — stories, tips, and gamification ideas for your Mac desktop." />
+  <meta property="og:image"       content="https://minecrafthud.eliaspfeffer.de/screenshot1.png" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="Blog — MinecraftHUD" />
+  <meta name="twitter:description" content="MinecraftHUD blog — stories, tips, and gamification ideas for your Mac desktop." />
+  <meta name="twitter:image"      content="https://minecrafthud.eliaspfeffer.de/screenshot1.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛏</text></svg>" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #7fff00;
+      --pixel: 'Press Start 2P', monospace;
+    }
+    html, body {
+      min-height: 100%;
+      background: #060616;
+      color: #ddd;
+      font-family: Georgia, serif;
+    }
+    .nav {
+      background: rgba(0,0,0,0.85);
+      border-bottom: 1px solid rgba(127,255,0,0.25);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav-logo {
+      font-family: var(--pixel);
+      font-size: 10px;
+      color: var(--green);
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+    .nav-link {
+      font-family: var(--pixel);
+      font-size: 8px;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--green); }
+    .page-wrap {
+      max-width: 720px;
+      margin: 60px auto;
+      padding: 0 24px;
+    }
+    .page-title {
+      font-family: var(--pixel);
+      font-size: 18px;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+    .page-sub {
+      font-family: var(--pixel);
+      font-size: 8px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 48px;
+    }
+    .post-card {
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(127,255,0,0.2);
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      text-decoration: none;
+      display: block;
+      transition: border-color 0.15s;
+    }
+    .post-card:hover { border-color: rgba(127,255,0,0.6); }
+    .post-kw {
+      font-family: var(--pixel);
+      font-size: 7px;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+    .post-title {
+      font-family: var(--pixel);
+      font-size: 11px;
+      color: #fff;
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+    .post-desc {
+      font-size: 15px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+    }
+    .post-read {
+      display: inline-block;
+      margin-top: 16px;
+      font-family: var(--pixel);
+      font-size: 7px;
+      color: var(--green);
+    }
+    .footer {
+      text-align: center;
+      padding: 48px 24px;
+      font-family: var(--pixel);
+      font-size: 7px;
+      color: rgba(255,255,255,0.25);
+    }
+    .footer a { color: rgba(127,255,0,0.55); text-decoration: none; }
+    .footer a:hover { color: var(--green); }
+  </style>
+  <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">⛏ MinecraftHUD</a>
+  <a class="nav-link active" href="/blog/">Blog</a>
+  <a class="nav-link" href="/#faq">FAQ</a>
+  <a class="nav-link" href="/support.html">Support</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-title">BLOG</div>
+  <div class="page-sub">Gamification · Mac productivity · Minecraft</div>
+
+  <a class="post-card" href="/blog/how-i-built-minecraft-hud-mac/">
+    <div class="post-kw">minecraft hud mac app</div>
+    <div class="post-title">How I Built a Minecraft HUD for My Mac Desktop (and Why It Actually Helps Me Code)</div>
+    <div class="post-desc">I overlaid pixel hearts, an XP bar, and real Minecraft sounds on top of my code editor. It sounds ridiculous. Here's why it works.</div>
+    <div class="post-read">Read post →</div>
+  </a>
+
+  <a class="post-card" href="/blog/gamified-workday-minecraft/">
+    <div class="post-kw">gamify your work mac</div>
+    <div class="post-title">I Gamified My Entire Workday With Minecraft and Here's What Happened</div>
+    <div class="post-desc">A hunger bar that drains when you open Twitter. XP for every keystroke. I ran the experiment for a week. Here's what actually changed.</div>
+    <div class="post-read">Read post →</div>
+  </a>
+</div>
+
+<footer class="footer">
+  <a href="/">⛏ MinecraftHUD</a> &nbsp;·&nbsp;
+  <a href="/blog/">Blog</a> &nbsp;·&nbsp;
+  <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp;
+  <a href="/support.html">Support</a>
+  <br /><br />
+  Not affiliated with Mojang or Microsoft. Minecraft is a registered trademark of Mojang Studios.
+</footer>
+
+<script>
+  fetch('/api/track', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ path: location.pathname, referrer: document.referrer }),
+  }).catch(() => {});
+</script>
+</body>
+</html>
