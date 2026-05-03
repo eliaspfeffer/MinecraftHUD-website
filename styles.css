@@ -112,6 +112,25 @@ html, body {
   color: rgba(255,255,255,0.55); line-height: 2.2;
   margin-bottom: 22px;
 }
+.trial-badge {
+  font-family: var(--pixel); font-size: 7px;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 6px 12px;
+  text-align: center;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+  background: rgba(255,215,0,0.06);
+}
+.trial-sub {
+  font-family: var(--pixel); font-size: 6px;
+  color: rgba(255,255,255,0.35);
+  text-align: center;
+  margin-top: -14px;
+  margin-bottom: 18px;
+  line-height: 2;
+}
+
 .btn-buy {
   display: block; width: 100%;
   background: var(--green); color: #000;
@@ -120,7 +139,7 @@ html, body {
   border: none; cursor: pointer;
   transition: box-shadow .2s, transform .1s;
   box-shadow: 0 0 30px var(--green-glow);
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   position: relative; overflow: hidden;
 }
 .btn-buy::after {
