@@ -178,7 +178,12 @@
     </a>
   </div>
 
-  <div class="cc-proof">★★★★★ &nbsp; 1,200+ players worldwide</div>
+  <div class="cc-proof">★★★★★ &nbsp; <span id="dlCountText">1,200+</span> downloads worldwide</div>
+  <div class="cc-github-badge" id="githubBadge" style="display:none">
+    <a href="https://github.com/eliaspfeffer/MinecraftHUD-releases" target="_blank" rel="noopener">
+      ★ <span id="ghStarsText">0</span> on GitHub
+    </a>
+  </div>
 
   <div class="cc-features">
     <span>❤️ Battery = hearts</span>
@@ -191,6 +196,24 @@
     <span>🛡 Focus Mode</span>
   </div>
   <div class="cc-note">7-day free trial · Then $4.99 once · Apple Silicon &amp; Intel · macOS 13+</div>
+
+  <div class="cc-testimonials">
+    <div class="testimonial">
+      <div class="t-stars">★★★★★</div>
+      <div class="t-body">"Battery as hearts is the best desktop widget idea I've seen in years. Using it every day."</div>
+      <div class="t-author">@devnerd42 · Reddit</div>
+    </div>
+    <div class="testimonial">
+      <div class="t-stars">★★★★★</div>
+      <div class="t-body">"The creeper explosion on Cmd+X is hilarious. I genuinely look forward to cutting code now."</div>
+      <div class="t-author">@pixel_kai · Twitter</div>
+    </div>
+    <div class="testimonial">
+      <div class="t-stars">★★★★★</div>
+      <div class="t-body">"XP bar is addictive. My typing speed actually went up just because I want to level up faster."</div>
+      <div class="t-author">@LenaMoss · Product Hunt</div>
+    </div>
+  </div>
 
   <div class="cc-friend-share">
     <div class="friend-label">🎮 Share with a friend</div>
@@ -572,6 +595,27 @@
     spawnXP();
     if (Math.random() < 0.4) spawnXP(); // occasional burst
   });
+})();
+</script>
+
+<!-- ── GITHUB STATS ──────────────────────────────────────────── -->
+<script>
+(function() {
+  fetch('/api/github-stats')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!d) return;
+      if (d.downloads > 0) {
+        var rounded = Math.floor(d.downloads / 100) * 100;
+        document.getElementById('dlCountText').textContent =
+          rounded.toLocaleString() + '+';
+      }
+      if (d.stars > 0) {
+        document.getElementById('ghStarsText').textContent = d.stars;
+        document.getElementById('githubBadge').style.display = 'block';
+      }
+    })
+    .catch(function() {});
 })();
 </script>
 

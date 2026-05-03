@@ -714,8 +714,18 @@ html, body {
 .cc-proof {
   font-family: var(--pixel); font-size: 8px;
   color: #ffcc00;
-  margin-bottom: 22px; letter-spacing: 1px;
+  margin-bottom: 8px; letter-spacing: 1px;
 }
+.cc-github-badge {
+  margin-bottom: 16px; text-align: center;
+}
+.cc-github-badge a {
+  font-family: var(--pixel); font-size: 7px;
+  color: rgba(127,255,0,0.55);
+  text-decoration: none;
+  transition: color .15s;
+}
+.cc-github-badge a:hover { color: var(--green); }
 
 /* XP level badge in the bar */
 .xp-level-badge {
