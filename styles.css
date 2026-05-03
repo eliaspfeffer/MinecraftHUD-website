@@ -256,6 +256,45 @@ html, body {
 }
 .btn-copy:hover { background: rgba(127,255,0,0.3); }
 .btn-copy.copied { color: var(--gold); border-color: var(--gold); }
+
+/* ─── EMAIL CAPTURE ─── */
+.cc-email-capture {
+  margin-top: 16px;
+  border: 1px solid rgba(127,255,0,0.2);
+  padding: 14px 16px;
+  background: rgba(0,0,0,0.35);
+}
+.email-label {
+  font-family: var(--pixel); font-size: 7px;
+  color: rgba(255,255,255,0.55); margin-bottom: 10px;
+  line-height: 1.8;
+}
+.email-row {
+  display: flex; gap: 8px;
+}
+.email-input {
+  flex: 1; background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(127,255,0,0.25);
+  color: rgba(255,255,255,0.85);
+  font-family: var(--pixel); font-size: 7px;
+  padding: 8px 10px; outline: none;
+}
+.email-input:focus { border-color: rgba(127,255,0,0.6); }
+.btn-notify {
+  font-family: var(--pixel); font-size: 7px;
+  background: rgba(127,255,0,0.15); color: var(--green);
+  border: 1px solid var(--green); padding: 8px 12px;
+  cursor: pointer; transition: background .15s;
+  white-space: nowrap;
+}
+.btn-notify:hover { background: rgba(127,255,0,0.3); }
+.btn-notify:disabled { opacity: 0.6; cursor: default; }
+.email-status {
+  font-family: var(--pixel); font-size: 7px;
+  margin-top: 8px; line-height: 1.8;
+}
+.email-status-ok  { color: var(--green); }
+.email-status-err { color: var(--red); }
 .btn-free-dl {
   display: block; text-align: center;
   font-family: var(--pixel); font-size: 8px;

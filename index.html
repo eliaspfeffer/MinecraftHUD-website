@@ -197,6 +197,16 @@
       <button class="btn-copy" onclick="copyFriendLink()">COPY</button>
     </div>
   </div>
+
+  <div class="cc-email-capture" id="emailCapture">
+    <div class="email-label">📬 Get notified of updates &amp; new features</div>
+    <form class="email-row" id="emailForm" onsubmit="submitEmail(event)">
+      <input class="email-input" id="emailInput" type="email"
+             placeholder="your@email.com" required autocomplete="email" />
+      <button class="btn-notify" type="submit" id="emailBtn">NOTIFY ME</button>
+    </form>
+    <div class="email-status" id="emailStatus"></div>
+  </div>
 </div>
 
 <!-- 3D Corner Steve -->
@@ -266,6 +276,43 @@
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ path: location.pathname, referrer: document.referrer }),
   }).catch(() => {});
+</script>
+<script>
+  function submitEmail(e) {
+    e.preventDefault();
+    const input  = document.getElementById('emailInput');
+    const btn    = document.getElementById('emailBtn');
+    const status = document.getElementById('emailStatus');
+    const email  = input.value.trim();
+
+    btn.disabled = true;
+    btn.textContent = '...';
+    status.textContent = '';
+    status.className = 'email-status';
+
+    fetch('/api/email-capture', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: 'homepage' }),
+    })
+      .then(r => r.json())
+      .then(d => {
+        if (d.ok) {
+          document.getElementById('emailForm').style.display = 'none';
+          status.textContent = '✔ You\'re on the list!';
+          status.className = 'email-status email-status-ok';
+          if (window.va) va('event', { name: 'email_signup' });
+        } else {
+          throw new Error(d.error || 'error');
+        }
+      })
+      .catch(() => {
+        btn.disabled = false;
+        btn.textContent = 'NOTIFY ME';
+        status.textContent = 'Something went wrong — try again.';
+        status.className = 'email-status email-status-err';
+      });
+  }
 </script>
 
 <!-- ── JUKEBOX ─────────────────────────────────────────────── -->
