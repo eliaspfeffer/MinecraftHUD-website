@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MinecraftHUD – Get License Key</title>
+  <title>PixelHUD – Get License Key</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -66,7 +66,7 @@
 </head>
 <body>
   <h1>⛏ LICENSE KEY</h1>
-  <p>Click "Generate" to create a new license key.<br>Copy it and paste into MinecraftHUD on first launch.</p>
+  <p>Click "Generate" to create a new license key.<br>Copy it and paste into PixelHUD on first launch.</p>
 
   <div class="key-box loading" id="key-display">Click Generate...</div>
 
@@ -76,7 +76,7 @@
   </div>
 
   <div id="status"></div>
-  <a href="/">← Back to MinecraftHUD</a>
+  <a href="/">← Back to PixelHUD</a>
 
 <script>
 const display = document.getElementById('key-display');
@@ -97,7 +97,7 @@ async function generateKey() {
     currentKey = data.key;
     display.className = 'key-box';
     display.textContent = data.key;
-    status.textContent = 'Key created! Copy and paste into MinecraftHUD.';
+    status.textContent = 'Key created! Copy and paste into PixelHUD.';
   } catch (err) {
     display.className = 'key-box error';
     display.textContent = 'Failed to create key. Try again.';

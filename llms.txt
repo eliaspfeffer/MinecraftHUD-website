@@ -1,10 +1,10 @@
-# MinecraftHUD
+# PixelHUD
 
 > A Minecraft-style HUD overlay for Mac and Windows. Battery = hearts. Keystrokes = XP. Closed apps = kill feed.
 
-## What is MinecraftHUD?
+## What is PixelHUD?
 
-MinecraftHUD is a desktop overlay application that gamifies your computer in real time using Minecraft's iconic HUD aesthetic. It displays a persistent overlay at the bottom of your screen (like a Minecraft game HUD) and animates background elements that react to your real system activity.
+PixelHUD is a desktop overlay application that gamifies your computer in real time using Minecraft's iconic HUD aesthetic. It displays a persistent overlay at the bottom of your screen (like a Minecraft game HUD) and animates background elements that react to your real system activity.
 
 ## Who is it for?
 
@@ -33,14 +33,14 @@ MinecraftHUD is a desktop overlay application that gamifies your computer in rea
 ## Download / Access
 
 - Website: https://minecrafthud.eliaspfeffer.de/
-- Windows download: https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/MinecraftHUD-Setup.exe
+- Windows download: https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/PixelHUD-Setup.exe
 
 ## FAQs
 
-**What is MinecraftHUD?**
+**What is PixelHUD?**
 A desktop overlay app that shows your Mac/Windows system stats as Minecraft UI elements — hearts for battery, XP bar for keystrokes, kill feed for closed apps.
 
-**Is MinecraftHUD free?**
+**Is PixelHUD free?**
 Yes. Both the macOS and Windows versions are free to download.
 
 **Does it work on Apple Silicon (M1/M2/M3/M4)?**

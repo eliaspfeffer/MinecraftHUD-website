@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const headers = { 'User-Agent': 'MinecraftHUD-website/1.0' };
+    const headers = { 'User-Agent': 'PixelHUD-website/1.0' };
     if (process.env.GITHUB_TOKEN) {
       headers['Authorization'] = `Bearer ${process.env.GITHUB_TOKEN}`;
     }

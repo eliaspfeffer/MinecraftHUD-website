@@ -12,7 +12,7 @@
     const friendLink = document.getElementById('friendLink');
     const friendDlMac = document.getElementById('friendDlMac');
     const friendDlWin = document.getElementById('friendDlWin');
-    const WIN_DL = 'https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/MinecraftHUD-Setup.exe';
+    const WIN_DL = 'https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/PixelHUD-Setup.exe';
     if (friendLink) friendLink.value = WIN_DL;
     if (friendDlMac) friendDlMac.style.display = 'none';
     if (friendDlWin) friendDlWin.style.display = 'inline-block';
