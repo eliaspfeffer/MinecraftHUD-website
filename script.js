@@ -84,3 +84,11 @@ const sizeSlider=document.getElementById('steveScale'),sizeOutput=document.getEl
 if(sizeSlider&&steveWrap){sizeSlider.addEventListener('input',()=>{const scale=Number(sizeSlider.value);sizeOutput.value=`${scale.toFixed(1)}×`;steveWrap.style.transform=`scale(${(.67*scale).toFixed(3)})`})}
 
 if(heroCardStack){document.querySelectorAll('#features .shortcut-card').forEach((card,index)=>{const clone=card.cloneNode(true);clone.classList.remove('mob-visible');clone.classList.add('hero-stack-card');clone.style.setProperty('--stack-i',index);clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));heroCardStack.appendChild(clone)});heroCardStack.querySelectorAll('.tnt-stage').forEach(initTntStage);heroCardStack.querySelectorAll('.hero-stack-card[data-effect="cow"],.hero-stack-card[data-effect="pig"]').forEach(card=>{card.addEventListener('pointerenter',()=>{const img=card.querySelector('.mob-stage img');img.style.animation='none';void img.offsetWidth;img.style.animation='';playCardSound(card)})})}
+
+// Mirror PixelHUD's global input sounds while this browser page has focus.
+const popSound=new Audio('sounds/pop.aiff');popSound.volume=.35;
+const dirtSounds=['sounds/dirt1.aiff','sounds/dirt2.aiff','sounds/dirt3.aiff'].map(src=>{const audio=new Audio(src);audio.volume=.35;return audio});
+let lastDirtPlay=0;
+function replaySound(audio){const sound=audio.cloneNode();sound.volume=audio.volume;sound.play().catch(()=>{})}
+document.addEventListener('pointerdown',()=>replaySound(popSound));
+document.addEventListener('keydown',event=>{if(event.repeat)return;const now=performance.now();if(now-lastDirtPlay<60)return;lastDirtPlay=now;replaySound(dirtSounds[Math.floor(Math.random()*dirtSounds.length)])});
