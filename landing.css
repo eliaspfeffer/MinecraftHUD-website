@@ -46,6 +46,10 @@ h1{font-size:clamp(56px,6.2vw,104px);line-height:.93;letter-spacing:-6px;margin:
 h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .hero-lede{max-width:650px;font-size:clamp(18px,1.35vw,23px);line-height:1.55;color:#afb5b0}
 .hero-actions{display:flex;align-items:center;gap:34px;margin:42px 0}
+.xp-download{position:relative;display:inline-flex;isolation:isolate}
+.xp-download>.button{position:relative;z-index:2}
+.xp-orbits{position:absolute;inset:-42px -55px;z-index:1;pointer-events:none}
+.xp-orbits img{--angle:calc(var(--orb-i)*36deg);position:absolute;left:50%;top:50%;width:22px;height:22px;image-rendering:pixelated;filter:drop-shadow(0 0 8px rgba(62,255,0,.8));animation:xpOrbit 5.5s linear infinite;animation-delay:calc(var(--orb-i)*-.42s)}
 .text-link{text-decoration:none;border-bottom:1px solid #777;padding:12px 0;color:#ccc}
 .hero-meta{display:flex;gap:10px;flex-wrap:wrap}
 .hero-meta span{border:1px solid #343b35;padding:8px 12px;font-size:12px;color:#879087}
@@ -299,6 +303,7 @@ footer>p{text-align:center}
 @keyframes creeperApproach{0%{right:-18%;transform:translateY(0)}65%,100%{right:70%;transform:translateY(-4px)}}
 @keyframes scaredBlink{0%,62%{opacity:0}63%,92%{opacity:1}93%,100%{opacity:0}}
 @keyframes cornerPanic{50%{transform:translateX(7px)}}
+@keyframes xpOrbit{0%{transform:rotate(var(--angle)) translateX(112px) scale(.75);opacity:.35}50%{opacity:1;transform:rotate(calc(var(--angle) + 180deg)) translateX(112px) scale(1.05)}100%{transform:rotate(calc(var(--angle) + 360deg)) translateX(112px) scale(.75);opacity:.35}}
 @media(max-width:1050px){
   .hero-card-stack{width:290px;transform:translate(-25px,-30px)}
   .shortcut-lab{grid-template-columns:repeat(2,minmax(0,1fr))}
