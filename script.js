@@ -62,10 +62,9 @@ function initTntStage(stage){
  const video=stage.querySelector('video'),canvas=stage.querySelector('canvas');let frameId=0;
  function size(){canvas.width=480;canvas.height=Math.round(480*(video.videoHeight||1080)/(video.videoWidth||1920))}
  function paint(){if(video.paused||video.ended)return;chromaFrame(video,canvas);frameId=requestAnimationFrame(paint)}
- function play(withSound=false){cancelAnimationFrame(frameId);video.currentTime=0;if(withSound)playCardSound(stage.closest('.shortcut-card'));video.play().then(paint).catch(()=>{})}
- video.addEventListener('loadedmetadata',size,{once:true});video.addEventListener('ended',()=>play(true));
+ function play(){cancelAnimationFrame(frameId);video.currentTime=0;video.play().then(paint).catch(()=>{})}
+ video.addEventListener('loadedmetadata',size,{once:true});video.addEventListener('ended',play);
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting))play()},{threshold:.45});observer.observe(stage);
- stage.closest('.shortcut-card')?.addEventListener('pointerenter',()=>play(true));
 }
 document.querySelectorAll('.tnt-stage').forEach(initTntStage);
 
@@ -90,7 +89,7 @@ document.querySelectorAll('#features .shortcut-card').forEach(card=>{card.addEve
 const sizeSlider=document.getElementById('steveScale'),sizeOutput=document.getElementById('steveScaleOutput'),steveWrap=document.querySelector('#corner-steve .steve-wrap');
 if(sizeSlider&&steveWrap){sizeSlider.addEventListener('input',()=>{const scale=Number(sizeSlider.value);sizeOutput.value=`${scale.toFixed(1)}×`;steveWrap.style.transform=`scale(${(.67*scale).toFixed(3)})`})}
 
-if(heroCardStack){document.querySelectorAll('#features .shortcut-card').forEach((card,index)=>{const clone=card.cloneNode(true);clone.classList.remove('mob-visible');clone.classList.add('hero-stack-card');clone.style.setProperty('--stack-i',index);clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));heroCardStack.appendChild(clone)});heroCardStack.querySelectorAll('.tnt-stage').forEach(initTntStage);heroCardStack.querySelectorAll('.hero-stack-card[data-effect="cow"],.hero-stack-card[data-effect="pig"]').forEach(card=>{card.addEventListener('pointerenter',()=>{const img=card.querySelector('.mob-stage img');img.style.animation='none';void img.offsetWidth;img.style.animation='';playCardSound(card)})});heroCardStack.querySelectorAll('.hero-stack-card[data-effect="villager"]').forEach(card=>card.addEventListener('pointerenter',()=>playCardSound(card)))}
+if(heroCardStack){document.querySelectorAll('#features .shortcut-card').forEach((card,index)=>{const clone=card.cloneNode(true);clone.classList.remove('mob-visible');clone.classList.add('hero-stack-card');clone.style.setProperty('--stack-i',index);clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));heroCardStack.appendChild(clone)});heroCardStack.querySelectorAll('.tnt-stage').forEach(initTntStage);heroCardStack.querySelectorAll('.hero-stack-card[data-effect="cow"],.hero-stack-card[data-effect="pig"]').forEach(card=>{card.addEventListener('pointerenter',()=>{const img=card.querySelector('.mob-stage img');img.style.animation='none';void img.offsetWidth;img.style.animation='';playCardSound(card)})});heroCardStack.querySelectorAll('.hero-stack-card[data-effect="tnt"],.hero-stack-card[data-effect="villager"]').forEach(card=>card.addEventListener('pointerenter',()=>playCardSound(card)))}
 
 document.querySelectorAll('#features .shortcut-card[data-effect="cow"],#features .shortcut-card[data-effect="pig"],#features .shortcut-card[data-effect="villager"]').forEach(card=>card.addEventListener('pointerenter',()=>playCardSound(card)));
 document.querySelectorAll('.app-cow,.app-pig').forEach(img=>img.addEventListener('animationiteration',()=>playCardSound(img.closest('.shortcut-card'))));
