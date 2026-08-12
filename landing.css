@@ -123,7 +123,7 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .hud-meaning-row{position:relative;display:block;min-height:660px;padding-block:110px}
 .hud-meaning-row>.feature-copy{position:absolute;z-index:2;max-width:430px}
 .hud-meaning-row>.feature-copy:first-child{left:0;top:85px}
-.hud-meaning-row>.xp-meaning{left:50%;top:calc(50% - 124px);transform:translate(-50%,-100%);max-width:none;text-align:center}
+.hud-meaning-row>.xp-meaning{left:50%;top:calc(50% - 122px);transform:translate(-50%,-100%);max-width:none;text-align:center}
 .hud-meaning-row>.xp-meaning h3{font-size:clamp(15px,1.35vw,23px);letter-spacing:-.4px}
 .hud-meaning-row>.hunger-meaning{right:0;bottom:85px;text-align:right}
 .hud-meaning-row>.feature-copy h3{white-space:nowrap;font-size:clamp(32px,3.4vw,58px)}
