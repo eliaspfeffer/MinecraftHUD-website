@@ -18,13 +18,13 @@ nav a:hover,footer a:hover{color:#fff}
 .sound-toggle{position:relative;z-index:120;width:42px;height:42px;display:grid;place-items:center;border:1px solid #3e4a40;background:#111612;color:#fff;font-size:19px;cursor:pointer;box-shadow:4px 4px 0 rgba(0,0,0,.35)}
 .sound-toggle:hover{border-color:var(--green)}
 .sound-toggle[aria-pressed="true"]{color:#777;background:#090b0a}
-.pixel-speaker{position:relative;display:block;width:24px;height:22px;image-rendering:pixelated}
+.pixel-speaker{position:relative;display:block;width:26px;height:22px;image-rendering:pixelated;color:#eaf2e9}
 .pixel-speaker i{position:absolute;display:block;background:currentColor}
-.speaker-box{left:1px;top:7px;width:6px;height:8px}
-.speaker-cone{left:7px;top:4px;width:4px;height:14px;box-shadow:4px 3px 0 currentColor,4px 7px 0 currentColor}
-.sound-wave{width:3px;background:transparent!important;border-right:3px solid currentColor}
-.wave-one{left:16px;top:6px;height:10px}
-.wave-two{left:20px;top:3px;height:16px}
+.speaker-box{left:1px;top:8px;width:7px;height:7px}
+.speaker-cone{left:8px;top:5px;width:4px;height:13px;box-shadow:4px -2px 0 currentColor,4px 2px 0 currentColor,4px 6px 0 currentColor}
+.sound-wave{background:transparent!important;border:3px solid currentColor;border-left:0}
+.wave-one{left:17px;top:7px;width:4px;height:8px}
+.wave-two{left:21px;top:4px;width:5px;height:14px}
 .mute-slash{display:none!important;left:11px;top:0;width:3px;height:25px;background:#ff4a3d!important;transform:rotate(-45deg);transform-origin:center;box-shadow:2px 0 0 #4b0905}
 .sound-toggle[aria-pressed="true"] .sound-wave{display:none}
 .sound-toggle[aria-pressed="true"] .mute-slash{display:block!important}
@@ -65,6 +65,8 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .header-download{z-index:100;overflow:visible}
 .xp-orbits{position:absolute;left:50%;top:50%;width:1px;height:1px;z-index:110;pointer-events:none;overflow:visible}
 .xp-orbits img{position:absolute;left:-14px;top:-14px;width:28px;height:28px;z-index:110;opacity:1;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(62,255,0,.95));animation:xpWander var(--duration) cubic-bezier(.37,.03,.63,.98) infinite;animation-delay:var(--delay)}
+.real-app-shot{padding:70px clamp(24px,5vw,80px);background:#090d0a}
+.real-app-shot img{display:block;width:min(100%,1600px);height:auto;margin:auto;border:1px solid #3c4d3f;box-shadow:20px 20px 0 rgba(184,255,56,.07)}
 .text-link{text-decoration:none;border-bottom:1px solid #777;padding:12px 0;color:#ccc}
 .hero-meta{display:flex;gap:10px;flex-wrap:wrap}
 .hero-meta span{border:1px solid #343b35;padding:8px 12px;font-size:12px;color:#879087}
@@ -126,6 +128,7 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .hud-meaning-row{position:relative;display:block;min-height:660px;padding-block:110px}
 .hud-meaning-row>.feature-copy{position:absolute;z-index:2;max-width:430px}
 .hud-meaning-row>.feature-copy:first-child{left:0;top:85px}
+.hud-meaning-row>.xp-meaning{left:50%;top:64px;transform:translateX(-50%);max-width:none;text-align:center}
 .hud-meaning-row>.hunger-meaning{right:0;bottom:85px;text-align:right}
 .hud-meaning-row>.feature-copy h3{white-space:nowrap;font-size:clamp(32px,3.4vw,58px)}
 .hud-meaning-visual{height:440px;display:grid;place-items:center;padding:100px 80px}
@@ -334,7 +337,7 @@ footer>p{text-align:center}
 @keyframes creeperLegB{from{rotate:x 22deg}to{rotate:x -20deg}}
 @keyframes scaredBlink{0%,62%{opacity:0}63%,92%{opacity:1}93%,100%{opacity:0}}
 @keyframes cornerPanic{50%{transform:translateX(7px)}}
-@keyframes xpWander{0%,100%{transform:translate(var(--x1),var(--y1)) scale(.58) rotate(0deg);opacity:.45}24%{transform:translate(var(--x2),var(--y2)) scale(1.08) rotate(105deg);opacity:1}51%{transform:translate(var(--x3),var(--y3)) scale(.72) rotate(210deg);opacity:.62}76%{transform:translate(var(--x4),var(--y4)) scale(.96) rotate(315deg);opacity:.9}}
+@keyframes xpWander{0%,100%{transform:translate(var(--x1),var(--y1)) scale(.72);opacity:.55}24%{transform:translate(var(--x2),var(--y2)) scale(1.08);opacity:1}51%{transform:translate(var(--x3),var(--y3)) scale(.82);opacity:.72}76%{transform:translate(var(--x4),var(--y4)) scale(.98);opacity:.95}}
 @media(max-width:1050px){
   .hero-card-stack{width:290px;transform:translate(-25px,-30px)}
   .shortcut-lab{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -355,6 +358,7 @@ footer>p{text-align:center}
   .hud-meaning-row{min-height:500px;padding-block:80px}
   .hud-meaning-row>.feature-copy{max-width:75%}
   .hud-meaning-row>.feature-copy:first-child{top:55px}
+  .hud-meaning-row>.xp-meaning{top:150px;width:100%;max-width:100%}
   .hud-meaning-row>.hunger-meaning{bottom:55px}
   .hud-meaning-visual{height:340px;padding:100px 0}
   .lunch-clock span{font-size:46px}
