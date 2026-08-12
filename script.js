@@ -1,5 +1,6 @@
 const body=document.body,intro=document.getElementById('intro'),skip=document.getElementById('skipIntro'),introVideo=intro.querySelector('video'),introCanvas=document.getElementById('introTntCanvas');
-body.classList.add('intro-active');
+// The page is the backdrop of the transparent TNT intro, so reveal it immediately.
+body.classList.add('intro-active','page-ready');
 let introFrame=0;
 function chromaFrame(video,canvas){const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!canvas.width){canvas.width=640;canvas.height=360}ctx.drawImage(video,0,0,canvas.width,canvas.height);const frame=ctx.getImageData(0,0,canvas.width,canvas.height),p=frame.data;for(let i=0;i<p.length;i+=4){const r=p[i],g=p[i+1],b=p[i+2],dominance=g-Math.max(r,b);if(g>95&&dominance>20){p[i+3]=Math.max(0,255-(dominance-20)*9)}}ctx.putImageData(frame,0,0);return ctx}
 function finishIntro(){cancelAnimationFrame(introFrame);introVideo.pause();intro.classList.add('done');body.classList.remove('intro-active');body.classList.add('page-ready')}
