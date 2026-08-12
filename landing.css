@@ -36,7 +36,7 @@ nav a:hover,footer a:hover{color:#fff}
 70%{opacity:1;transform:scale(100)}
 100%{opacity:0;transform:scale(130)}
 }
-.hero{position:relative;min-height:100vh;background:#0b0e0c;color:#fff;display:grid;grid-template-columns:minmax(0,1fr) minmax(520px,1.1fr);gap:5vw;align-items:center;padding:130px clamp(24px,5vw,80px) 90px;overflow:hidden}
+.hero{position:relative;min-height:100vh;background:#0b0e0c;color:#fff;display:grid;grid-template-columns:minmax(0,1fr) minmax(520px,1.1fr);gap:5vw;align-items:center;padding:96px clamp(24px,5vw,80px) 124px;overflow:hidden}
 .hero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 75% 25%,rgba(85,135,44,.18),transparent 35%),linear-gradient(120deg,transparent 45%,rgba(184,255,56,.04))}
 .hero-noise{position:absolute;inset:0;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E")}
 .hero-copy,.hero-demo{position:relative;z-index:2}
@@ -152,7 +152,7 @@ footer small{grid-column:1/-1;padding-top:30px;border-top:1px solid #222;color:#
 .steve-model{width:120px;height:192px;transform-style:preserve-3d;position:relative}
 .s-box{position:absolute;transform-style:preserve-3d}
 .s-face{position:absolute;image-rendering:pixelated;backface-visibility:hidden}
-@media(max-width:1050px){.hero{grid-template-columns:1fr;padding-top:130px}
+@media(max-width:1050px){.hero{grid-template-columns:1fr;padding-top:96px}
 .hero-demo{max-width:850px}
 .feature-row,.feature-row.reverse{grid-template-columns:1fr;gap:60px;min-height:auto}
 .feature-row.reverse .feature-copy{order:0}
@@ -165,7 +165,7 @@ nav{display:none}
 }
 @media(max-width:650px){.site-header{height:66px}
 .site-header>.button{display:none}
-.hero{padding:110px 20px 80px;min-height:auto}
+.hero{padding:84px 20px 106px;min-height:auto}
 .hero h1{font-size:52px;letter-spacing:-3px}
 .hero-actions{align-items:flex-start;flex-direction:column}
 .mac-window{transform:none}
