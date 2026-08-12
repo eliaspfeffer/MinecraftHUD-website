@@ -250,16 +250,16 @@ footer>p{text-align:center}
 .creeper-rig{position:absolute;left:50%;bottom:8px;width:72px;height:146px;transform:translateX(-50%) rotateY(-20deg);transform-style:preserve-3d;animation:creeperBodyBob .52s ease-in-out infinite alternate}
 .creeper-box{position:absolute;transform-style:preserve-3d}
 .creeper-face{position:absolute;display:block;background-image:url('assets/app/minecraft-creeper-texture.png');background-repeat:no-repeat;background-size:calc(64px * var(--uv-scale)) calc(32px * var(--uv-scale));background-position:calc(-1px * var(--uv-x) * var(--uv-scale)) calc(-1px * var(--uv-y) * var(--uv-scale));image-rendering:pixelated;backface-visibility:hidden}
-.creeper-head{left:8px;top:0;width:56px;height:56px}
-.creeper-head .creeper-face{--uv-scale:7;width:56px;height:56px}
-.creeper-head .face-0{transform:translateZ(28px)}.creeper-head .face-1{transform:rotateY(180deg) translateZ(28px)}.creeper-head .face-2{transform:rotateY(90deg) translateZ(28px)}.creeper-head .face-3{transform:rotateY(-90deg) translateZ(28px)}.creeper-head .face-4{transform:rotateX(90deg) translateZ(28px)}.creeper-head .face-5{transform:rotateX(-90deg) translateZ(28px)}
-.creeper-body{left:20px;top:56px;width:32px;height:58px}
-.creeper-body .creeper-face{--uv-scale:4;width:32px;height:48px}
-.creeper-body .face-0{transform:translateZ(16px)}.creeper-body .face-1{transform:rotateY(180deg) translateZ(16px)}.creeper-body .face-2{width:32px;transform:rotateY(90deg) translateZ(16px)}.creeper-body .face-3{width:32px;transform:rotateY(-90deg) translateZ(16px)}.creeper-body .face-4{height:32px;transform:rotateX(90deg) translateZ(16px)}.creeper-body .face-5{height:32px;transform:rotateX(-90deg) translateZ(42px)}
-.creeper-leg{top:111px;width:24px;height:30px;transform-origin:50% 0}
-.creeper-leg .creeper-face{--uv-scale:6;width:24px;height:36px}
-.creeper-leg .face-0{transform:translateZ(12px)}.creeper-leg .face-1{transform:rotateY(180deg) translateZ(12px)}.creeper-leg .face-2{transform:rotateY(90deg) translateZ(12px)}.creeper-leg .face-3{transform:rotateY(-90deg) translateZ(12px)}.creeper-leg .face-4{height:24px;transform:rotateX(90deg) translateZ(12px)}.creeper-leg .face-5{height:24px;transform:rotateX(-90deg) translateZ(18px);background-color:#152415}
-.creeper-leg.front-left{left:8px;z-index:3;animation:creeperLegA .52s ease-in-out infinite alternate}.creeper-leg.front-right{right:8px;z-index:3;animation:creeperLegB .52s ease-in-out infinite alternate}.creeper-leg.back-left{left:10px;transform:translateZ(-18px);animation:creeperLegB .52s ease-in-out infinite alternate}.creeper-leg.back-right{right:10px;transform:translateZ(-18px);animation:creeperLegA .52s ease-in-out infinite alternate}
+.creeper-head{left:12px;top:0;width:48px;height:48px}
+.creeper-head .creeper-face{--uv-scale:6;width:48px;height:48px}
+.creeper-head .face-0{transform:translateZ(24px)}.creeper-head .face-1{transform:rotateY(180deg) translateZ(24px)}.creeper-head .face-2{transform:rotateY(90deg) translateZ(24px)}.creeper-head .face-3{transform:rotateY(-90deg) translateZ(24px)}.creeper-head .face-4{transform:rotateX(90deg) translateZ(24px)}.creeper-head .face-5{transform:rotateX(-90deg) translateZ(24px)}
+.creeper-body{left:12px;top:48px;width:48px;height:66px}
+.creeper-body .creeper-face{--uv-scale:6;width:48px;height:72px}
+.creeper-body .face-0{transform:translateZ(12px)}.creeper-body .face-1{transform:rotateY(180deg) translateZ(12px)}.creeper-body .face-2{width:24px;transform:rotateY(90deg) translateZ(36px)}.creeper-body .face-3{width:24px;transform:rotateY(-90deg) translateZ(12px)}.creeper-body .face-4{height:24px;transform:rotateX(90deg) translateZ(12px)}.creeper-body .face-5{height:24px;transform:rotateX(-90deg) translateZ(54px)}
+.creeper-leg{top:111px;width:20px;height:30px;transform-origin:50% 0}
+.creeper-leg .creeper-face{--uv-scale:5;width:20px;height:30px}
+.creeper-leg .face-0{transform:translateZ(10px)}.creeper-leg .face-1{transform:rotateY(180deg) translateZ(10px)}.creeper-leg .face-2{transform:rotateY(90deg) translateZ(10px)}.creeper-leg .face-3{transform:rotateY(-90deg) translateZ(10px)}.creeper-leg .face-4{height:20px;transform:rotateX(90deg) translateZ(10px)}.creeper-leg .face-5{height:20px;transform:rotateX(-90deg) translateZ(20px);background-color:#152415}
+.creeper-leg.front-left{left:12px;z-index:3;animation:creeperLegA .52s ease-in-out infinite alternate}.creeper-leg.front-right{right:12px;z-index:3;animation:creeperLegB .52s ease-in-out infinite alternate}.creeper-leg.back-left{left:14px;transform:translateZ(-16px);animation:creeperLegB .52s ease-in-out infinite alternate}.creeper-leg.back-right{right:14px;transform:translateZ(-16px);animation:creeperLegA .52s ease-in-out infinite alternate}
 .villager-stage{display:grid;place-items:center;background:#241d19}
 .villager-image{width:100%;height:100%;object-fit:cover;cursor:pointer;transition:transform .2s,filter .2s}
 .villager-image:hover{transform:scale(1.035)}
