@@ -246,7 +246,7 @@ footer>p{text-align:center}
 .cursor-prompt{position:absolute;right:18px;top:18px;color:#fff;background:#101311e6;padding:12px 14px;font:8px/1.5 var(--pixel)}
 .cursor-prompt b{font-size:24px;color:var(--green)}
 .creeper-stage{background:linear-gradient(#6a9bc1 0 67%,#426b35 67% 82%,#51402f 82%)}
-.app-creeper{position:absolute;right:-22%;bottom:8px;width:104px;height:158px;perspective:700px;animation:creeperApproach 5.8s ease-in-out infinite;filter:drop-shadow(8px 12px 0 rgba(0,0,0,.22))}
+.app-creeper{position:absolute;right:-22%;bottom:-12px;width:104px;height:158px;perspective:700px;animation:creeperApproach 5.8s ease-in-out infinite;filter:drop-shadow(8px 12px 0 rgba(0,0,0,.22))}
 .creeper-rig{position:absolute;left:50%;bottom:8px;width:72px;height:146px;transform:translateX(-50%) rotateY(-20deg);transform-style:preserve-3d;animation:creeperBodyBob .52s ease-in-out infinite alternate}
 .creeper-box{position:absolute;transform-style:preserve-3d}
 .creeper-face{position:absolute;display:block;background-image:url('assets/app/minecraft-creeper-texture.png');background-repeat:no-repeat;background-size:calc(64px * var(--uv-scale)) calc(32px * var(--uv-scale));background-position:calc(-1px * var(--uv-x) * var(--uv-scale)) calc(-1px * var(--uv-y) * var(--uv-scale));image-rendering:pixelated;backface-visibility:hidden}
@@ -256,7 +256,7 @@ footer>p{text-align:center}
 .creeper-body{left:20px;top:48px;width:32px;height:58px}
 .creeper-body .creeper-face{--uv-scale:4;width:32px;height:48px}
 .creeper-body .face-0{transform:translateZ(16px)}.creeper-body .face-1{transform:rotateY(180deg) translateZ(16px)}.creeper-body .face-2{width:32px;transform:rotateY(90deg) translateZ(16px)}.creeper-body .face-3{width:32px;transform:rotateY(-90deg) translateZ(16px)}.creeper-body .face-4{height:32px;transform:rotateX(90deg) translateZ(16px)}.creeper-body .face-5{height:32px;transform:rotateX(-90deg) translateZ(42px)}
-.creeper-leg{top:97px;width:20px;height:30px;transform-origin:50% 0}
+.creeper-leg{top:90px;width:20px;height:30px;transform-origin:50% 0}
 .creeper-leg .creeper-face{--uv-scale:5;width:20px;height:30px}
 .creeper-leg .face-0{transform:translateZ(10px)}.creeper-leg .face-1{transform:rotateY(180deg) translateZ(10px)}.creeper-leg .face-2{transform:rotateY(90deg) translateZ(10px)}.creeper-leg .face-3{transform:rotateY(-90deg) translateZ(10px)}.creeper-leg .face-4{height:20px;transform:rotateX(90deg) translateZ(10px)}.creeper-leg .face-5{height:20px;transform:rotateX(-90deg) translateZ(20px);background-color:#152415}
 .creeper-leg.front-left{left:12px;z-index:3;animation:creeperLegA .52s ease-in-out infinite alternate}.creeper-leg.front-right{right:12px;z-index:3;animation:creeperLegB .52s ease-in-out infinite alternate}.creeper-leg.back-left{left:14px;transform:translateZ(-16px);animation:creeperLegB .52s ease-in-out infinite alternate}.creeper-leg.back-right{right:14px;transform:translateZ(-16px);animation:creeperLegA .52s ease-in-out infinite alternate}
