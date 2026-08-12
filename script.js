@@ -49,6 +49,14 @@ function buildPixelBar(bar,shape,type){
 document.querySelectorAll('.native-hearts').forEach(bar=>buildPixelBar(bar,heartShape,'heart'));
 document.querySelectorAll('.native-hunger').forEach(bar=>buildPixelBar(bar,hungerShape,'hunger'));
 
+function buildCreeper(model){
+ const makeBox=(name,faces=6)=>{const box=document.createElement('div');box.className=`creeper-box ${name}`;for(let i=0;i<faces;i++){const face=document.createElement('i');face.className=`creeper-face face-${i}`;box.appendChild(face)}return box};
+ const rig=document.createElement('div');rig.className='creeper-rig';rig.append(makeBox('creeper-head'),makeBox('creeper-body'));
+ ['front-left','front-right','back-left','back-right'].forEach(name=>rig.appendChild(makeBox(`creeper-leg ${name}`)));
+ model.replaceChildren(rig);
+}
+document.querySelectorAll('.app-creeper').forEach(buildCreeper);
+
 // The requested YouTube excerpt is a chroma-key source. Remove its green at runtime.
 function initTntStage(stage){
  const video=stage.querySelector('video'),canvas=stage.querySelector('canvas');let frameId=0;

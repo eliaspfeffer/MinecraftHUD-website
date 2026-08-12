@@ -247,7 +247,20 @@ footer>p{text-align:center}
 .cursor-prompt{position:absolute;right:18px;top:18px;color:#fff;background:#101311e6;padding:12px 14px;font:8px/1.5 var(--pixel)}
 .cursor-prompt b{font-size:24px;color:var(--green)}
 .creeper-stage{background:linear-gradient(#6a9bc1 0 67%,#426b35 67% 82%,#51402f 82%)}
-.app-creeper{position:absolute;right:-22%;bottom:18px;width:128px!important;height:128px!important;max-width:none;object-fit:contain;image-rendering:pixelated;animation:creeperApproach 5.8s ease-in-out infinite;filter:drop-shadow(8px 12px 0 rgba(0,0,0,.18))}
+.app-creeper{position:absolute;right:-22%;bottom:10px;width:96px;height:150px;perspective:600px;animation:creeperApproach 5.8s ease-in-out infinite;filter:drop-shadow(8px 12px 0 rgba(0,0,0,.18))}
+.creeper-rig{position:absolute;left:50%;bottom:8px;width:64px;height:136px;transform:translateX(-50%) rotateY(-24deg);transform-style:preserve-3d;animation:creeperBodyBob .52s ease-in-out infinite alternate}
+.creeper-box{position:absolute;transform-style:preserve-3d}
+.creeper-face{position:absolute;display:block;background-image:url('assets/app/creeper.png');background-size:128px 128px;image-rendering:pixelated;backface-visibility:hidden;filter:saturate(1.15)}
+.creeper-head{left:8px;top:0;width:48px;height:48px}
+.creeper-head .creeper-face{width:48px;height:48px;background-position:center top}
+.creeper-head .face-0{transform:translateZ(24px)}.creeper-head .face-1{transform:rotateY(180deg) translateZ(24px)}.creeper-head .face-2{transform:rotateY(90deg) translateZ(24px)}.creeper-head .face-3{transform:rotateY(-90deg) translateZ(24px)}.creeper-head .face-4{transform:rotateX(90deg) translateZ(24px)}.creeper-head .face-5{transform:rotateX(-90deg) translateZ(24px)}
+.creeper-body{left:17px;top:48px;width:30px;height:56px}
+.creeper-body .creeper-face{width:30px;height:56px;background-position:center bottom}
+.creeper-body .face-0{transform:translateZ(15px)}.creeper-body .face-1{transform:rotateY(180deg) translateZ(15px)}.creeper-body .face-2{width:30px;transform:rotateY(90deg) translateZ(15px)}.creeper-body .face-3{width:30px;transform:rotateY(-90deg) translateZ(15px)}.creeper-body .face-4{height:30px;transform:rotateX(90deg) translateZ(15px)}.creeper-body .face-5{height:30px;transform:rotateX(-90deg) translateZ(41px)}
+.creeper-leg{top:101px;width:18px;height:34px;transform-origin:50% 0}
+.creeper-leg .creeper-face{width:18px;height:34px;background-position:left bottom}
+.creeper-leg .face-0{transform:translateZ(9px)}.creeper-leg .face-1{transform:rotateY(180deg) translateZ(9px)}.creeper-leg .face-2{transform:rotateY(90deg) translateZ(9px)}.creeper-leg .face-3{transform:rotateY(-90deg) translateZ(9px)}.creeper-leg .face-4{height:18px;transform:rotateX(90deg) translateZ(9px)}.creeper-leg .face-5{height:18px;transform:rotateX(-90deg) translateZ(25px)}
+.creeper-leg.front-left{left:9px;z-index:3;animation:creeperLegA .52s ease-in-out infinite alternate}.creeper-leg.front-right{right:9px;z-index:3;animation:creeperLegB .52s ease-in-out infinite alternate}.creeper-leg.back-left{left:13px;transform:translateZ(-14px);animation:creeperLegB .52s ease-in-out infinite alternate}.creeper-leg.back-right{right:13px;transform:translateZ(-14px);animation:creeperLegA .52s ease-in-out infinite alternate}
 .villager-stage{display:grid;place-items:center;background:#241d19}
 .villager-image{width:100%;height:100%;object-fit:cover;cursor:pointer;transition:transform .2s,filter .2s}
 .villager-image:hover{transform:scale(1.035)}
@@ -302,6 +315,9 @@ footer>p{text-align:center}
 .steve-wrap{transform-origin:bottom left}
 @keyframes appMobWalk{from{right:-30%;transform:scaleX(1)}to{right:110%;transform:scaleX(1)}}
 @keyframes creeperApproach{0%{right:-18%;transform:translateY(0)}65%,100%{right:70%;transform:translateY(-4px)}}
+@keyframes creeperBodyBob{to{transform:translateX(-50%) translateY(-4px) rotateY(-18deg)}}
+@keyframes creeperLegA{from{rotate:x -20deg}to{rotate:x 22deg}}
+@keyframes creeperLegB{from{rotate:x 22deg}to{rotate:x -20deg}}
 @keyframes scaredBlink{0%,62%{opacity:0}63%,92%{opacity:1}93%,100%{opacity:0}}
 @keyframes cornerPanic{50%{transform:translateX(7px)}}
 @keyframes xpWander{0%,100%{transform:translate(var(--x1),var(--y1)) scale(.58) rotate(0deg);opacity:.45}24%{transform:translate(var(--x2),var(--y2)) scale(1.08) rotate(105deg);opacity:1}51%{transform:translate(var(--x3),var(--y3)) scale(.72) rotate(210deg);opacity:.62}76%{transform:translate(var(--x4),var(--y4)) scale(.96) rotate(315deg);opacity:.9}}
