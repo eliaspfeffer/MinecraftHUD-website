@@ -261,7 +261,7 @@ footer>p{text-align:center}
 .tnt-stage canvas{position:absolute;inset:0;width:100%;height:100%}
 .feature-steve-wrap{position:absolute;left:50%;bottom:8px;width:120px;height:192px;transform:translateX(-50%) scale(.8);transform-origin:bottom center;perspective:700px}
 .feature-steve-wrap .steve-model{position:absolute;inset:0;transform-style:preserve-3d}
-.cursor-prompt{position:absolute;right:18px;top:18px;color:#fff;background:#101311e6;padding:12px 14px;font:8px/1.5 var(--pixel)}
+.cursor-prompt{position:absolute;right:18px;top:18px;color:#fff;background:#101311e6;padding:8.4px 9.8px;font:5.6px/1.5 var(--pixel)}
 .cursor-prompt b{font-size:24px;color:var(--green)}
 .creeper-stage{background:linear-gradient(#6a9bc1 0 67%,#426b35 67% 82%,#51402f 82%)}
 .app-creeper{position:absolute;right:-22%;bottom:-12px;width:104px;height:158px;perspective:700px;animation:creeperApproach 5.8s ease-in-out infinite;filter:drop-shadow(8px 12px 0 rgba(0,0,0,.22))}
