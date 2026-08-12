@@ -18,6 +18,16 @@ nav a:hover,footer a:hover{color:#fff}
 .sound-toggle{position:relative;z-index:120;width:42px;height:42px;display:grid;place-items:center;border:1px solid #3e4a40;background:#111612;color:#fff;font-size:19px;cursor:pointer;box-shadow:4px 4px 0 rgba(0,0,0,.35)}
 .sound-toggle:hover{border-color:var(--green)}
 .sound-toggle[aria-pressed="true"]{color:#777;background:#090b0a}
+.pixel-speaker{position:relative;display:block;width:24px;height:22px;image-rendering:pixelated}
+.pixel-speaker i{position:absolute;display:block;background:currentColor}
+.speaker-box{left:1px;top:7px;width:6px;height:8px}
+.speaker-cone{left:7px;top:4px;width:4px;height:14px;box-shadow:4px 3px 0 currentColor,4px 7px 0 currentColor}
+.sound-wave{width:3px;background:transparent!important;border-right:3px solid currentColor}
+.wave-one{left:16px;top:6px;height:10px}
+.wave-two{left:20px;top:3px;height:16px}
+.mute-slash{display:none!important;left:11px;top:0;width:3px;height:25px;background:#ff4a3d!important;transform:rotate(-45deg);transform-origin:center;box-shadow:2px 0 0 #4b0905}
+.sound-toggle[aria-pressed="true"] .sound-wave{display:none}
+.sound-toggle[aria-pressed="true"] .mute-slash{display:block!important}
 .intro{position:fixed;inset:0;z-index:1000;background:transparent;display:flex;align-items:center;justify-content:center;transition:opacity .8s,visibility .8s}
 .intro.done{opacity:0;visibility:hidden;pointer-events:none}
 .intro-grid{display:none}

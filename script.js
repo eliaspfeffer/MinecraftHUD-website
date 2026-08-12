@@ -78,7 +78,7 @@ Object.entries(mobFrames).forEach(([mob,frames])=>document.querySelectorAll(`.ap
 let audioUnlocked=false;
 let soundsMuted=localStorage.getItem('pixelhud-muted')==='true';
 const soundToggle=document.getElementById('soundToggle');
-function renderSoundToggle(){if(!soundToggle)return;soundToggle.setAttribute('aria-pressed',String(soundsMuted));soundToggle.setAttribute('aria-label',soundsMuted?'Alle Sounds aktivieren':'Alle Sounds deaktivieren');soundToggle.firstElementChild.textContent=soundsMuted?'🔇':'🔊'}
+function renderSoundToggle(){if(!soundToggle)return;soundToggle.setAttribute('aria-pressed',String(soundsMuted));soundToggle.setAttribute('aria-label',soundsMuted?'Alle Sounds aktivieren':'Alle Sounds deaktivieren')}
 renderSoundToggle();
 soundToggle?.addEventListener('click',event=>{event.stopPropagation();audioUnlocked=true;soundsMuted=!soundsMuted;localStorage.setItem('pixelhud-muted',String(soundsMuted));document.querySelectorAll('audio').forEach(audio=>{audio.pause();audio.currentTime=0});renderSoundToggle()});
 const playCardSound=card=>{const audio=card?.querySelector('audio');if(!audio||!audioUnlocked||soundsMuted)return false;const sound=audio.cloneNode();sound.volume=card.dataset.effect==='tnt'?.6:.65;sound.play().catch(()=>{});return true};
