@@ -104,6 +104,9 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .feature-row{display:grid;grid-template-columns:minmax(300px,.8fr) minmax(500px,1.2fr);align-items:center;gap:8vw;min-height:760px;padding:100px 0;border-top:1px solid #334334}
 .feature-row.reverse{grid-template-columns:minmax(500px,1.2fr) minmax(300px,.8fr)}
 .feature-row.reverse .feature-copy{order:2}
+.hud-meaning-row{grid-template-columns:minmax(230px,.7fr) minmax(420px,1.15fr) minmax(230px,.7fr);gap:4vw}
+.hud-meaning-visual img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain;background:#08130c;border:1px solid #3e5241;box-shadow:16px 16px 0 #09130b}
+.hunger-meaning{text-align:right}
 .feature-number{color:#87a376}
 .feature-copy h3{font-size:clamp(38px,4vw,68px);line-height:1.02;letter-spacing:-3px;margin:24px 0}
 .feature-copy>p{font-size:19px;line-height:1.6;color:#aeb9af}
@@ -156,6 +159,8 @@ footer small{grid-column:1/-1;padding-top:30px;border-top:1px solid #222;color:#
 .hero-demo{max-width:850px}
 .feature-row,.feature-row.reverse{grid-template-columns:1fr;gap:60px;min-height:auto}
 .feature-row.reverse .feature-copy{order:0}
+.hud-meaning-row{grid-template-columns:1fr;text-align:center}
+.hud-meaning-row .feature-copy,.hunger-meaning{text-align:center}
 .moments{grid-template-columns:1fr}
 .moments-copy{position:static}
 .manifesto-grid{grid-template-columns:1fr}
