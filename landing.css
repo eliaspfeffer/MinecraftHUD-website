@@ -291,6 +291,9 @@ footer>p{text-align:center}
 .wallpaper-videos{min-height:540px}
 .wallpaper-videos video{width:78%;height:390px;object-fit:cover;border:2px solid #d8cfb6;box-shadow:14px 14px 0 rgba(20,17,13,.18)}
 .wallpaper-videos video+video{position:absolute;right:0;bottom:38px;width:62%;height:315px;border-color:#587a5e}
+.deathscreen-preview{position:absolute;left:7%;right:5%;top:74px;z-index:5;border:2px solid #6d2424;box-shadow:18px 18px 0 rgba(10,0,0,.38);overflow:hidden}
+.deathscreen-preview img{display:block;width:100%;height:auto;aspect-ratio:1982/1280;object-fit:contain;border:0;box-shadow:none}
+.deathscreen-preview strong{position:absolute;left:50%;top:13%;transform:translateX(-50%);width:max-content;max-width:90%;color:#ff3c36;text-align:center;font:clamp(18px,2vw,34px)/1.1 var(--pixel);text-shadow:3px 3px 0 #430000}
 .friends-online{min-height:540px}
 .friends-online>img{height:520px;object-position:left top}
 .online-list{position:absolute;right:-15px;bottom:42px;width:260px;padding:18px;background:#111b13;border:1px solid #57705b;box-shadow:10px 10px 0 #09130b;display:grid;gap:12px}
@@ -348,6 +351,8 @@ footer>p{text-align:center}
   .wallpaper-videos{min-height:390px}
   .wallpaper-videos video{height:290px}
   .wallpaper-videos video+video{height:210px}
+  .deathscreen-preview{left:2%;right:2%;top:66px}
+  .deathscreen-preview strong{top:10%;font-size:14px}
   .friends-online{min-height:430px}
   .friends-online>img{height:410px}
   .online-list{right:0;width:220px}
