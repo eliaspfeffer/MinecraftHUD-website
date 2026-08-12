@@ -14,6 +14,10 @@ nav a:hover,footer a:hover{color:#fff}
 .button{display:inline-flex;align-items:center;justify-content:center;gap:14px;min-height:58px;padding:0 28px;background:var(--green);color:#10150e;text-decoration:none;font-weight:700;border:1px solid #d9ff8c;box-shadow:6px 6px 0 #35520e;transition:transform .2s,box-shadow .2s}
 .button:hover{transform:translate(-2px,-2px);box-shadow:9px 9px 0 #35520e}
 .button-small{min-height:42px;padding:0 20px;font-size:13px;box-shadow:4px 4px 0 #35520e}
+.header-actions{display:flex;align-items:center;gap:14px;position:relative;overflow:visible}
+.sound-toggle{position:relative;z-index:120;width:42px;height:42px;display:grid;place-items:center;border:1px solid #3e4a40;background:#111612;color:#fff;font-size:19px;cursor:pointer;box-shadow:4px 4px 0 rgba(0,0,0,.35)}
+.sound-toggle:hover{border-color:var(--green)}
+.sound-toggle[aria-pressed="true"]{color:#777;background:#090b0a}
 .intro{position:fixed;inset:0;z-index:1000;background:transparent;display:flex;align-items:center;justify-content:center;transition:opacity .8s,visibility .8s}
 .intro.done{opacity:0;visibility:hidden;pointer-events:none}
 .intro-grid{display:none}
@@ -47,10 +51,10 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .hero-lede{max-width:650px;font-size:clamp(18px,1.35vw,23px);line-height:1.55;color:#afb5b0}
 .hero-actions{display:flex;align-items:center;gap:34px;margin:42px 0}
 .xp-download{position:relative;display:inline-flex}
-.xp-download>.button{position:relative;z-index:1}
+.xp-download>.button{position:relative;z-index:2}
 .header-download{z-index:100;overflow:visible}
-.xp-orbits{position:absolute;inset:50%;z-index:5;pointer-events:none;overflow:visible}
-.xp-orbits img{position:absolute;left:-11px;top:-11px;width:22px;height:22px;z-index:var(--depth);image-rendering:pixelated;filter:drop-shadow(0 0 8px rgba(62,255,0,.8));animation:xpWander var(--duration) cubic-bezier(.37,.03,.63,.98) infinite;animation-delay:var(--delay)}
+.xp-orbits{position:absolute;left:50%;top:50%;width:1px;height:1px;z-index:110;pointer-events:none;overflow:visible}
+.xp-orbits img{position:absolute;left:-14px;top:-14px;width:28px;height:28px;z-index:110;opacity:1;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(62,255,0,.95));animation:xpWander var(--duration) cubic-bezier(.37,.03,.63,.98) infinite;animation-delay:var(--delay)}
 .text-link{text-decoration:none;border-bottom:1px solid #777;padding:12px 0;color:#ccc}
 .hero-meta{display:flex;gap:10px;flex-wrap:wrap}
 .hero-meta span{border:1px solid #343b35;padding:8px 12px;font-size:12px;color:#879087}
@@ -180,7 +184,7 @@ footer small{grid-column:1/-1;padding-top:30px;border-top:1px solid #222;color:#
 nav{display:none}
 }
 @media(max-width:650px){.site-header{height:66px}
-.site-header>.button,.site-header>.header-download{display:none}
+.site-header>.button,.site-header>.header-download,.site-header>.header-actions{display:none}
 .hero{padding:84px 20px 106px;min-height:auto}
 .hero h1{font-size:52px;letter-spacing:-3px}
 .hero-actions{align-items:flex-start;flex-direction:column}

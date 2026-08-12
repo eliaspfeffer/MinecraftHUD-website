@@ -76,7 +76,12 @@ const mobFrames={cow:['assets/app/cow_walk1.png','assets/app/cow_walk2.png'],pig
 Object.entries(mobFrames).forEach(([mob,frames])=>document.querySelectorAll(`.app-${mob}`).forEach(img=>{let n=0;setInterval(()=>{n=1-n;img.src=frames[n]},260)}));
 
 let audioUnlocked=false;
-const playCardSound=card=>{const audio=card?.querySelector('audio');if(!audio||!audioUnlocked)return false;const sound=audio.cloneNode();sound.volume=card.dataset.effect==='tnt'?.6:.65;sound.play().catch(()=>{});return true};
+let soundsMuted=localStorage.getItem('pixelhud-muted')==='true';
+const soundToggle=document.getElementById('soundToggle');
+function renderSoundToggle(){if(!soundToggle)return;soundToggle.setAttribute('aria-pressed',String(soundsMuted));soundToggle.setAttribute('aria-label',soundsMuted?'Alle Sounds aktivieren':'Alle Sounds deaktivieren');soundToggle.firstElementChild.textContent=soundsMuted?'🔇':'🔊'}
+renderSoundToggle();
+soundToggle?.addEventListener('click',event=>{event.stopPropagation();audioUnlocked=true;soundsMuted=!soundsMuted;localStorage.setItem('pixelhud-muted',String(soundsMuted));document.querySelectorAll('audio').forEach(audio=>{audio.pause();audio.currentTime=0});renderSoundToggle()});
+const playCardSound=card=>{const audio=card?.querySelector('audio');if(!audio||!audioUnlocked||soundsMuted)return false;const sound=audio.cloneNode();sound.volume=card.dataset.effect==='tnt'?.6:.65;sound.play().catch(()=>{});return true};
 document.querySelectorAll('#features .shortcut-card[data-effect="cow"],#features .shortcut-card[data-effect="pig"]').forEach(card=>{const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting)return;card.classList.remove('mob-visible');void card.offsetWidth;card.classList.add('mob-visible')}),{threshold:.55});observer.observe(card)});
 
 const bindCardHoverSound=root=>root.querySelectorAll('.shortcut-card:not([data-effect="tnt"])').forEach(card=>card.addEventListener('pointerenter',()=>playCardSound(card)));
@@ -95,6 +100,6 @@ bindTntHoverSound(document);
 const popSound=new Audio('sounds/pop.mp3');popSound.preload='auto';popSound.volume=.55;
 const dirtSounds=['sounds/dirt1.mp3','sounds/dirt2.mp3','sounds/dirt3.mp3'].map(src=>{const audio=new Audio(src);audio.preload='auto';audio.volume=.45;return audio});
 let lastDirtPlay=0;
-function replaySound(audio){const sound=audio.cloneNode();sound.volume=audio.volume;sound.play().catch(()=>{})}
-document.addEventListener('pointerdown',()=>{audioUnlocked=true;replaySound(popSound)},{capture:true});
+function replaySound(audio){if(soundsMuted)return;const sound=audio.cloneNode();sound.volume=audio.volume;sound.play().catch(()=>{})}
+document.addEventListener('pointerdown',event=>{audioUnlocked=true;if(!event.target.closest('#soundToggle'))replaySound(popSound)},{capture:true});
 document.addEventListener('keydown',event=>{if(event.repeat)return;audioUnlocked=true;const now=performance.now();if(now-lastDirtPlay<60)return;lastDirtPlay=now;replaySound(dirtSounds[Math.floor(Math.random()*dirtSounds.length)])});
