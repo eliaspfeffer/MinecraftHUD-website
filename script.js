@@ -1,7 +1,9 @@
-const body=document.body,intro=document.getElementById('intro'),skip=document.getElementById('skipIntro');
+const body=document.body,intro=document.getElementById('intro'),skip=document.getElementById('skipIntro'),introVideo=intro.querySelector('video'),introCanvas=document.getElementById('introTntCanvas');
 body.classList.add('intro-active');
-function finishIntro(){intro.classList.add('done');body.classList.remove('intro-active');body.classList.add('page-ready')}
-function runIntro(){setTimeout(()=>intro.classList.add('explode'),2400);setTimeout(finishIntro,3150)}
+let introFrame=0;
+function chromaFrame(video,canvas){const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!canvas.width){canvas.width=640;canvas.height=360}ctx.drawImage(video,0,0,canvas.width,canvas.height);const frame=ctx.getImageData(0,0,canvas.width,canvas.height),p=frame.data;for(let i=0;i<p.length;i+=4){const r=p[i],g=p[i+1],b=p[i+2],dominance=g-Math.max(r,b);if(g>95&&dominance>20){p[i+3]=Math.max(0,255-(dominance-20)*9)}}ctx.putImageData(frame,0,0);return ctx}
+function finishIntro(){cancelAnimationFrame(introFrame);introVideo.pause();intro.classList.add('done');body.classList.remove('intro-active');body.classList.add('page-ready')}
+function runIntro(){const paint=()=>{if(introVideo.paused||introVideo.ended){finishIntro();return}chromaFrame(introVideo,introCanvas);introFrame=requestAnimationFrame(paint)};introVideo.currentTime=0;introVideo.play().then(paint).catch(finishIntro)}
 if(matchMedia('(prefers-reduced-motion: reduce)').matches) finishIntro(); else runIntro();
 skip.addEventListener('click',finishIntro);
 
@@ -38,11 +40,11 @@ function buildPixelBar(bar,shape,type){
 document.querySelectorAll('.native-hearts').forEach(bar=>buildPixelBar(bar,heartShape,'heart'));
 document.querySelectorAll('.native-hunger').forEach(bar=>buildPixelBar(bar,hungerShape,'hunger'));
 
-// The bundled explosion is a chroma-key source. PixelHUD removes its green at runtime; so do we.
+// The requested YouTube excerpt is a chroma-key source. Remove its green at runtime.
 document.querySelectorAll('.tnt-stage').forEach(stage=>{
- const video=stage.querySelector('video'),canvas=stage.querySelector('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});let frameId=0;
+ const video=stage.querySelector('video'),canvas=stage.querySelector('canvas');let frameId=0;
  function size(){canvas.width=480;canvas.height=Math.round(480*(video.videoHeight||1080)/(video.videoWidth||1920))}
- function paint(){if(video.paused||video.ended)return;ctx.drawImage(video,0,0,canvas.width,canvas.height);const frame=ctx.getImageData(0,0,canvas.width,canvas.height),p=frame.data;for(let i=0;i<p.length;i+=4){if(p[i+1]>105&&p[i+1]>p[i]*1.28&&p[i+1]>p[i+2]*1.28)p[i+3]=0}ctx.putImageData(frame,0,0);frameId=requestAnimationFrame(paint)}
+ function paint(){if(video.paused||video.ended)return;chromaFrame(video,canvas);frameId=requestAnimationFrame(paint)}
  function play(){cancelAnimationFrame(frameId);video.currentTime=0;video.play().then(paint).catch(()=>{})}
  video.addEventListener('loadedmetadata',size,{once:true});video.addEventListener('ended',()=>cancelAnimationFrame(frameId));stage.querySelector('button').addEventListener('click',play);
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){play();observer.disconnect()}},{threshold:.45});observer.observe(stage);
