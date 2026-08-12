@@ -162,6 +162,12 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .cta-copy h2{font-size:clamp(56px,7vw,100px);line-height:.9;letter-spacing:-6px;margin:22px 0}
 .cta-copy>p:not(.section-kicker){color:#b9c1ba;font-size:18px}
 .button-light{margin:28px auto;background:#fff;border-color:#fff;box-shadow:6px 6px 0 var(--green);animation:ctaButtonPulse 1s ease-in-out infinite}
+.cursor-xp-download{position:relative;display:inline-flex;isolation:isolate}
+.cursor-xp-download>.button{position:relative;z-index:3}
+.cursor-xp-swarm{--mouse-x:50%;--mouse-y:50%;position:absolute;inset:0;z-index:2;pointer-events:none}
+.cursor-xp-swarm img{position:absolute;left:var(--mouse-x);top:var(--mouse-y);width:22px;height:22px;min-width:22px;max-width:none;opacity:0;image-rendering:pixelated;filter:drop-shadow(0 0 7px rgba(62,255,0,.9));transform:translate(-50%,-50%) scale(.15);transition:opacity .22s,transform .35s;animation:cursorXpOrbit var(--cursor-speed) linear infinite;animation-play-state:paused;animation-delay:calc(var(--cursor-orb-i)*-.18s)}
+.cursor-xp-download.xp-active .cursor-xp-swarm{z-index:4}
+.cursor-xp-download.xp-active .cursor-xp-swarm img{opacity:1;animation-play-state:running}
 .cta-copy small{display:block;color:#7f8981}
 .faq{padding-top:140px;padding-bottom:150px;background:var(--paper)}
 .faq h2{margin-bottom:70px}
@@ -338,6 +344,7 @@ footer>p{text-align:center}
 @keyframes cornerPanic{50%{transform:translateX(7px)}}
 @keyframes xpWander{0%,100%{transform:translate(var(--x1),var(--y1)) scale(.72);opacity:.55}24%{transform:translate(var(--x2),var(--y2)) scale(1.08);opacity:1}51%{transform:translate(var(--x3),var(--y3)) scale(.82);opacity:.72}76%{transform:translate(var(--x4),var(--y4)) scale(.98);opacity:.95}}
 @keyframes ctaButtonPulse{0%,100%{transform:translate(0,0);box-shadow:6px 6px 0 var(--green)}50%{transform:translate(-2px,-2px);box-shadow:9px 9px 0 var(--green)}}
+@keyframes cursorXpOrbit{from{transform:translate(-50%,-50%) rotate(0deg) translateX(var(--cursor-radius)) scale(.72)}50%{transform:translate(-50%,-50%) rotate(180deg) translateX(var(--cursor-radius)) scale(1.04)}to{transform:translate(-50%,-50%) rotate(360deg) translateX(var(--cursor-radius)) scale(.72)}}
 @media(max-width:1050px){
   .hero-card-stack{width:290px;transform:translate(-25px,-30px)}
   .shortcut-lab{grid-template-columns:repeat(2,minmax(0,1fr))}
