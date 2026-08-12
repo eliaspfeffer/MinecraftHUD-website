@@ -50,9 +50,10 @@ document.querySelectorAll('.native-hearts').forEach(bar=>buildPixelBar(bar,heart
 document.querySelectorAll('.native-hunger').forEach(bar=>buildPixelBar(bar,hungerShape,'hunger'));
 
 function buildCreeper(model){
- const makeBox=(name,faces=6)=>{const box=document.createElement('div');box.className=`creeper-box ${name}`;for(let i=0;i<faces;i++){const face=document.createElement('i');face.className=`creeper-face face-${i}`;box.appendChild(face)}return box};
- const rig=document.createElement('div');rig.className='creeper-rig';rig.append(makeBox('creeper-head'),makeBox('creeper-body'));
- ['front-left','front-right','back-left','back-right'].forEach(name=>rig.appendChild(makeBox(`creeper-leg ${name}`)));
+ const uv={head:[[8,8,8,8],[24,8,8,8],[0,8,8,8],[16,8,8,8],[8,0,8,8],[16,0,8,8]],body:[[20,20,8,12],[32,20,8,12],[16,20,4,12],[28,20,4,12],[20,16,8,4],[28,16,8,4]],leg:[[4,20,4,6],[12,20,4,6],[0,20,4,6],[8,20,4,6],[4,16,4,4],[8,16,4,4]]};
+ const makeBox=(name,type)=>{const box=document.createElement('div');box.className=`creeper-box ${name}`;uv[type].forEach((crop,i)=>{const face=document.createElement('i');face.className=`creeper-face face-${i}`;face.style.setProperty('--uv-x',crop[0]);face.style.setProperty('--uv-y',crop[1]);face.style.setProperty('--uv-w',crop[2]);face.style.setProperty('--uv-h',crop[3]);box.appendChild(face)});return box};
+ const rig=document.createElement('div');rig.className='creeper-rig';rig.append(makeBox('creeper-head','head'),makeBox('creeper-body','body'));
+ ['front-left','front-right','back-left','back-right'].forEach(name=>rig.appendChild(makeBox(`creeper-leg ${name}`,'leg')));
  model.replaceChildren(rig);
 }
 document.querySelectorAll('.app-creeper').forEach(buildCreeper);
