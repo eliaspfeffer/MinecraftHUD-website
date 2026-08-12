@@ -220,7 +220,8 @@ nav{display:none}
 footer{grid-template-columns:1fr;text-align:center}
 footer>div{justify-content:center}
 footer>p{text-align:center}
-#corner-steve{display:none}
+#corner-steve{display:block;left:8px;bottom:12px;transform:scale(.62);transform-origin:bottom left}
+#corner-steve .steve-wrap{transform:scale(.52)}
 .real-app-shot{padding:48px 0 60px}
 .real-app-shot>img{width:100vw;max-width:none;border-inline:0;box-shadow:none}
 .real-app-download{padding-inline:20px}
