@@ -26,7 +26,7 @@ document.querySelectorAll('details').forEach(item=>item.addEventListener('toggle
 const featureSteve=document.getElementById('featureSteveModel'),featureStage=document.querySelector('.steve-stage');
 if(featureSteve&&featureStage){featureStage.addEventListener('pointermove',event=>{const r=featureStage.getBoundingClientRect(),x=(event.clientX-r.left)/r.width-.5,y=(event.clientY-r.top)/r.height-.5;featureSteve.style.transform=`rotateY(${(-x*55).toFixed(1)}deg) rotateX(${(y*18).toFixed(1)}deg)`})}
 
-const revealObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in-view')}),{threshold:.12});document.querySelectorAll('.feature-row,.manifesto,.moments,.trust>div').forEach(el=>revealObserver.observe(el));
+const revealObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in-view')}),{threshold:.12});document.querySelectorAll('.feature-row,.moments,.trust>div').forEach(el=>revealObserver.observe(el));
 
 // Pixel-perfect HUD icons, transcribed from PixelHUD's HeartView and HungerBarView.
 const heartShape=['0110110','1111111','1111111','0111110','0011100','0001000'];
