@@ -75,7 +75,8 @@ if(creeperCard&&cornerSteve){creeperCard.addEventListener('pointerenter',()=>cor
 const mobFrames={cow:['assets/app/cow_walk1.png','assets/app/cow_walk2.png'],pig:['assets/app/pig_walk1.png','assets/app/pig_walk2.png']};
 Object.entries(mobFrames).forEach(([mob,frames])=>document.querySelectorAll(`.app-${mob}`).forEach(img=>{let n=0;setInterval(()=>{n=1-n;img.src=frames[n]},260)}));
 
-const playCardSound=card=>{const audio=card.querySelector('audio');if(!audio)return;audio.currentTime=0;audio.play().catch(()=>{})};
+let audioUnlocked=false;
+const playCardSound=card=>{const audio=card?.querySelector('audio');if(!audio||!audioUnlocked)return;const sound=audio.cloneNode();sound.volume=.65;sound.play().catch(()=>{})};
 const mobObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting)return;const card=entry.target;card.classList.remove('mob-visible');void card.offsetWidth;card.classList.add('mob-visible');playCardSound(card)}),{threshold:.55});
 document.querySelectorAll('#features .shortcut-card[data-effect="cow"],#features .shortcut-card[data-effect="pig"]').forEach(card=>mobObserver.observe(card));
 const soundObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)playCardSound(entry.target)}),{threshold:.6});
@@ -95,9 +96,9 @@ document.querySelectorAll('#features .shortcut-card[data-effect="cow"],#features
 document.querySelectorAll('.app-cow,.app-pig').forEach(img=>img.addEventListener('animationiteration',()=>playCardSound(img.closest('.shortcut-card'))));
 
 // Mirror PixelHUD's global input sounds while this browser page has focus.
-const popSound=new Audio('sounds/pop.aiff');popSound.volume=.35;
-const dirtSounds=['sounds/dirt1.aiff','sounds/dirt2.aiff','sounds/dirt3.aiff'].map(src=>{const audio=new Audio(src);audio.volume=.35;return audio});
+const popSound=new Audio('sounds/pop.mp3');popSound.preload='auto';popSound.volume=.55;
+const dirtSounds=['sounds/dirt1.mp3','sounds/dirt2.mp3','sounds/dirt3.mp3'].map(src=>{const audio=new Audio(src);audio.preload='auto';audio.volume=.45;return audio});
 let lastDirtPlay=0;
 function replaySound(audio){const sound=audio.cloneNode();sound.volume=audio.volume;sound.play().catch(()=>{})}
-document.addEventListener('pointerdown',()=>replaySound(popSound));
-document.addEventListener('keydown',event=>{if(event.repeat)return;const now=performance.now();if(now-lastDirtPlay<60)return;lastDirtPlay=now;replaySound(dirtSounds[Math.floor(Math.random()*dirtSounds.length)])});
+document.addEventListener('pointerdown',()=>{audioUnlocked=true;replaySound(popSound)},{capture:true});
+document.addEventListener('keydown',event=>{if(event.repeat)return;audioUnlocked=true;const now=performance.now();if(now-lastDirtPlay<60)return;lastDirtPlay=now;replaySound(dirtSounds[Math.floor(Math.random()*dirtSounds.length)])});
