@@ -14,9 +14,10 @@
 <body>
   <div class="intro" id="intro" aria-hidden="true">
     <div class="intro-grid"></div>
-    <div class="tnt" id="tnt"><span>TNT</span></div>
+    <!-- Source: https://youtu.be/ip6EF6_ljOc — exact excerpt from 00:02 through 00:06. -->
+    <video class="intro-tnt-source" src="assets/app/tnt-youtube-2-6.mp4" muted playsinline preload="auto"></video>
+    <canvas class="intro-tnt-video" id="introTntCanvas" width="640" height="360" aria-label="TNT explosion from the original referenced video"></canvas>
     <p class="intro-copy">A little nostalgia is about to hit.</p>
-    <div class="blast" id="blast"></div>
     <button class="skip-intro" id="skipIntro">Skip intro</button>
   </div>
 
@@ -68,7 +69,7 @@
     <section class="shortcut-lab" aria-label="PixelHUD keyboard shortcut effects">
       <article class="shortcut-card tnt-card" data-effect="tnt">
         <span class="shortcut-number">01</span><div class="shortcut-key"><kbd>⌘</kbd><b>+</b><kbd>W</kbd></div><span>Close a tab</span><h3>TNT explosion.</h3><p>Close a browser tab and the real full-screen PixelHUD blast takes over for a split second.</p>
-        <div class="shortcut-stage tnt-stage"><video src="assets/app/tnt_explosion.mp4" muted playsinline preload="metadata"></video><canvas aria-label="The actual PixelHUD TNT explosion animation"></canvas><button type="button">Replay effect</button></div>
+        <div class="shortcut-stage tnt-stage"><video src="assets/app/tnt-youtube-2-6.mp4" muted playsinline preload="metadata"></video><canvas aria-label="The actual TNT explosion from the referenced video, seconds 2 through 6"></canvas><button type="button">Replay effect</button></div>
       </article>
       <article class="shortcut-card" data-effect="cow">
         <span class="shortcut-number">02</span><div class="shortcut-key"><kbd>⌘</kbd><b>+</b><kbd>C</kbd></div><span>Copy</span><h3>Spawn a cow.</h3><p>The exact animated cow from PixelHUD walks across the bottom of your screen—with its familiar sound.</p>

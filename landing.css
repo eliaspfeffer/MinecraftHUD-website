@@ -25,6 +25,9 @@ nav a:hover,footer a:hover{color:#fff}
 .intro.explode .tnt{animation:tntExplode .3s forwards}
 .intro.explode .blast{animation:blast .7s forwards}
 .intro.explode .intro-copy{opacity:0}
+.intro-tnt-source{display:none}
+.intro-tnt-video{position:relative;z-index:2;width:min(100vw,1280px);height:auto;aspect-ratio:16/9;object-fit:contain;filter:drop-shadow(0 0 30px rgba(255,255,255,.18))}
+.intro .intro-copy{z-index:3;top:auto;bottom:11vh}
 @keyframes tntPulse{50%{filter:brightness(1.8);transform:scale(1.04)}
 }
 @keyframes tntExplode{to{transform:scale(.2);opacity:0}
