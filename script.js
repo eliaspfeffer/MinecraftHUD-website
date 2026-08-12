@@ -54,9 +54,10 @@ function initTntStage(stage){
  const video=stage.querySelector('video'),canvas=stage.querySelector('canvas');let frameId=0;
  function size(){canvas.width=480;canvas.height=Math.round(480*(video.videoHeight||1080)/(video.videoWidth||1920))}
  function paint(){if(video.paused||video.ended)return;chromaFrame(video,canvas);frameId=requestAnimationFrame(paint)}
- function play(){cancelAnimationFrame(frameId);video.currentTime=0;video.play().then(paint).catch(()=>{})}
- video.addEventListener('loadedmetadata',size,{once:true});video.addEventListener('ended',play);
+ function play(withSound=false){cancelAnimationFrame(frameId);video.currentTime=0;if(withSound)playCardSound(stage.closest('.shortcut-card'));video.play().then(paint).catch(()=>{})}
+ video.addEventListener('loadedmetadata',size,{once:true});video.addEventListener('ended',()=>play(true));
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting))play()},{threshold:.45});observer.observe(stage);
+ stage.closest('.shortcut-card')?.addEventListener('pointerenter',()=>play(true));
 }
 document.querySelectorAll('.tnt-stage').forEach(initTntStage);
 
@@ -72,9 +73,6 @@ document.querySelectorAll('#features .shortcut-card[data-effect="cow"],#features
 const soundObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)playCardSound(entry.target)}),{threshold:.6});
 document.querySelectorAll('#features .shortcut-card[data-effect="tnt"],#features .shortcut-card[data-effect="villager"]').forEach(card=>soundObserver.observe(card));
 
-const creeperGrid=['...GGG...','..GGGGG..','.GGGGGGG.','GGGGGGGGG','GG.G.G.GG','GG.G.G.GG','GGGGGGGGG','GG.GGG.GG','GGG.G.GGG','.GGGGGGG.','.GGGGGGG.','.GGGGGGG.','.GGGGGGG.','GG..G..GG','GG..G..GG','GG..G..GG','GG..G..GG'];
-document.querySelectorAll('.app-creeper').forEach(creeper=>{creeperGrid.forEach((row,y)=>[...row].forEach((cell,x)=>{const px=document.createElement('i');if(cell==='G'){const face=(y===4||y===5)&&([2,3,5,6].includes(x))||(y===7&&[3,4,5].includes(x))||(y===8&&[2,6].includes(x));px.style.background=face?'#111':y<9?'rgb(115,186,51)':'rgb(56,115,20)'}creeper.appendChild(px)}))});
-
 document.addEventListener('click',event=>{const picture=event.target.closest('.villager-image');if(!picture)return;const audio=picture.parentElement.querySelector('audio');if(!audio)return;audio.currentTime=0;audio.play();picture.classList.add('playing');setTimeout(()=>picture.classList.remove('playing'),900)});
 document.addEventListener('click',event=>{const card=event.target.closest('.shortcut-card');if(card)playCardSound(card)});
 
@@ -83,7 +81,10 @@ document.querySelectorAll('#features .shortcut-card').forEach(card=>{card.addEve
 const sizeSlider=document.getElementById('steveScale'),sizeOutput=document.getElementById('steveScaleOutput'),steveWrap=document.querySelector('#corner-steve .steve-wrap');
 if(sizeSlider&&steveWrap){sizeSlider.addEventListener('input',()=>{const scale=Number(sizeSlider.value);sizeOutput.value=`${scale.toFixed(1)}×`;steveWrap.style.transform=`scale(${(.67*scale).toFixed(3)})`})}
 
-if(heroCardStack){document.querySelectorAll('#features .shortcut-card').forEach((card,index)=>{const clone=card.cloneNode(true);clone.classList.remove('mob-visible');clone.classList.add('hero-stack-card');clone.style.setProperty('--stack-i',index);clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));heroCardStack.appendChild(clone)});heroCardStack.querySelectorAll('.tnt-stage').forEach(initTntStage);heroCardStack.querySelectorAll('.hero-stack-card[data-effect="cow"],.hero-stack-card[data-effect="pig"]').forEach(card=>{card.addEventListener('pointerenter',()=>{const img=card.querySelector('.mob-stage img');img.style.animation='none';void img.offsetWidth;img.style.animation='';playCardSound(card)})})}
+if(heroCardStack){document.querySelectorAll('#features .shortcut-card').forEach((card,index)=>{const clone=card.cloneNode(true);clone.classList.remove('mob-visible');clone.classList.add('hero-stack-card');clone.style.setProperty('--stack-i',index);clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));heroCardStack.appendChild(clone)});heroCardStack.querySelectorAll('.tnt-stage').forEach(initTntStage);heroCardStack.querySelectorAll('.hero-stack-card[data-effect="cow"],.hero-stack-card[data-effect="pig"]').forEach(card=>{card.addEventListener('pointerenter',()=>{const img=card.querySelector('.mob-stage img');img.style.animation='none';void img.offsetWidth;img.style.animation='';playCardSound(card)})});heroCardStack.querySelectorAll('.hero-stack-card[data-effect="villager"]').forEach(card=>card.addEventListener('pointerenter',()=>playCardSound(card)))}
+
+document.querySelectorAll('#features .shortcut-card[data-effect="cow"],#features .shortcut-card[data-effect="pig"],#features .shortcut-card[data-effect="villager"]').forEach(card=>card.addEventListener('pointerenter',()=>playCardSound(card)));
+document.querySelectorAll('.app-cow,.app-pig').forEach(img=>img.addEventListener('animationiteration',()=>playCardSound(img.closest('.shortcut-card'))));
 
 // Mirror PixelHUD's global input sounds while this browser page has focus.
 const popSound=new Audio('sounds/pop.aiff');popSound.volume=.35;

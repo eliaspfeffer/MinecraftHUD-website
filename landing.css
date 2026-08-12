@@ -245,8 +245,7 @@ footer>p{text-align:center}
 .cursor-prompt{position:absolute;right:18px;top:18px;color:#fff;background:#101311e6;padding:12px 14px;font:8px/1.5 var(--pixel)}
 .cursor-prompt b{font-size:24px;color:var(--green)}
 .creeper-stage{background:linear-gradient(#6a9bc1 0 67%,#426b35 67% 82%,#51402f 82%)}
-.app-creeper{position:absolute;right:-18%;bottom:18px;display:grid;grid-template-columns:repeat(9,7px);grid-template-rows:repeat(17,7px);width:63px!important;height:119px!important;animation:creeperApproach 5.8s ease-in-out infinite;filter:drop-shadow(8px 12px 0 rgba(0,0,0,.18))}
-.app-creeper i{display:block;width:7px;height:7px}
+.app-creeper{position:absolute;right:-22%;bottom:18px;width:128px!important;height:128px!important;max-width:none;object-fit:contain;image-rendering:pixelated;animation:creeperApproach 5.8s ease-in-out infinite;filter:drop-shadow(8px 12px 0 rgba(0,0,0,.18))}
 .villager-stage{display:grid;place-items:center;background:#241d19}
 .villager-image{width:100%;height:100%;object-fit:cover;cursor:pointer;transition:transform .2s,filter .2s}
 .villager-image:hover{transform:scale(1.035)}
