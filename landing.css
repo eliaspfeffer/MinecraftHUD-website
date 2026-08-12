@@ -193,7 +193,7 @@ footer>p{text-align:center}
 .authentic-hero-shot>span{position:absolute;left:18px;bottom:18px;padding:10px 12px;background:#0b0e0c;color:var(--green);font:8px/1 var(--pixel);letter-spacing:.6px}
 .demo-label{margin-top:24px}
 .hero-demo{min-height:620px;display:grid;place-items:center}
-.hero-card-stack{position:relative;width:min(27vw,330px);height:470px;transform:translateY(45px)}
+.hero-card-stack{position:relative;width:min(27vw,330px);height:470px;transform:translateY(-35px)}
 .hero-stack-card{--fan-angle:calc((var(--stack-i) - 2.5) * 8deg);--fan-x:calc((var(--stack-i) - 2.5) * 34px);position:absolute!important;inset:0!important;width:100%;min-height:470px!important;padding:25px 23px 22px!important;grid-column:auto!important;pointer-events:auto;transform-origin:50% 115%;transform:translateX(var(--fan-x)) rotate(var(--fan-angle))!important;box-shadow:0 24px 50px rgba(0,0,0,.5);transition:transform .65s cubic-bezier(.2,.9,.2,1),filter .3s;filter:brightness(calc(1 - var(--stack-i) * .045));z-index:calc(6 - var(--stack-i))}
 .hero-stack-card:hover{transform:translateX(var(--fan-x)) translateY(-65px) rotate(var(--fan-angle))!important;filter:brightness(1);z-index:20}
 .hero-stack-card .shortcut-key{transform:scale(.78);transform-origin:left top;margin-bottom:10px}
@@ -285,14 +285,14 @@ footer>p{text-align:center}
 @keyframes scaredBlink{0%,62%{opacity:0}63%,92%{opacity:1}93%,100%{opacity:0}}
 @keyframes cornerPanic{50%{transform:translateX(7px)}}
 @media(max-width:1050px){
-  .hero-card-stack{width:290px;transform:translate(-25px,45px)}
+  .hero-card-stack{width:290px;transform:translate(-25px,-30px)}
   .shortcut-lab{grid-template-columns:repeat(2,minmax(0,1fr))}
   .shortcut-card,.shortcut-card:nth-child(4),.shortcut-card:nth-child(5){grid-column:span 1}
   .native-hud-visual,.lunch-visual,.size-control{box-shadow:12px 12px 0 #09130b}
 }
 @media(max-width:650px){
   .hero-demo{min-height:480px;overflow:hidden}
-  .hero-card-stack{width:230px;height:380px;transform:translate(-10px,45px) scale(.82)}
+  .hero-card-stack{width:230px;height:380px;transform:translate(-10px,-20px) scale(.82)}
   .authentic-hero-shot{transform:none;box-shadow:10px 12px 0 rgba(184,255,56,.08)}
   .shortcut-lab{grid-template-columns:1fr;padding:0 20px 90px}
   .shortcut-card,.shortcut-card:nth-child(4),.shortcut-card:nth-child(5),.shortcut-card:last-child{grid-column:1;min-height:500px}
