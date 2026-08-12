@@ -65,6 +65,7 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .real-app-download{display:flex;justify-content:center;margin-top:42px;padding-bottom:22px;position:relative;z-index:3}
 .showcase-download{position:relative;display:inline-flex;overflow:visible}
 .showcase-download .button{min-height:42px;padding:0 20px;font-size:13px;box-shadow:4px 4px 0 #35520e}
+.real-app-shot .showcase-download .xp-orbits img{display:block;width:28px;height:28px;min-width:28px;max-width:none;margin:0;border:0;box-shadow:none}
 .text-link{text-decoration:none;border-bottom:1px solid #777;padding:12px 0;color:#ccc}
 .hero-meta{display:flex;gap:10px;flex-wrap:wrap}
 .hero-meta span{border:1px solid #343b35;padding:8px 12px;font-size:12px;color:#879087}
