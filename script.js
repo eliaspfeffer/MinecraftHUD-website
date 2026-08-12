@@ -76,23 +76,17 @@ Object.entries(mobFrames).forEach(([mob,frames])=>document.querySelectorAll(`.ap
 
 let audioUnlocked=false;
 const playCardSound=card=>{const audio=card?.querySelector('audio');if(!audio||!audioUnlocked)return;const sound=audio.cloneNode();sound.volume=.65;sound.play().catch(()=>{})};
-const mobObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting)return;const card=entry.target;card.classList.remove('mob-visible');void card.offsetWidth;card.classList.add('mob-visible');playCardSound(card)}),{threshold:.55});
-document.querySelectorAll('#features .shortcut-card[data-effect="cow"],#features .shortcut-card[data-effect="pig"]').forEach(card=>mobObserver.observe(card));
-const soundObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)playCardSound(entry.target)}),{threshold:.6});
-document.querySelectorAll('#features .shortcut-card[data-effect="tnt"],#features .shortcut-card[data-effect="villager"]').forEach(card=>soundObserver.observe(card));
+document.querySelectorAll('#features .shortcut-card[data-effect="cow"],#features .shortcut-card[data-effect="pig"]').forEach(card=>{const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting)return;card.classList.remove('mob-visible');void card.offsetWidth;card.classList.add('mob-visible')}),{threshold:.55});observer.observe(card)});
 
-document.addEventListener('click',event=>{const picture=event.target.closest('.villager-image');if(!picture)return;const audio=picture.parentElement.querySelector('audio');if(!audio)return;audio.currentTime=0;audio.play();picture.classList.add('playing');setTimeout(()=>picture.classList.remove('playing'),900)});
-document.addEventListener('click',event=>{const card=event.target.closest('.shortcut-card');if(card)playCardSound(card)});
+const bindCardHoverSound=root=>root.querySelectorAll('.shortcut-card').forEach(card=>card.addEventListener('pointerenter',()=>playCardSound(card)));
 
 document.querySelectorAll('#features .shortcut-card').forEach(card=>{card.addEventListener('pointermove',event=>{const r=card.getBoundingClientRect(),x=(event.clientX-r.left)/r.width-.5,y=(event.clientY-r.top)/r.height-.5;card.style.setProperty('--tilt-x',`${(-y*8).toFixed(2)}deg`);card.style.setProperty('--tilt-y',`${(x*10).toFixed(2)}deg`)});card.addEventListener('pointerleave',()=>{card.style.setProperty('--tilt-x','0deg');card.style.setProperty('--tilt-y','0deg')})});
 
 const sizeSlider=document.getElementById('steveScale'),sizeOutput=document.getElementById('steveScaleOutput'),steveWrap=document.querySelector('#corner-steve .steve-wrap');
 if(sizeSlider&&steveWrap){sizeSlider.addEventListener('input',()=>{const scale=Number(sizeSlider.value);sizeOutput.value=`${scale.toFixed(1)}×`;steveWrap.style.transform=`scale(${(.67*scale).toFixed(3)})`})}
 
-if(heroCardStack){document.querySelectorAll('#features .shortcut-card').forEach((card,index)=>{const clone=card.cloneNode(true);clone.classList.remove('mob-visible');clone.classList.add('hero-stack-card');clone.style.setProperty('--stack-i',index);clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));heroCardStack.appendChild(clone)});heroCardStack.querySelectorAll('.tnt-stage').forEach(initTntStage);heroCardStack.querySelectorAll('.hero-stack-card[data-effect="cow"],.hero-stack-card[data-effect="pig"]').forEach(card=>{card.addEventListener('pointerenter',()=>{const img=card.querySelector('.mob-stage img');img.style.animation='none';void img.offsetWidth;img.style.animation='';playCardSound(card)})});heroCardStack.querySelectorAll('.hero-stack-card[data-effect="tnt"],.hero-stack-card[data-effect="villager"]').forEach(card=>card.addEventListener('pointerenter',()=>playCardSound(card)))}
-
-document.querySelectorAll('#features .shortcut-card[data-effect="cow"],#features .shortcut-card[data-effect="pig"],#features .shortcut-card[data-effect="villager"]').forEach(card=>card.addEventListener('pointerenter',()=>playCardSound(card)));
-document.querySelectorAll('.app-cow,.app-pig').forEach(img=>img.addEventListener('animationiteration',()=>playCardSound(img.closest('.shortcut-card'))));
+if(heroCardStack){document.querySelectorAll('#features .shortcut-card').forEach((card,index)=>{const clone=card.cloneNode(true);clone.classList.remove('mob-visible');clone.classList.add('hero-stack-card');clone.style.setProperty('--stack-i',index);clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));heroCardStack.appendChild(clone)});heroCardStack.querySelectorAll('.tnt-stage').forEach(initTntStage);heroCardStack.querySelectorAll('.hero-stack-card[data-effect="cow"],.hero-stack-card[data-effect="pig"]').forEach(card=>{card.addEventListener('pointerenter',()=>{const img=card.querySelector('.mob-stage img');img.style.animation='none';void img.offsetWidth;img.style.animation=''})})}
+bindCardHoverSound(document);
 
 // Mirror PixelHUD's global input sounds while this browser page has focus.
 const popSound=new Audio('sounds/pop.mp3');popSound.preload='auto';popSound.volume=.55;
