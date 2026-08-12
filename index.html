@@ -44,25 +44,9 @@
         <div class="hero-meta"><span>macOS 13+</span><span>Apple Silicon &amp; Intel</span><span>Local by design</span></div>
       </div>
 
-      <div class="hero-demo reveal" aria-label="A live preview of PixelHUD">
-        <div class="mac-window">
-          <div class="window-bar"><i></i><i></i><i></i><span>Monday, 9:41 AM</span></div>
-          <div class="demo-world">
-            <div class="sun"></div><div class="cloud cloud-a"></div><div class="cloud cloud-b"></div>
-            <div class="hill hill-back"></div><div class="hill hill-front"></div>
-            <div class="tree tree-a"></div><div class="tree tree-b"></div><div class="tree tree-c"></div>
-            <img class="demo-pig" src="sprites/mob_pig.png" alt="">
-            <div class="kill-feed"><span>Design.app was slain</span><span>Inbox eliminated</span></div>
-            <div class="hud-demo">
-              <div class="hearts" aria-label="Battery as hearts">♥♥♥♥♥♥♥♥<b>♥</b><i>♥</i></div>
-              <div class="level">14</div>
-              <div class="hunger">● ● ● ● ● ● ● <b>●</b></div>
-              <div class="xp-track"><span></span></div>
-              <small>7,642 XP · one more email to level up</small>
-            </div>
-          </div>
-        </div>
-        <div class="demo-label"><span class="status-dot"></span>Alive on your desktop, without getting in the way.</div>
+      <div class="hero-demo reveal" aria-label="PixelHUD running on a real Mac desktop">
+        <figure class="authentic-hero-shot"><img src="assets/features/desktop-hud.webp" alt="The actual PixelHUD dynamic wallpaper, characters and HUD on macOS"><span>REAL PIXELHUD CAPTURE</span></figure>
+        <div class="demo-label"><span class="status-dot"></span>The actual app. Alive on your desktop.</div>
       </div>
       <a class="scroll-cue" href="#story"><span>Scroll to enter</span><i></i></a>
     </section>
@@ -77,40 +61,63 @@
     </section>
 
     <section class="feature-intro" id="features">
-      <p class="section-kicker">Your whole day, re-enchanted.</p>
-      <h2>Every signal becomes<br><em>something you can feel.</em></h2>
+      <p class="section-kicker">The shortcuts you already use. Now with consequences.</p>
+      <h2>Your commands<br><em>come alive.</em></h2>
     </section>
 
-    <section class="feature-story">
-      <article class="feature-row">
-        <div class="feature-copy"><span class="feature-number">01 / SURVIVE</span><h3>Your battery has a heartbeat.</h3><p>Ten pixel hearts quietly mirror your Mac's battery. As the day runs long, every remaining heart suddenly matters.</p><ul><li>Real-time battery status</li><li>Low-health warning sound</li><li>Always visible, never intrusive</li></ul></div>
-        <figure class="feature-visual world-shot"><img src="assets/features/desktop-hud.webp" alt="PixelHUD heart, hunger and XP bars on a Mac desktop" loading="lazy" decoding="async"><figcaption>Hearts = battery · Hunger = focus · XP = momentum</figcaption></figure>
+    <section class="shortcut-lab" aria-label="PixelHUD keyboard shortcut effects">
+      <article class="shortcut-card tnt-card" data-effect="tnt">
+        <span class="shortcut-number">01</span><div class="shortcut-key"><kbd>⌘</kbd><b>+</b><kbd>W</kbd></div><span>Close a tab</span><h3>TNT explosion.</h3><p>Close a browser tab and the real full-screen PixelHUD blast takes over for a split second.</p>
+        <div class="shortcut-stage tnt-stage"><video src="assets/app/tnt_explosion.mp4" muted playsinline preload="metadata"></video><canvas aria-label="The actual PixelHUD TNT explosion animation"></canvas><button type="button">Replay effect</button></div>
       </article>
-
-      <article class="feature-row reverse">
-        <div class="feature-copy"><span class="feature-number">02 / LEVEL UP</span><h3>Your effort finally has an XP bar.</h3><p>Typing and focused work fill the bar. Tiny green progress becomes a strangely powerful reason to keep going.</p><ul><li>Activity-based XP</li><li>Levels that persist</li><li>Pomodoro focus bonuses</li></ul></div>
-        <figure class="feature-visual app-shot"><img src="assets/features/profile.webp" alt="PixelHUD profile showing level and weekly XP" loading="lazy" decoding="async"><figcaption>One workday. One character. Your progress.</figcaption></figure>
+      <article class="shortcut-card" data-effect="cow">
+        <span class="shortcut-number">02</span><div class="shortcut-key"><kbd>⌘</kbd><b>+</b><kbd>C</kbd></div><span>Copy</span><h3>Spawn a cow.</h3><p>The exact animated cow from PixelHUD walks across the bottom of your screen—with its familiar sound.</p>
+        <div class="shortcut-stage mob-stage"><img class="app-cow" src="assets/app/cow_walk1.png" alt="The actual PixelHUD cow sprite"></div>
       </article>
-
-      <article class="feature-row">
-        <div class="feature-copy"><span class="feature-number">03 / UNLOCK</span><h3>Ordinary work. Legendary achievements.</h3><p>Close your first app. Finish four focus sessions. Reach level ten. PixelHUD notices the moments no to-do list celebrates.</p><ul><li>Unlockable achievements</li><li>Playful kill feed</li><li>Progress that feels personal</li></ul></div>
-        <figure class="feature-visual app-shot"><img src="assets/features/achievements.webp" alt="PixelHUD achievement cards" loading="lazy" decoding="async"><figcaption>The tiny wins deserve a little ceremony.</figcaption></figure>
+      <article class="shortcut-card" data-effect="pig">
+        <span class="shortcut-number">03</span><div class="shortcut-key"><kbd>⌘</kbd><b>+</b><kbd>V</kbd></div><span>Paste</span><h3>Spawn a pig.</h3><p>Paste something and the exact PixelHUD pig trots through your desktop.</p>
+        <div class="shortcut-stage mob-stage"><img class="app-pig" src="assets/app/pig_walk1.png" alt="The actual PixelHUD pig sprite"></div>
       </article>
-
-      <article class="feature-row reverse">
-        <div class="feature-copy"><span class="feature-number">04 / LISTEN</span><h3>Your soundtrack. Your discs.</h3><p>Drop your own local songs onto collectible pixel discs. No server, no account, no algorithm deciding the mood.</p><ul><li>Drag-and-drop local music</li><li>Collectible jukebox library</li><li>Your files stay on your Mac</li></ul></div>
-        <figure class="feature-visual app-shot"><img src="assets/features/jukebox.webp" alt="PixelHUD jukebox with colorful collectible discs" loading="lazy" decoding="async"><figcaption>Every world deserves a soundtrack.</figcaption></figure>
+      <article class="shortcut-card steve-card" data-effect="steve">
+        <span class="shortcut-number">04</span><span>Steve in the corner</span><h3>Follows your cursor.</h3><p>The exact skin and 3D construction from PixelHUD turn Steve into a tiny desktop companion. Move your cursor and try it.</p>
+        <div class="shortcut-stage steve-stage"><img src="assets/features/explosion.webp" alt="Steve in the actual PixelHUD desktop app"><div class="cursor-prompt">MOVE YOUR CURSOR <b>↙</b></div></div>
       </article>
-
-      <article class="feature-row">
-        <div class="feature-copy"><span class="feature-number">05 / TOGETHER</span><h3>Adventures are better with friends.</h3><p>Share your code, find your people and compare levels on a friendly leaderboard—without turning your workday into a competition.</p><ul><li>Personal friend codes</li><li>Friends leaderboard</li><li>Shared progress, zero pressure</li></ul></div>
-        <figure class="feature-visual app-shot"><img src="assets/features/friends.webp" alt="PixelHUD friends and leaderboard screen" loading="lazy" decoding="async"><figcaption>Your party, even when everyone works remotely.</figcaption></figure>
+      <article class="shortcut-card creeper-card" data-effect="creeper">
+        <span class="shortcut-number">05</span><div class="shortcut-key"><kbd>⌘</kbd><b>+</b><kbd>X</kbd></div><span>Cut</span><h3>Spawn a creeper.</h3><p>The app's pixel creeper approaches. Steve spots it—and starts nervously shaking his head.</p>
+        <div class="shortcut-stage creeper-stage"><img class="app-creeper" src="sprites/mob_creeper.png" alt="The actual PixelHUD creeper sprite"><div class="scared-note">STEVE: NOT OKAY</div></div>
       </article>
     </section>
 
-    <section class="moments">
-      <div class="moments-copy"><p class="section-kicker">And then there are the moments.</p><h2>Cut. Paste. <em>Boom.</em></h2><p>Pixel creatures wander through the edge of your screen. Sounds punctuate familiar shortcuts. A TNT blast turns Cmd+X into an event. Completely unnecessary—and exactly the point.</p></div>
-      <div class="moments-gallery"><img src="assets/features/explosion.webp" alt="A TNT-style PixelHUD explosion across the desktop" loading="lazy" decoding="async"><img src="assets/features/overlay.webp" alt="PixelHUD overlay with characters and HUD" loading="lazy" decoding="async"></div>
+    <section class="feature-story exact-features">
+      <article class="feature-row">
+        <div class="feature-copy"><span class="feature-number">06 / HEARTS</span><h3>See exactly how much battery is left.</h3><p>The heart containers in the app are your battery—drawn here from the exact same 7×6 pixel grid and colors as PixelHUD itself.</p><ul><li>9 hearts map to battery percentage</li><li>Full, half and empty states</li><li>Low battery finally feels urgent</li></ul></div>
+        <figure class="feature-visual native-hud-visual"><div class="native-hud-panel"><div class="native-hearts" data-fill="7.5" aria-label="The exact PixelHUD battery hearts"></div><div class="native-xp"><span></span></div><small>BATTERY 83% · LEVEL 14 · 7,642 XP</small><div class="native-hunger" data-fill="6" aria-label="The exact PixelHUD hunger icons"></div></div><figcaption>Rendered from PixelHUD's HeartView and HungerBarView pixel data.</figcaption></figure>
+      </article>
+
+      <article class="feature-row reverse">
+        <div class="feature-copy"><span class="feature-number">07 / XP + JUKEBOX</span><h3>Type. Click. Level up your soundtrack.</h3><p>Every keystroke and click earns XP. New levels unlock music discs for your jukebox—bringing that Minecraft nostalgia back into your workday.</p><ul><li>XP for typing and clicking</li><li>Music discs unlock as you level</li><li>Add your own local songs</li></ul></div>
+        <figure class="feature-visual jukebox-composite"><img class="jukebox-screen" src="assets/features/jukebox.webp" alt="The current PixelHUD jukebox screen" loading="lazy"><img class="jukebox-sprite" src="assets/app/jukebox_playing.png" alt="The actual playing jukebox sprite bundled with PixelHUD" loading="lazy"><figcaption>The current jukebox screen and the exact in-app playing sprite.</figcaption></figure>
+      </article>
+
+      <article class="feature-row">
+        <div class="feature-copy"><span class="feature-number">08 / LUNCH</span><h3>Hunger tells you when to take lunch.</h3><p>The drumsticks slowly empty through your day. When the bar gets low, it is time to stop grinding and eat something real.</p><ul><li>9 exact in-app hunger icons</li><li>Gradual workday countdown</li><li>Triple-click to refill after lunch</li></ul></div>
+        <figure class="feature-visual lunch-visual"><div class="lunch-clock"><span>12:31</span><small>LUNCH QUEST AVAILABLE</small></div><div class="native-hunger large" data-fill="2.5"></div><img src="assets/features/desktop-hud.webp" alt="PixelHUD hunger bar on the dynamic desktop" loading="lazy"><figcaption>Your desktop tells you when it is time to step away.</figcaption></figure>
+      </article>
+
+      <article class="feature-row reverse">
+        <div class="feature-copy"><span class="feature-number">09 / DYNAMIC WORLD</span><h3>Your wallpaper changes with the day.</h3><p>PixelHUD's landscape lives behind your windows—sun, clouds, hills, trees and wandering creatures shifting from daylight into night.</p><ul><li>Dynamic day and night</li><li>Animated clouds and creatures</li><li>The actual PixelHUD desktop world</li></ul></div>
+        <figure class="feature-visual wallpaper-pair"><img src="assets/features/desktop-hud.webp" alt="PixelHUD dynamic wallpaper during the day" loading="lazy"><img src="assets/features/overlay.webp" alt="PixelHUD dynamic wallpaper and HUD at night" loading="lazy"><figcaption>One desktop. A world that moves through the day with you.</figcaption></figure>
+      </article>
+
+      <article class="feature-row">
+        <div class="feature-copy"><span class="feature-number">10 / FRIENDS ONLINE</span><h3>See who is online.</h3><p>Your friends tab shows the people in your PixelHUD world, their level and XP—with live activity used to show who is around now.</p><ul><li>Friend codes and profiles</li><li>Online presence</li><li>Shared leaderboard progress</li></ul></div>
+        <figure class="feature-visual friends-online"><img src="assets/features/friends.webp" alt="The current PixelHUD friends screen" loading="lazy"><div class="online-list"><span><i></i>YOU · ONLINE</span><span><i></i>ALEX · ONLINE</span><span class="offline"><i></i>SAM · 2H AGO</span></div><figcaption>The current friends screen, with live presence made explicit.</figcaption></figure>
+      </article>
+
+      <article class="feature-row reverse">
+        <div class="feature-copy"><span class="feature-number">11 / YOUR SIZE</span><h3>Make Steve your size.</h3><p>A simple slider in PixelHUD's menu scales Steve up or down. Keep him subtle—or give him the screen presence he thinks he deserves.</p><ul><li>Live Steve size slider</li><li>Small companion to desktop giant</li><li>Your setting is remembered</li></ul></div>
+        <figure class="feature-visual size-control"><div class="size-steves"><div class="skin-preview small-steve"></div><div class="skin-preview medium-steve"></div><div class="skin-preview large-steve"></div></div><label>STEVE: <output id="steveScaleOutput">1.0×</output><input id="steveScale" type="range" min="0.5" max="3" step="0.1" value="1"></label><figcaption>Drag the real control here. The corner Steve changes size too.</figcaption></figure>
+      </article>
     </section>
 
     <section class="trust">
