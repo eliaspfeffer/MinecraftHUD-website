@@ -76,7 +76,7 @@ const mobFrames={cow:['assets/app/cow_walk1.png','assets/app/cow_walk2.png'],pig
 Object.entries(mobFrames).forEach(([mob,frames])=>document.querySelectorAll(`.app-${mob}`).forEach(img=>{let n=0;setInterval(()=>{n=1-n;img.src=frames[n]},260)}));
 
 let audioUnlocked=false;
-const playCardSound=card=>{const audio=card?.querySelector('audio');if(!audio||!audioUnlocked)return false;const sound=audio.cloneNode();sound.volume=.65;sound.play().catch(()=>{});return true};
+const playCardSound=card=>{const audio=card?.querySelector('audio');if(!audio||!audioUnlocked)return false;const sound=audio.cloneNode();sound.volume=card.dataset.effect==='tnt'?.6:.65;sound.play().catch(()=>{});return true};
 document.querySelectorAll('#features .shortcut-card[data-effect="cow"],#features .shortcut-card[data-effect="pig"]').forEach(card=>{const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting)return;card.classList.remove('mob-visible');void card.offsetWidth;card.classList.add('mob-visible')}),{threshold:.55});observer.observe(card)});
 
 const bindCardHoverSound=root=>root.querySelectorAll('.shortcut-card:not([data-effect="tnt"])').forEach(card=>card.addEventListener('pointerenter',()=>playCardSound(card)));
