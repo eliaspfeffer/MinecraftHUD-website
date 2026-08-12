@@ -125,11 +125,11 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .hud-meaning-row{position:relative;display:block;min-height:660px;padding-block:110px}
 .hud-meaning-row>.feature-copy{position:absolute;z-index:2;max-width:430px}
 .hud-meaning-row>.feature-copy:first-child{left:0;top:85px}
-.hud-meaning-row>.xp-meaning{left:50%;top:calc(50% - 122px);transform:translate(-50%,-100%);max-width:none;text-align:center}
-.hud-meaning-row>.xp-meaning h3{font-size:clamp(15px,1.35vw,23px);letter-spacing:-.4px}
+.hud-meaning-visual>.xp-meaning{max-width:none;text-align:center}
+.hud-meaning-visual>.xp-meaning h3{margin:0;font-size:clamp(15px,1.35vw,23px);line-height:1;letter-spacing:-.4px}
 .hud-meaning-row>.hunger-meaning{right:0;bottom:85px;text-align:right}
 .hud-meaning-row>.feature-copy h3{white-space:nowrap;font-size:clamp(32px,3.4vw,58px)}
-.hud-meaning-visual{height:440px;display:grid;place-items:center;padding:100px 80px}
+.hud-meaning-visual{height:440px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 80px}
 .hud-meaning-visual img{width:min(100%,780px);height:auto;aspect-ratio:auto;object-fit:contain;background:#08130c;border:1px solid #3e5241;box-shadow:16px 16px 0 #09130b}
 .feature-number{color:#87a376}
 .feature-copy h3{font-size:clamp(38px,4vw,68px);line-height:1.02;letter-spacing:-3px;margin:24px 0}
@@ -361,7 +361,7 @@ footer>p{text-align:center}
   .hud-meaning-row{min-height:500px;padding-block:80px}
   .hud-meaning-row>.feature-copy{max-width:75%}
   .hud-meaning-row>.feature-copy:first-child{top:55px}
-  .hud-meaning-row>.xp-meaning{top:calc(50% - 72px);width:100%;max-width:100%}
+  .hud-meaning-visual>.xp-meaning{width:100%;max-width:100%}
   .hud-meaning-row>.hunger-meaning{bottom:55px}
   .hud-meaning-visual{height:340px;padding:100px 0}
   .lunch-clock span{font-size:46px}
