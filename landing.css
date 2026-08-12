@@ -310,7 +310,7 @@ footer>p{text-align:center}
 .size-control input{width:100%;margin-top:14px;accent-color:#7dff00}
 .size-control figcaption{color:#203b24}
 .feature-visual figcaption{position:relative;z-index:4}
-#corner-steve.nervous{animation:cornerPanic .08s steps(2) infinite}
+#corner-steve.nervous{animation:cornerPanic .32s steps(2) infinite}
 .steve-wrap{transform-origin:bottom left}
 @keyframes appMobWalk{from{right:-30%;transform:scaleX(1)}to{right:110%;transform:scaleX(1)}}
 @keyframes creeperApproach{0%{right:-18%;transform:translateY(0)}65%,100%{right:70%;transform:translateY(-4px)}}
