@@ -76,11 +76,11 @@ const mobFrames={cow:['assets/app/cow_walk1.png','assets/app/cow_walk2.png'],pig
 Object.entries(mobFrames).forEach(([mob,frames])=>document.querySelectorAll(`.app-${mob}`).forEach(img=>{let n=0;setInterval(()=>{n=1-n;img.src=frames[n]},260)}));
 
 let audioUnlocked=false;
-const playCardSound=card=>{const audio=card?.querySelector('audio');if(!audio||!audioUnlocked)return;const sound=audio.cloneNode();sound.volume=.65;sound.play().catch(()=>{})};
+const playCardSound=card=>{const audio=card?.querySelector('audio');if(!audio||!audioUnlocked)return false;const sound=audio.cloneNode();sound.volume=.65;sound.play().catch(()=>{});return true};
 document.querySelectorAll('#features .shortcut-card[data-effect="cow"],#features .shortcut-card[data-effect="pig"]').forEach(card=>{const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting)return;card.classList.remove('mob-visible');void card.offsetWidth;card.classList.add('mob-visible')}),{threshold:.55});observer.observe(card)});
 
 const bindCardHoverSound=root=>root.querySelectorAll('.shortcut-card:not([data-effect="tnt"])').forEach(card=>card.addEventListener('pointerenter',()=>playCardSound(card)));
-const bindTntHoverSound=root=>root.querySelectorAll('.shortcut-card[data-effect="tnt"]').forEach(card=>card.addEventListener('pointerenter',()=>playCardSound(card)));
+const bindTntHoverSound=root=>root.querySelectorAll('.shortcut-card[data-effect="tnt"]').forEach(card=>card.addEventListener('pointerenter',()=>{if(card.dataset.tntSoundPlayed==='true')return;if(playCardSound(card))card.dataset.tntSoundPlayed='true'}));
 
 document.querySelectorAll('#features .shortcut-card').forEach(card=>{card.addEventListener('pointermove',event=>{const r=card.getBoundingClientRect(),x=(event.clientX-r.left)/r.width-.5,y=(event.clientY-r.top)/r.height-.5;card.style.setProperty('--tilt-x',`${(-y*8).toFixed(2)}deg`);card.style.setProperty('--tilt-y',`${(x*10).toFixed(2)}deg`)});card.addEventListener('pointerleave',()=>{card.style.setProperty('--tilt-x','0deg');card.style.setProperty('--tilt-y','0deg')})});
 
