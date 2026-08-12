@@ -192,8 +192,18 @@ footer>p{text-align:center}
 .authentic-hero-shot img{width:100%;aspect-ratio:16/10;object-fit:cover}
 .authentic-hero-shot>span{position:absolute;left:18px;bottom:18px;padding:10px 12px;background:#0b0e0c;color:var(--green);font:8px/1 var(--pixel);letter-spacing:.6px}
 .demo-label{margin-top:24px}
+.hero-demo{min-height:620px;display:grid;place-items:center}
+.hero-card-stack{position:relative;width:min(27vw,330px);height:470px;transform:translateY(45px)}
+.hero-stack-card{--fan-angle:calc((var(--stack-i) - 2.5) * 8deg);--fan-x:calc((var(--stack-i) - 2.5) * 34px);position:absolute!important;inset:0!important;width:100%;min-height:470px!important;padding:25px 23px 22px!important;grid-column:auto!important;pointer-events:auto;transform-origin:50% 115%;transform:translateX(var(--fan-x)) rotate(var(--fan-angle))!important;box-shadow:0 24px 50px rgba(0,0,0,.5);transition:transform .65s cubic-bezier(.2,.9,.2,1),filter .3s;filter:brightness(calc(.72 + var(--stack-i) * .055));z-index:calc(var(--stack-i) + 1)}
+.hero-stack-card:hover{transform:translateX(var(--fan-x)) translateY(-65px) rotate(var(--fan-angle))!important;filter:brightness(1);z-index:20}
+.hero-stack-card .shortcut-key{transform:scale(.78);transform-origin:left top;margin-bottom:10px}
+.hero-stack-card h3{font-size:30px}
+.hero-stack-card .shortcut-stage{margin-inline:-23px;margin-bottom:-22px;min-height:165px}
+.hero-stack-card .cursor-prompt{display:none}
+.hero-stack-card .feature-steve-wrap{transform:translateX(-50%) scale(.58)}
 .shortcut-lab{padding:140px clamp(24px,8vw,150px);background:var(--deep);color:#fff;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}
-.shortcut-card{position:relative;grid-column:span 2;min-height:550px;padding:34px 30px 28px;border:1px solid #3b503e;background:#172319;overflow:hidden;display:flex;flex-direction:column}
+.shortcut-card{position:relative;grid-column:span 2;min-height:550px;padding:34px 30px 28px;border:1px solid #3b503e;background:#172319;overflow:hidden;display:flex;flex-direction:column;transform:perspective(900px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));transition:transform .18s ease,box-shadow .18s ease;transform-style:preserve-3d}
+.shortcut-card:hover{box-shadow:0 30px 55px rgba(0,0,0,.28)}
 .shortcut-card:nth-child(4),.shortcut-card:nth-child(5){grid-column:span 2;min-height:550px}
 .shortcut-card:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(184,255,56,.05),transparent 45%);pointer-events:none}
 .shortcut-number{position:absolute;right:24px;top:26px;color:#758579!important;font:10px/1 var(--pixel)!important}
@@ -205,7 +215,7 @@ footer>p{text-align:center}
 .shortcut-card>p{color:#aeb9af;line-height:1.55;margin-bottom:26px}
 .shortcut-stage{position:relative;margin:auto -30px -28px;min-height:190px;background:#0b100d;border-top:1px solid #344637;overflow:hidden}
 .mob-stage{background:linear-gradient(#77badd 0 70%,#547f3e 70% 82%,#54402f 82%)}
-.mob-stage img{position:absolute;right:-28%;bottom:17px;width:auto;height:112px;max-width:none;image-rendering:pixelated;transform:scaleX(-1);animation:appMobWalk 5.8s linear infinite}
+.mob-stage img{position:absolute;right:-28%;bottom:17px;width:auto;height:112px;max-width:none;image-rendering:pixelated;animation:appMobWalk 5.8s linear infinite}
 .mob-stage .app-pig{height:98px;animation-delay:-2.7s}
 .tnt-stage{min-height:230px;background:radial-gradient(circle,#2a342c,#080b09)}
 .tnt-stage video{display:none}
@@ -218,10 +228,10 @@ footer>p{text-align:center}
 .creeper-stage{background:linear-gradient(#6a9bc1 0 67%,#426b35 67% 82%,#51402f 82%)}
 .app-creeper{position:absolute;right:-18%;bottom:18px;display:grid;grid-template-columns:repeat(9,7px);grid-template-rows:repeat(17,7px);width:63px!important;height:119px!important;animation:creeperApproach 5.8s ease-in-out infinite;filter:drop-shadow(8px 12px 0 rgba(0,0,0,.18))}
 .app-creeper i{display:block;width:7px;height:7px}
-.villager-stage{display:grid;place-items:center;background:linear-gradient(150deg,#835d3a,#392d26)}
-.villager-play{border:2px solid #efe3c1;background:#241d19;color:#efe3c1;padding:16px 18px;font:700 12px/1 var(--sans);letter-spacing:.08em;cursor:pointer;box-shadow:6px 6px 0 #15110f}
-.villager-play.playing{transform:translate(3px,3px);box-shadow:3px 3px 0 #15110f;background:#4d382a}
-.scared-note{position:absolute;right:20px;top:20px;padding:11px;background:#891b19;color:#fff;font:8px/1 var(--pixel);opacity:0;animation:scaredBlink 5s steps(1) infinite}
+.villager-stage{display:grid;place-items:center;background:#241d19}
+.villager-image{width:100%;height:100%;object-fit:cover;cursor:pointer;transition:transform .2s,filter .2s}
+.villager-image:hover{transform:scale(1.035)}
+.villager-image.playing{filter:brightness(1.25);transform:scale(1.06)}
 .creeper-card:hover .app-creeper{animation-duration:1.8s}
 .creeper-card:hover .scared-note{opacity:1;animation:none}
 .native-hud-visual{min-height:380px;display:grid;place-items:center;background:linear-gradient(135deg,#7eafdd,#516f80);border:1px solid #3e5241;box-shadow:20px 20px 0 #09130b}
@@ -270,16 +280,19 @@ footer>p{text-align:center}
 .feature-visual figcaption{position:relative;z-index:4}
 #corner-steve.nervous{animation:cornerPanic .08s steps(2) infinite}
 .steve-wrap{transform-origin:bottom left}
-@keyframes appMobWalk{from{right:-30%;transform:scaleX(-1)}to{right:110%;transform:scaleX(-1)}}
+@keyframes appMobWalk{from{right:-30%;transform:scaleX(1)}to{right:110%;transform:scaleX(1)}}
 @keyframes creeperApproach{0%{right:-18%;transform:translateY(0)}65%,100%{right:70%;transform:translateY(-4px)}}
 @keyframes scaredBlink{0%,62%{opacity:0}63%,92%{opacity:1}93%,100%{opacity:0}}
 @keyframes cornerPanic{50%{transform:translateX(7px)}}
 @media(max-width:1050px){
+  .hero-card-stack{width:290px;transform:translate(-25px,45px)}
   .shortcut-lab{grid-template-columns:repeat(2,minmax(0,1fr))}
   .shortcut-card,.shortcut-card:nth-child(4),.shortcut-card:nth-child(5){grid-column:span 1}
   .native-hud-visual,.lunch-visual,.size-control{box-shadow:12px 12px 0 #09130b}
 }
 @media(max-width:650px){
+  .hero-demo{min-height:480px;overflow:hidden}
+  .hero-card-stack{width:230px;height:380px;transform:translate(-10px,45px) scale(.82)}
   .authentic-hero-shot{transform:none;box-shadow:10px 12px 0 rgba(184,255,56,.08)}
   .shortcut-lab{grid-template-columns:1fr;padding:0 20px 90px}
   .shortcut-card,.shortcut-card:nth-child(4),.shortcut-card:nth-child(5),.shortcut-card:last-child{grid-column:1;min-height:500px}

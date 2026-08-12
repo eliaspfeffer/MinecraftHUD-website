@@ -11,6 +11,9 @@ skip.addEventListener('click',finishIntro);
 
 document.querySelectorAll('details').forEach(item=>item.addEventListener('toggle',()=>{if(item.open)document.querySelectorAll('details').forEach(other=>{if(other!==item)other.open=false})}));
 
+// Build the hero fan from the real shortcut cards so their content has one source of truth.
+const heroCardStack=document.getElementById('heroCardStack');
+
 (function buildCornerSteve(){
  const container=document.getElementById('steveModel');if(!container)return;const S=3,SKIN='assets/app/steve_skin.png';
  function faceStyle(ux,uy,uw,uh,w,h){const sx=(w/(uw*S))*64*S,sy=(h/(uh*S))*64*S;return`background-image:url('${SKIN}');background-size:${sx}px ${sy}px;background-position:${-(ux*S*(w/(uw*S)))}px ${-(uy*S*(h/(uh*S)))}px;image-rendering:pixelated;`}
@@ -65,7 +68,11 @@ Object.entries(mobFrames).forEach(([mob,frames])=>{const img=document.querySelec
 const creeperGrid=['...GGG...','..GGGGG..','.GGGGGGG.','GGGGGGGGG','GG.G.G.GG','GG.G.G.GG','GGGGGGGGG','GG.GGG.GG','GGG.G.GGG','.GGGGGGG.','.GGGGGGG.','.GGGGGGG.','.GGGGGGG.','GG..G..GG','GG..G..GG','GG..G..GG','GG..G..GG'];
 document.querySelectorAll('.app-creeper').forEach(creeper=>{creeperGrid.forEach((row,y)=>[...row].forEach((cell,x)=>{const px=document.createElement('i');if(cell==='G'){const face=(y===4||y===5)&&([2,3,5,6].includes(x))||(y===7&&[3,4,5].includes(x))||(y===8&&[2,6].includes(x));px.style.background=face?'#111':y<9?'rgb(115,186,51)':'rgb(56,115,20)'}creeper.appendChild(px)}))});
 
-document.querySelectorAll('.villager-play').forEach(button=>button.addEventListener('click',()=>{const audio=button.parentElement.querySelector('audio');audio.currentTime=0;audio.play();button.classList.add('playing');setTimeout(()=>button.classList.remove('playing'),900)}));
+document.addEventListener('click',event=>{const picture=event.target.closest('.villager-image');if(!picture)return;const audio=picture.parentElement.querySelector('audio');if(!audio)return;audio.currentTime=0;audio.play();picture.classList.add('playing');setTimeout(()=>picture.classList.remove('playing'),900)});
+
+document.querySelectorAll('#features .shortcut-card').forEach(card=>{card.addEventListener('pointermove',event=>{const r=card.getBoundingClientRect(),x=(event.clientX-r.left)/r.width-.5,y=(event.clientY-r.top)/r.height-.5;card.style.setProperty('--tilt-x',`${(-y*8).toFixed(2)}deg`);card.style.setProperty('--tilt-y',`${(x*10).toFixed(2)}deg`)});card.addEventListener('pointerleave',()=>{card.style.setProperty('--tilt-x','0deg');card.style.setProperty('--tilt-y','0deg')})});
 
 const sizeSlider=document.getElementById('steveScale'),sizeOutput=document.getElementById('steveScaleOutput'),steveWrap=document.querySelector('#corner-steve .steve-wrap');
 if(sizeSlider&&steveWrap){sizeSlider.addEventListener('input',()=>{const scale=Number(sizeSlider.value);sizeOutput.value=`${scale.toFixed(1)}×`;steveWrap.style.transform=`scale(${(.67*scale).toFixed(3)})`})}
+
+if(heroCardStack){document.querySelectorAll('#features .shortcut-card').forEach((card,index)=>{const clone=card.cloneNode(true);clone.classList.add('hero-stack-card');clone.style.setProperty('--stack-i',index);clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));heroCardStack.appendChild(clone)})}
