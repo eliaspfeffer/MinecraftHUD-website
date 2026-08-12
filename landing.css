@@ -108,6 +108,7 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .hud-meaning-row>.feature-copy{position:absolute;z-index:2;max-width:430px}
 .hud-meaning-row>.feature-copy:first-child{left:0;top:85px}
 .hud-meaning-row>.hunger-meaning{right:0;bottom:85px;text-align:right}
+.hud-meaning-row>.feature-copy h3{white-space:nowrap;font-size:clamp(32px,3.4vw,58px)}
 .hud-meaning-visual{height:440px;display:grid;place-items:center;padding:100px 80px}
 .hud-meaning-visual img{width:min(100%,780px);height:auto;aspect-ratio:auto;object-fit:contain;background:#08130c;border:1px solid #3e5241;box-shadow:16px 16px 0 #09130b}
 .feature-number{color:#87a376}
@@ -235,7 +236,7 @@ footer>p{text-align:center}
 .tnt-stage{min-height:230px;background:radial-gradient(circle,#2a342c,#080b09)}
 .tnt-stage video{display:none}
 .tnt-stage canvas{position:absolute;inset:0;width:100%;height:100%}
-.feature-steve-wrap{position:absolute;left:50%;bottom:8px;width:120px;height:192px;transform:translateX(-50%) scale(.72);transform-origin:bottom center;perspective:700px}
+.feature-steve-wrap{position:absolute;left:50%;bottom:8px;width:120px;height:192px;transform:translateX(-50%) scale(.8);transform-origin:bottom center;perspective:700px}
 .feature-steve-wrap .steve-model{position:absolute;inset:0;transform-style:preserve-3d}
 .cursor-prompt{position:absolute;right:18px;top:18px;color:#fff;background:#101311e6;padding:12px 14px;font:8px/1.5 var(--pixel)}
 .cursor-prompt b{font-size:24px;color:var(--green)}
