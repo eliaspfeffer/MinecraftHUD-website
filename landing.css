@@ -62,6 +62,9 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .xp-orbits img{position:absolute;left:-14px;top:-14px;width:28px;height:28px;min-width:28px;max-width:none;z-index:var(--depth);opacity:1;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(62,255,0,.95));animation:xpWander var(--duration) cubic-bezier(.37,.03,.63,.98) infinite;animation-delay:var(--delay)}
 .real-app-shot{padding:70px clamp(24px,5vw,80px);background:#090d0a}
 .real-app-shot img{display:block;width:min(45.6vw,704px);height:auto;margin:auto;border:1px solid #3c4d3f;box-shadow:20px 20px 0 rgba(184,255,56,.07)}
+.real-app-download{display:flex;justify-content:center;margin-top:42px;padding-bottom:22px;position:relative;z-index:3}
+.showcase-download{position:relative;display:inline-flex;overflow:visible}
+.showcase-download .button{min-height:42px;padding:0 20px;font-size:13px;box-shadow:4px 4px 0 #35520e}
 .text-link{text-decoration:none;border-bottom:1px solid #777;padding:12px 0;color:#ccc}
 .hero-meta{display:flex;gap:10px;flex-wrap:wrap}
 .hero-meta span{border:1px solid #343b35;padding:8px 12px;font-size:12px;color:#879087}
