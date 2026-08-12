@@ -64,9 +64,9 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .xp-download>.button{position:relative;z-index:2}
 .header-download{z-index:100;overflow:visible}
 .xp-orbits{position:absolute;left:50%;top:50%;width:1px;height:1px;z-index:110;pointer-events:none;overflow:visible}
-.xp-orbits img{position:absolute;left:-14px;top:-14px;width:28px;height:28px;z-index:110;opacity:1;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(62,255,0,.95));animation:xpWander var(--duration) cubic-bezier(.37,.03,.63,.98) infinite;animation-delay:var(--delay)}
+.xp-orbits img{position:absolute;left:-14px;top:-14px;width:28px;height:28px;min-width:28px;max-width:none;z-index:110;opacity:1;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(62,255,0,.95));animation:xpWander var(--duration) cubic-bezier(.37,.03,.63,.98) infinite;animation-delay:var(--delay)}
 .real-app-shot{padding:70px clamp(24px,5vw,80px);background:#090d0a}
-.real-app-shot img{display:block;width:min(100%,1600px);height:auto;margin:auto;border:1px solid #3c4d3f;box-shadow:20px 20px 0 rgba(184,255,56,.07)}
+.real-app-shot img{display:block;width:min(82vw,1280px);height:auto;margin:auto;border:1px solid #3c4d3f;box-shadow:20px 20px 0 rgba(184,255,56,.07)}
 .text-link{text-decoration:none;border-bottom:1px solid #777;padding:12px 0;color:#ccc}
 .hero-meta{display:flex;gap:10px;flex-wrap:wrap}
 .hero-meta span{border:1px solid #343b35;padding:8px 12px;font-size:12px;color:#879087}
