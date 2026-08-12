@@ -211,7 +211,7 @@ footer>p{text-align:center}
 .hero-demo{min-height:620px;display:grid;place-items:center}
 .hero-card-stack{position:relative;width:min(27vw,330px);height:470px;transform:translateY(-35px)}
 .hero-stack-card{--fan-angle:calc((var(--stack-i) - 2.5) * 8deg);--fan-x:calc((var(--stack-i) - 2.5) * 34px);position:absolute!important;inset:0!important;width:100%;min-height:470px!important;padding:25px 23px 22px!important;grid-column:auto!important;pointer-events:auto;transform-origin:50% 115%;transform:translateX(var(--fan-x)) rotate(var(--fan-angle))!important;box-shadow:0 24px 50px rgba(0,0,0,.5);transition:transform .65s cubic-bezier(.2,.9,.2,1),filter .3s;filter:brightness(calc(1 - var(--stack-i) * .045));z-index:calc(6 - var(--stack-i))}
-.hero-stack-card:hover{transform:translateX(var(--fan-x)) translateY(-65px) rotate(var(--fan-angle))!important;filter:brightness(1);z-index:20}
+.hero-stack-card:hover{transform:translateX(var(--fan-x)) rotate(var(--fan-angle)) scale(1.035)!important;filter:brightness(1);z-index:20}
 .hero-stack-card .shortcut-key{transform:scale(.78);transform-origin:left top;margin-bottom:10px}
 .hero-stack-card h3{font-size:30px}
 .hero-stack-card .shortcut-stage{margin-inline:-23px;margin-bottom:-22px;min-height:165px}
