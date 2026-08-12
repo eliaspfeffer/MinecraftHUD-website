@@ -215,8 +215,12 @@ footer>p{text-align:center}
 .shortcut-card>p{color:#aeb9af;line-height:1.55;margin-bottom:26px}
 .shortcut-stage{position:relative;margin:auto -30px -28px;min-height:190px;background:#0b100d;border-top:1px solid #344637;overflow:hidden}
 .mob-stage{background:linear-gradient(#77badd 0 70%,#547f3e 70% 82%,#54402f 82%)}
-.mob-stage img{position:absolute;right:-28%;bottom:17px;width:auto;height:112px;max-width:none;image-rendering:pixelated;animation:appMobWalk 5.8s linear both;animation-play-state:paused}
+.mob-stage img{position:absolute;right:-28%;bottom:17px;width:auto;height:112px;max-width:none;image-rendering:pixelated;animation:appMobWalk 5.8s linear infinite;animation-play-state:paused}
 .shortcut-card.mob-visible .mob-stage img{animation-play-state:running}
+.hero-stack-card[data-effect="cow"] .mob-stage img{animation-play-state:running}
+.hero-card-stack:has(.hero-stack-card:hover) .hero-stack-card[data-effect="cow"] .mob-stage img{animation-play-state:paused}
+.hero-card-stack:has(.hero-stack-card[data-effect="cow"]:hover) .hero-stack-card[data-effect="cow"] .mob-stage img{animation-play-state:running}
+.hero-stack-card[data-effect="cow"]:hover .mob-stage img,.hero-stack-card[data-effect="pig"]:hover .mob-stage img,.hero-stack-card[data-effect="cow"]:focus-within .mob-stage img,.hero-stack-card[data-effect="pig"]:focus-within .mob-stage img{animation-play-state:running}
 .mob-stage .app-pig{height:98px}
 .tnt-stage{min-height:230px;background:radial-gradient(circle,#2a342c,#080b09)}
 .tnt-stage video{display:none}
