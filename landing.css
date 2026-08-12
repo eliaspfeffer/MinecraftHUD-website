@@ -118,6 +118,7 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .feature-copy li:before{content:"+";color:var(--green);margin-right:12px}
 .feature-visual{margin:0;position:relative}
 .feature-visual img{width:100%;border:1px solid #3e5241;box-shadow:20px 20px 0 #09130b;object-fit:cover;aspect-ratio:16/10}
+.feature-visual.hud-meaning-visual img{display:block;width:min(100%,782px);height:auto;aspect-ratio:782/102;object-fit:contain;object-position:center;background:#08130c}
 .feature-visual figcaption{font-family:var(--pixel);font-size:7px;color:#7f9b83;margin-top:22px;letter-spacing:.5px}
 .world-shot img{filter:saturate(.85) contrast(1.06)}
 .moments{display:grid;grid-template-columns:.75fr 1.25fr;gap:7vw;padding:150px clamp(24px,8vw,150px);background:#e6dfcf}
