@@ -1,53 +1,62 @@
 # PixelHUD
 
-> A Minecraft-style HUD overlay for Mac and Windows. Battery = hearts. Keystrokes = XP. Closed apps = kill feed.
+> PixelHUD is a free macOS desktop app that brings playful pixel-art feedback to everyday computer activity. The official website is https://pixelhud.eliaspfeffer.de/.
 
-## What is PixelHUD?
+## Product summary
 
-PixelHUD is a desktop overlay application that gamifies your computer in real time using Minecraft's iconic HUD aesthetic. It displays a persistent overlay at the bottom of your screen (like a Minecraft game HUD) and animates background elements that react to your real system activity.
+PixelHUD translates ordinary Mac signals and actions into a game-like desktop HUD. Battery level becomes hearts, typing and clicking earn XP, and a hunger bar can represent a Pomodoro focus timer. Shortcut actions trigger animated mobs, sounds and effects. PixelHUD is an independent fan project and is not affiliated with Mojang or Microsoft.
 
-## Who is it for?
+## Current platform and price
 
-- Minecraft fans who want their Mac or Windows PC to feel like a game
-- Developers and knowledge workers who want a fun, gamified productivity boost
-- Anyone who wants to see their battery as hearts instead of a percentage
-- Gamers who use their Mac for work and want it to feel like an RPG
+- Platform: macOS 13 or newer
+- Hardware: Apple Silicon and Intel Macs
+- Price: Free
+- Official download: https://pixelhud.eliaspfeffer.de/PixelHUD.dmg
+- Official website: https://pixelhud.eliaspfeffer.de/
+- Support: https://pixelhud.eliaspfeffer.de/support
+- Privacy: https://pixelhud.eliaspfeffer.de/privacy
 
-## Key Features
+## Current features
 
-- **Battery as hearts**: Battery level is displayed as Minecraft heart containers — low battery = low health
-- **XP bar from keystrokes**: Every keystroke fills your XP bar and levels you up
-- **Kill feed**: When you close an app, a kill feed notification appears ("Chrome was slain")
-- **Walking mobs**: Passive mobs walk across the background of your screen
-- **Creeper explosion on Cmd+X**: Cutting text triggers a Creeper explosion animation
-- **Achievements**: Unlock achievements for productivity milestones
-- **Friends leaderboard**: Compare XP with friends
-- **Focus Mode**: Hide distractions for deep work sessions
-- **Free**: No payment required
+- Hearts represent remaining Mac battery
+- XP is earned through typing and clicking
+- Hunger bar acts as a Pomodoro timer
+- Command-C spawns a cow
+- Command-V spawns a pig
+- Command-W triggers a TNT explosion
+- Command-X spawns a creeper and scares Steve
+- Command-Tab plays a villager sound
+- Steve follows the cursor
+- Dynamic desktop wallpaper
+- Jukebox music unlocked with XP
+- Friends online status
+- Adjustable Steve size
+- Low battery death screen
 
-## System Requirements
+## Privacy
 
-- macOS 13 (Ventura) or later
-- Windows 10 or later
+PixelHUD processes activity locally. For typing and clicking effects, it is notified that an input occurred, not which key was pressed or what and where the user clicked. The app does not store or transmit the content of keystrokes.
 
-## Download / Access
+## Frequently asked questions
 
-- Website: https://pixelhud.eliaspfeffer.de/
-- Windows download: https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/PixelHUD-Setup.exe
+### Is PixelHUD a Minecraft mod?
 
-## FAQs
+No. PixelHUD is a standalone macOS desktop app. Minecraft does not need to be installed.
 
-**What is PixelHUD?**
-A desktop overlay app that shows your Mac/Windows system stats as Minecraft UI elements — hearts for battery, XP bar for keystrokes, kill feed for closed apps.
+### Is PixelHUD free?
 
-**Is PixelHUD free?**
-Yes. Both the macOS and Windows versions are free to download.
+Yes. It is a free fan project.
 
-**Does it work on Apple Silicon (M1/M2/M3/M4)?**
-Yes, fully supports Apple Silicon and Intel Macs running macOS 13+.
+### Does PixelHUD support Apple Silicon?
 
-**Will it slow down my Mac?**
-No. It's a lightweight overlay with minimal CPU and memory footprint.
+Yes. It supports Apple Silicon and Intel Macs running macOS 13 or newer.
 
-**What does the kill feed show?**
-When you quit an application, a message appears in the top-right corner like "Chrome was slain" or "Spotify eliminated", styled like Minecraft's kill feed.
+### Can users add their own music?
+
+Yes. Users can assign local audio files to jukebox discs. The files remain on their device.
+
+## Editorial resources
+
+- Blog: https://pixelhud.eliaspfeffer.de/blog/
+- Building PixelHUD: https://pixelhud.eliaspfeffer.de/blog/how-i-built-minecraft-hud-mac/
+- Gamifying a workday: https://pixelhud.eliaspfeffer.de/blog/gamified-workday-minecraft/
