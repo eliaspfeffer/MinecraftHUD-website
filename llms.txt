@@ -32,7 +32,7 @@ PixelHUD is a desktop overlay application that gamifies your computer in real ti
 
 ## Download / Access
 
-- Website: https://minecrafthud.eliaspfeffer.de/
+- Website: https://pixelhud.eliaspfeffer.de/
 - Windows download: https://github.com/eliaspfeffer/MinecraftHUD-releases/releases/latest/download/PixelHUD-Setup.exe
 
 ## FAQs

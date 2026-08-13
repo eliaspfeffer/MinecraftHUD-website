@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://minecrafthud.eliaspfeffer.de/sitemap.xml
+Sitemap: https://pixelhud.eliaspfeffer.de/sitemap.xml
