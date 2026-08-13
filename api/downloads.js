@@ -11,10 +11,11 @@ export default async function handler(req, res) {
       const ua = req.headers['user-agent'] || '';
       if (!/bot|crawl|spider|prerender|lighthouse/i.test(ua)) {
         const source = typeof req.body?.source === 'string' ? req.body.source.slice(0, 40) : 'website';
-        await fetch(`${SUPABASE_URL}/rest/v1/minecrafthud_downloads`, {
+        const insertResponse = await fetch(`${SUPABASE_URL}/rest/v1/minecrafthud_downloads`, {
           method: 'POST', headers: { ...headers, Prefer: 'return=minimal' },
           body: JSON.stringify({ source }),
         });
+        if (!insertResponse.ok) throw new Error(`Download insert failed: ${insertResponse.status}`);
       }
     } else if (req.method !== 'GET') {
       return res.status(405).json({ error: 'Method not allowed' });
@@ -25,6 +26,7 @@ export default async function handler(req, res) {
     });
     const range = countResponse.headers.get('content-range') || '*/0';
     const count = Number(range.split('/')[1]) || 0;
+    if (!countResponse.ok) throw new Error(`Download count failed: ${countResponse.status}`);
     return res.status(200).json({ count, configured: true });
   } catch (_) {
     return res.status(200).json({ count: 0, configured: false });
