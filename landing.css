@@ -179,6 +179,8 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 footer{background:#080a09;color:#fff;padding:70px clamp(24px,5vw,80px);display:grid;grid-template-columns:1fr 1.5fr 1fr;align-items:center;gap:30px}
 footer>p{margin:0;color:#777;text-align:center}
 footer>div{display:flex;justify-content:flex-end;gap:20px}
+.download-count{grid-column:1/-1!important;font-family:var(--pixel);font-size:10px!important;line-height:1.8;color:#8c968e!important}
+.download-count strong{color:var(--green);font-size:18px}
 footer small{grid-column:1/-1;padding-top:30px;border-top:1px solid #222;color:#555;text-align:center}
 #corner-steve{position:fixed;bottom:56px;left:18px;z-index:70;pointer-events:none;transition:transform .3s}
 .steve-wrap{width:80px;height:128px;perspective:500px;perspective-origin:50% 20%;transform:scale(.67);transform-origin:bottom left}

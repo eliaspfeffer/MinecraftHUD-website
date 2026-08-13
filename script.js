@@ -12,6 +12,11 @@ skip.addEventListener('click',finishIntro);
 
 document.querySelectorAll('details').forEach(item=>item.addEventListener('toggle',()=>{if(item.open)document.querySelectorAll('details').forEach(other=>{if(other!==item)other.open=false})}));
 
+const downloadCount=document.getElementById('downloadCount');
+function showDownloadCount(count){if(downloadCount)downloadCount.textContent=new Intl.NumberFormat('en-US').format(count)}
+fetch('/api/downloads').then(r=>r.json()).then(data=>showDownloadCount(data.count)).catch(()=>{});
+document.addEventListener('click',event=>{const link=event.target.closest('a[download][href$="PixelHUD.dmg"]');if(!link)return;fetch('/api/downloads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:link.closest('header')?'header':link.closest('.cta-section')?'cta':link.closest('.real-app-shot')?'screenshot':'hero'}),keepalive:true}).then(r=>r.json()).then(data=>showDownloadCount(data.count)).catch(()=>{})});
+
 // Build the hero fan from the real shortcut cards so their content has one source of truth.
 const heroCardStack=document.getElementById('heroCardStack');
 const realAppDownload=document.getElementById('realAppDownload'),headerDownload=document.querySelector('.header-download');if(realAppDownload&&headerDownload){const clone=headerDownload.cloneNode(true);clone.className='xp-download showcase-download';clone.querySelector('.button').textContent='Download for Mac';const swarm=clone.querySelector('.cursor-xp-swarm');swarm.className='xp-orbits';swarm.replaceChildren();realAppDownload.appendChild(clone)}
