@@ -70,6 +70,7 @@ h1 em,h2 em{font-family:Georgia,serif;font-weight:400;color:var(--green)}
 .text-link{text-decoration:none;border-bottom:1px solid #777;padding:12px 0;color:#ccc}
 .hero-meta{display:flex;gap:10px;flex-wrap:wrap}
 .hero-meta span{border:1px solid #343b35;padding:8px 12px;font-size:12px;color:#879087}
+.hero-meta strong{color:var(--green);font-weight:700}
 .mac-window{border:1px solid #465047;background:#171c18;box-shadow:0 35px 100px rgba(0,0,0,.55),16px 16px 0 rgba(184,255,56,.1);transform:perspective(1200px) rotateY(-4deg) rotateX(2deg)}
 .window-bar{height:38px;border-bottom:1px solid #343c35;display:flex;align-items:center;padding:0 14px;gap:7px;font-size:10px;color:#727a73}
 .window-bar i{width:10px;height:10px;border-radius:50%;background:#525952}

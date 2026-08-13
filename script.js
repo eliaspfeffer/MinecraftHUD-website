@@ -12,8 +12,8 @@ skip.addEventListener('click',finishIntro);
 
 document.querySelectorAll('details').forEach(item=>item.addEventListener('toggle',()=>{if(item.open)document.querySelectorAll('details').forEach(other=>{if(other!==item)other.open=false})}));
 
-const downloadCount=document.getElementById('downloadCount');
-function showDownloadCount(count){if(downloadCount)downloadCount.textContent=new Intl.NumberFormat('en-US').format(count)}
+const downloadCount=document.getElementById('downloadCount'),heroDownloadCount=document.getElementById('heroDownloadCount');
+function showDownloadCount(count){const formatted=new Intl.NumberFormat('en-US').format(count);if(downloadCount)downloadCount.textContent=formatted;if(heroDownloadCount)heroDownloadCount.textContent=formatted}
 fetch('/api/downloads').then(r=>r.json()).then(data=>showDownloadCount(data.count)).catch(()=>{});
 document.addEventListener('click',event=>{const link=event.target.closest('a[download][href$="PixelHUD.dmg"]');if(!link)return;fetch('/api/downloads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:link.closest('header')?'header':link.closest('.cta-section')?'cta':link.closest('.real-app-shot')?'screenshot':'hero'}),keepalive:true}).then(r=>r.json()).then(data=>showDownloadCount(data.count)).catch(()=>{})});
 
