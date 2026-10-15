@@ -9,7 +9,7 @@ PixelHUD translates ordinary Mac signals and actions into a game-like desktop HU
 ## Current platform and price
 
 - Platform: macOS 13 or newer
-- Hardware: Apple Silicon and Intel Macs
+- Hardware: Apple Silicon (arm64); the current downloadable build is not an Intel build
 - Price: Free
 - Official download: https://pixelhud.eliaspfeffer.de/PixelHUD.dmg
 - Official website: https://pixelhud.eliaspfeffer.de/
@@ -49,7 +49,7 @@ Yes. It is a free fan project.
 
 ### Does PixelHUD support Apple Silicon?
 
-Yes. It supports Apple Silicon and Intel Macs running macOS 13 or newer.
+Yes. The current download supports Apple Silicon Macs running macOS 13 or newer. An Intel build is not currently provided.
 
 ### Can users add their own music?
 

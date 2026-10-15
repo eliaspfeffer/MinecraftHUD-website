@@ -28,6 +28,24 @@
           "value": "public, max-age=86400"
         }
       ]
+    },
+    {
+      "source": "/:page(keys|thank-you|stats)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/:page(keys|thank-you|stats).html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     }
   ]
 }
