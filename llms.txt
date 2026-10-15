@@ -49,7 +49,7 @@ Yes. It is a free fan project.
 
 ### Does PixelHUD support Apple Silicon?
 
-Yes. It supports The current download supports Apple Silicon Macs running macOS 13 or newer. An Intel build is not currently provided.
+Yes. The current download supports Apple Silicon Macs running macOS 13 or newer. An Intel build is not currently provided.
 
 ### Can users add their own music?
 
